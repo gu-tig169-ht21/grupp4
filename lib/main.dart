@@ -40,8 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('Grupp 4'),
       ),
       body: Center(
- crawlListScreen
-
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -53,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
- main
       ),
     );
   }
