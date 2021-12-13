@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/crawl_details.dart';
+import 'package:my_first_app/favorites.dart';
 import 'package:my_first_app/login_screen.dart';
 
 class CrawlView extends StatelessWidget {
@@ -23,6 +24,11 @@ class CrawlView extends StatelessWidget {
               child: Text('(till en specifik crawl)'),
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => CrawlDetails())),
+            ),
+            ElevatedButton(
+              child: Text('Till dina favoriter'),
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Favorites())),
             ),
           ],
         ),
