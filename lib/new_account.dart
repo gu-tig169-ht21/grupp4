@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'crawl_view.dart';
 
-class LoginScreen extends StatelessWidget {
+class NewAccountScreen extends StatelessWidget {
   final textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Login Screen'),
+          title: Text('Create new account'),
         ),
         body: Center(
           child: Column(
@@ -22,6 +22,11 @@ class LoginScreen extends StatelessWidget {
               ),
               TextField(
                 decoration: InputDecoration(hintText: 'Password'),
+                controller: textEditingController,
+                // onSubmitted: (input) {
+              ),
+              TextField(
+                decoration: InputDecoration(hintText: 'Confirm password'),
                 controller: textEditingController,
                 // onSubmitted: (input) {
               ),

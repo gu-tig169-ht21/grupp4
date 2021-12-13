@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/crawl_details.dart';
 import 'package:my_first_app/login_screen.dart';
+import 'package:my_first_app/new_account.dart';
 
 class CrawlView extends StatelessWidget {
   @override
@@ -15,9 +16,14 @@ class CrawlView extends StatelessWidget {
           children: [
             Text('crawl view'),
             ElevatedButton(
-              child: Text('(till login'),
+              child: Text('(till login)'),
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => LoginScreen())),
+            ),
+            ElevatedButton(
+              child: Text('(till nytt konto)'),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => NewAccountScreen())),
             ),
             ElevatedButton(
               child: Text('(till en specifik crawl)'),
