@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'crawl_view.dart';
+import 'crawl_list.dart';
 
 class Register extends StatelessWidget {
   @override

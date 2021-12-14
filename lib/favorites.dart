@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'crawl_view.dart';
+import 'crawl_list.dart';
 
-class Favorites extends StatelessWidget {
+class Favorites extends StatefulWidget {
+  @override
+  State<Favorites> createState() {
+    return _FavoriteState();
+  }
+}
+
+class _FavoriteState extends State<Favorites> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

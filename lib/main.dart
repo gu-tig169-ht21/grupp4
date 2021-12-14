@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'crawl_view.dart';
+import 'crawl_list.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,8 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('Grupp 4'),
       ),
       body: Center(
- crawlListScreen
-
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -53,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
- main
       ),
     );
   }

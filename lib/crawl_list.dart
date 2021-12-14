@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/crawl_details.dart';
 import 'package:my_first_app/favorites.dart';
 import 'package:my_first_app/login_screen.dart';
+import 'package:my_first_app/my_crawls.dart';
 
 class CrawlView extends StatelessWidget {
   @override
@@ -29,6 +30,11 @@ class CrawlView extends StatelessWidget {
               child: Text('Till dina favoriter'),
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => Favorites())),
+            ),
+            ElevatedButton(
+              child: Text('Mina Crawls'),
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => MyCrawls())),
             ),
           ],
         ),
