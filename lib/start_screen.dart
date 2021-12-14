@@ -44,7 +44,7 @@ class StartScreen extends StatelessWidget {
                   .push(MaterialPageRoute(builder: (context) => LoginScreen())),
               ),
               ElevatedButton(
-                child: Text('(Skapa konto'),
+                child: Text('Skapa konto'),
                 onPressed: () => Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => Register())),
               ),
