@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'crawl_view.dart';
 
 class NewAccountScreen extends StatelessWidget {
-  final textEditingController = TextEditingController();
+  final inputUsername = TextEditingController();
+  final inputPassword = TextEditingController();
+  final inputPasswordConfirm = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +19,19 @@ class NewAccountScreen extends StatelessWidget {
             children: [
               TextField(
                 decoration: InputDecoration(hintText: 'Username'),
-                controller: textEditingController,
+                controller: inputUsername,
                 // onSubmitted: (input) {
               ),
               TextField(
+                obscureText: true,
                 decoration: InputDecoration(hintText: 'Password'),
-                controller: textEditingController,
+                controller: inputPassword,
                 // onSubmitted: (input) {
               ),
               TextField(
+                obscureText: true,
                 decoration: InputDecoration(hintText: 'Confirm password'),
-                controller: textEditingController,
+                controller: inputPasswordConfirm,
                 // onSubmitted: (input) {
               ),
               ElevatedButton(

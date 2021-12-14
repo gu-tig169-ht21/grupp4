@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'crawl_view.dart';
 
 class LoginScreen extends StatelessWidget {
-  final textEditingController = TextEditingController();
+  final inputUsername = TextEditingController();
+  final inputPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +18,18 @@ class LoginScreen extends StatelessWidget {
             children: [
               TextField(
                 decoration: InputDecoration(hintText: 'Username'),
-                controller: textEditingController,
+                controller: inputUsername,
                 // onSubmitted: (input) {
               ),
               TextField(
+                obscureText: true,
                 decoration: InputDecoration(hintText: 'Password'),
-                controller: textEditingController,
+                controller: inputPassword,
                 // onSubmitted: (input) {
+              ),
+              ElevatedButton(
+                child: Text('Log in'),
+                onPressed: () => Navigator.pop(context),
               ),
               ElevatedButton(
                 child: Text('(till crawl screen)'),
