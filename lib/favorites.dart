@@ -22,7 +22,7 @@ class _FavoritesState extends State<Favorites> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Favorites'),
-        backgroundColor: Colors.yellow[800],
+        backgroundColor: Colors.amberAccent[400],
       ),
       body: Center(
         child: Column(

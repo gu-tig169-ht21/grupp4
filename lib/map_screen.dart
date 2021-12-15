@@ -80,7 +80,7 @@ class MapSampleState extends State<MapSample> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Google Maps'),
-        backgroundColor: Colors.yellow[800],
+        backgroundColor: Colors.amberAccent[400],
       ),
       body: Column(
         children: [

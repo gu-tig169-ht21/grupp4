@@ -30,7 +30,7 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Register User'),
-        backgroundColor: Colors.yellow[800],
+        backgroundColor: Colors.amberAccent[400],
       ),
       body: Center(
         child: Column(

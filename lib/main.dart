@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Grupp 4'),
-        backgroundColor: Colors.yellow[800],
+        backgroundColor: Colors.amberAccent[400],
       ),
       body: Center(
         child: Column(
