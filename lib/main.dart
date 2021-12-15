@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'Authenticate/authenticate.dart';
 import 'bottom_nav_bar.dart';
-import 'crawl_view.dart';
+import 'crawl_list_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
