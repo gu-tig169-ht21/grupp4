@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:my_first_app/Authenticate/Authenticate.dart';
 import 'package:provider/provider.dart';
 
+import 'Authenticate/authenticate.dart';
 import 'crawl_view.dart';
 
 Future<void> main() async {
