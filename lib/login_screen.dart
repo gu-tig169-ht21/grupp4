@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'crawl_view.dart';
 
+
 bool showLogout = false;
 
 class LoginScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
   @override
   Widget build(BuildContext context) {
     TextEditingController _email = TextEditingController();
@@ -55,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    obscureText: true,
                     controller: _password,
                     decoration: InputDecoration(
                         labelText: 'Password', border: OutlineInputBorder()),
