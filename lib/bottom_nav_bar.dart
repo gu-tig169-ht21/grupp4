@@ -14,7 +14,7 @@ class BottomNavBar extends StatelessWidget {
           label: 'Favoriter',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.public),
           label: 'Hem',
         ),
         BottomNavigationBarItem(
