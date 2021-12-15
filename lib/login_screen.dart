@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_first_app/Authenticate/Authenticate.dart';
 import 'package:my_first_app/register_user.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import 'Authenticate/authenticate.dart';
 import 'crawl_view.dart';
 
 bool showLogout = false;
