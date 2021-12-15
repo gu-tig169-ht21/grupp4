@@ -118,16 +118,9 @@ class MapSampleState extends State<MapSample> {
           crawlCard(),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-                icon: Icon(Icons.favorite_border_outlined), onPressed: () {}),
-            IconButton(icon: Icon(Icons.search), onPressed: () {}),
-            IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
-          ],
-        ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onClicked: onItemTapped,
       ),
       /*
       floatingActionButton: FloatingActionButton.extended(
@@ -153,7 +146,10 @@ class MapSampleState extends State<MapSample> {
       leading: IconButton(
           onPressed: () {}, icon: Icon(Icons.favorite_border_outlined)),
       title: Text('Crawl 1'),
-      trailing: Icon(Icons.info),
+      trailing: IconButton(
+        icon: Icon(Icons.info),
+        onPressed: () {},
+      ),
     );
   }
 }
