@@ -8,6 +8,7 @@ import 'Authenticate/authenticate.dart';
 import 'bottom_nav_bar.dart';
 import 'crawl_list_view.dart';
 
+//safetyBranch
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
