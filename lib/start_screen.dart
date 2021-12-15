@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/login_screen.dart';
 import 'package:my_first_app/register_user.dart';
 import 'bottom_nav_bar.dart';
-import 'crawl_view.dart';
+import 'crawl_list_view.dart';
 import 'favorites.dart';
 
 class StartScreen extends StatefulWidget {

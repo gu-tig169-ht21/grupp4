@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/Authenticate/authenticate.dart';
 
 import 'bottom_nav_bar.dart';
-import 'crawl_view.dart';
+import 'crawl_list_view.dart';
 
 class Register extends StatefulWidget {
   @override

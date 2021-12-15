@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'bottom_nav_bar.dart';
 
-import 'crawl_view.dart';
+import 'crawl_list_view.dart';
 
 class Favorites extends StatefulWidget {
   @override

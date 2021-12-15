@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/crawl_card.dart';
 import 'package:my_first_app/crawl_details.dart';
 import 'package:my_first_app/favorites.dart';
 import 'package:my_first_app/login_screen.dart';
@@ -52,10 +53,15 @@ class CrawlViewState extends State<CrawlView> {
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => StartScreen())),
             ),
-            ElevatedButton(
+            /*  ElevatedButton(
               child: Text('Till map screen'),
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => MapSample())),
+            ), */
+            ElevatedButton(
+              child: Text('Till crawlCard'),
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => CrawlCard())),
             ),
           ],
         ),
