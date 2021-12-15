@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:my_first_app/register.dart';
 
 import 'crawl_view.dart';
 
-class LoginScreen extends StatelessWidget {
+class NewAccountScreen extends StatelessWidget {
   final inputUsername = TextEditingController();
   final inputPassword = TextEditingController();
+  final inputPasswordConfirm = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Login Screen'),
+          title: Text('Create new account'),
         ),
         body: Center(
           child: Column(
@@ -28,18 +28,15 @@ class LoginScreen extends StatelessWidget {
                 controller: inputPassword,
                 // onSubmitted: (input) {
               ),
-              ElevatedButton(
-                child: Text('Log in'),
-                onPressed: () => Navigator.pop(context),
+              TextField(
+                obscureText: true,
+                decoration: InputDecoration(hintText: 'Confirm password'),
+                controller: inputPasswordConfirm,
+                // onSubmitted: (input) {
               ),
               ElevatedButton(
                 child: Text('(till crawl screen)'),
                 onPressed: () => Navigator.pop(context),
-              ),
-              ElevatedButton(
-                child: Text('(till registration'),
-                onPressed: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Register())),
               ),
             ],
           ),
