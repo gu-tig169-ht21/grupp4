@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
+import 'bottom_nav_bar.dart';
 
 import 'crawl_view.dart';
 
-class Favorites extends StatelessWidget {
+class Favorites extends StatefulWidget {
+  @override
+  State<Favorites> createState() => _FavoritesState();
+}
+
+class _FavoritesState extends State<Favorites> {
+  int _selectedIndex = 0;
+
+  void onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +34,10 @@ class Favorites extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onClicked: onItemTapped,
       ),
     );
   }

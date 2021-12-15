@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'Authenticate/authenticate.dart';
+import 'bottom_nav_bar.dart';
 import 'crawl_view.dart';
 
 Future<void> main() async {
@@ -72,25 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.hearing_outlined),
-            label: 'Favoriter',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Hem',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.miscellaneous_services),
-            label: 'Profil',
-          )
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
       ),
     );
   }

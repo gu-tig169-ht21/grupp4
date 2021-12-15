@@ -4,17 +4,32 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/login_screen.dart';
 import 'package:my_first_app/register_user.dart';
+import 'bottom_nav_bar.dart';
 import 'crawl_view.dart';
 import 'favorites.dart';
 
-class StartScreen extends StatelessWidget {
+class StartScreen extends StatefulWidget {
+  @override
+  State<StartScreen> createState() => _StartScreenState();
+}
+
+class _StartScreenState extends State<StartScreen> {
+  int _selectedIndex = 0;
+
+  void onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Start Screen'),
-        ),
-        body: Center(
+      appBar: AppBar(
+        title: Text('Start Screen'),
+      ),
+      body: Center(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -37,7 +52,7 @@ class StartScreen extends StatelessWidget {
                     Navigator.pop(context), //Todo add new crawl class
               ),
               Container(
-                height: 250,
+                height: 200,
               ),
               ElevatedButton(
                 child: Text('Logga in'),
@@ -58,6 +73,12 @@ class StartScreen extends StatelessWidget {
               )
             ],
           ),
-        ));
+        ),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onClicked: onItemTapped,
+      ),
+    );
   }
 }

@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'bottom_nav_bar.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,6 +24,14 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
+  int _selectedIndex = 0;
+
+  void onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   Completer<GoogleMapController> _controller = Completer();
 
   static final CameraPosition _CenterGbg = CameraPosition(

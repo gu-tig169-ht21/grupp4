@@ -1,6 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/firebase_file.dart';
+import 'bottom_nav_bar.dart';
 import 'storage_services.dart';
 
 class CrawlDetails extends StatefulWidget {
@@ -10,6 +11,14 @@ class CrawlDetails extends StatefulWidget {
 
 class _CrawlDetailsState extends State<CrawlDetails> {
   late Future<List<FirebaseFile>> futureFiles;
+
+  int _selectedIndex = 0;
+
+  void onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   void initState() {
@@ -58,6 +67,10 @@ class _CrawlDetailsState extends State<CrawlDetails> {
                 }
             }
           },
+        ),
+        bottomNavigationBar: BottomNavBar(
+          selectedIndex: _selectedIndex,
+          onClicked: onItemTapped,
         ),
       );
 

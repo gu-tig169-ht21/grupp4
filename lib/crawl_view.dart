@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/crawl_details.dart';
 import 'package:my_first_app/favorites.dart';
 import 'package:my_first_app/login_screen.dart';
+import 'package:my_first_app/map_screen.dart';
 import 'package:my_first_app/register_user.dart';
 import 'package:my_first_app/start_screen.dart';
+import 'bottom_nav_bar.dart';
+import 'map_screen.dart';
 
 class CrawlView extends StatefulWidget {
   @override
-  State<CrawlView> createState() => _CrawlViewState();
+  State<CrawlView> createState() => CrawlViewState();
 }
 
-class _CrawlViewState extends State<CrawlView> {
+class CrawlViewState extends State<CrawlView> {
   int _selectedIndex = 0;
 
-  void _onItemTapped(int index) {
+  void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -49,27 +52,17 @@ class _CrawlViewState extends State<CrawlView> {
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => StartScreen())),
             ),
+            ElevatedButton(
+              child: Text('Till map screen'),
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => MapSample())),
+            ),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.hearing_outlined),
-            label: 'Favoriter',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Hem',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.miscellaneous_services),
-            label: 'Profil',
-          )
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onClicked: onItemTapped,
       ),
     );
   }
