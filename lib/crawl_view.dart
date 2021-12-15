@@ -5,7 +5,6 @@ import 'package:my_first_app/login_screen.dart';
 import 'package:my_first_app/register_user.dart';
 import 'package:my_first_app/start_screen.dart';
 
-
 class CrawlView extends StatefulWidget {
   @override
   State<CrawlView> createState() => _CrawlViewState();
@@ -19,6 +18,7 @@ class _CrawlViewState extends State<CrawlView> {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,8 +48,6 @@ class _CrawlViewState extends State<CrawlView> {
               child: Text('Till start screen'),
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => StartScreen())),
-                ),
-              ),
             ),
           ],
         ),
