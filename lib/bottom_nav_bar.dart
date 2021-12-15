@@ -10,7 +10,7 @@ class BottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.hearing_outlined),
+          icon: Icon(Icons.favorite),
           label: 'Favoriter',
         ),
         BottomNavigationBarItem(
@@ -18,15 +18,15 @@ class BottomNavBar extends StatelessWidget {
           label: 'Hem',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.miscellaneous_services),
+          icon: Icon(Icons.person),
           label: 'Profil',
         )
       ],
       currentIndex: selectedIndex,
       onTap: onClicked,
-      selectedItemColor: Colors.black,
-      backgroundColor: Colors.blue,
-      unselectedItemColor: Colors.white,
+      selectedItemColor: Colors.white,
+      backgroundColor: Colors.yellow[800],
+      unselectedItemColor: Colors.yellow[200],
     );
   }
 }
