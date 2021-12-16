@@ -7,6 +7,8 @@ import 'bottom_nav_bar.dart';
 import 'crawl_list_view.dart';
 import 'firebase/Authenticate/authenticate.dart';
 import './google/places_api.dart';
+import 'navbar_page.dart';
+import 'interface_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Grupp 4'),
-        backgroundColor: Colors.amberAccent[400],
+        backgroundColor: ColorTheme.a,
       ),
       body: Center(
         child: Column(
@@ -69,11 +71,19 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Text('Splashscreen'),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: ColorTheme.b),
+              child: Text('navbar'),
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => NavbarPage())),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: ColorTheme.b),
               child: Text('(till crawl screen)'),
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => CrawlView())),
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: ColorTheme.b),
               child: Text('(getPlace)'),
               onPressed: () async {
                 coordinates = await Api.getPlace('Henriksberg');

@@ -9,12 +9,14 @@ import 'package:my_first_app/start_screen.dart';
 //import 'theme.dart';
 //import 'card_theme.dart';
 import 'package:flutter/widgets.dart';
+import 'interface_theme.dart';
 
 class CrawlCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: ColorTheme.a,
         title: Text('Crawl list'),
       ),
       body: Center(

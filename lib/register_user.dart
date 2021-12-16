@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'bottom_nav_bar.dart';
 import 'crawl_list_view.dart';
 import 'firebase/Authenticate/authenticate.dart';
+import 'interface_theme.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -29,7 +30,7 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Register User'),
-        backgroundColor: Colors.amberAccent[400],
+        backgroundColor: ColorTheme.a,
       ),
       body: Center(
         child: Column(
@@ -65,10 +66,10 @@ class _RegisterState extends State<Register> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onClicked: onItemTapped,
-      ),
+      // bottomNavigationBar: BottomNavBar(
+      //   selectedIndex: _selectedIndex,
+      //   onClicked: onItemTapped,
+      // ),
     );
   }
 }

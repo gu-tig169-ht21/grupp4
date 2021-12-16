@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/firebase/storage/firebase_file.dart';
 import 'bottom_nav_bar.dart';
 import 'firebase/storage/storage_services.dart';
+import 'interface_theme.dart';
 
 class CrawlDetails extends StatefulWidget {
   @override
@@ -34,7 +35,7 @@ class _CrawlDetailsState extends State<CrawlDetails> {
         appBar: AppBar(
           title: Text('View crawls'),
           centerTitle: true,
-          backgroundColor: Colors.amberAccent[400],
+          backgroundColor: ColorTheme.a,
         ),
         body: FutureBuilder<List<FirebaseFile>>(
           future: futureFiles,
@@ -69,10 +70,10 @@ class _CrawlDetailsState extends State<CrawlDetails> {
             }
           },
         ),
-        bottomNavigationBar: BottomNavBar(
-          selectedIndex: _selectedIndex,
-          onClicked: onItemTapped,
-        ),
+        // bottomNavigationBar: BottomNavBar(
+        //   selectedIndex: _selectedIndex,
+        //   onClicked: onItemTapped,
+        // ),
       );
 
   Widget buildFile(BuildContext context, FirebaseFile file) => ListTile(
