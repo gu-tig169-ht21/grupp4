@@ -57,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String coordinates = '';
     return Scaffold(
       appBar: AppBar(
         title: Text('Grupp 4'),
@@ -74,7 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               child: Text('(getPlace)'),
-              onPressed: () => Api.getPlace(),
+              onPressed: () async {
+                coordinates = await Api.getPlace('Henriksberg');
+                print('Detta är kordinaterna för Henriksberg: ' + coordinates);
+              },
             ),
           ],
         ),

@@ -7,14 +7,16 @@ const API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
 
 class Api {
   //todo, skapa variabel som tar emot adress
-  static void getPlace() async {
-    var response =
-        await http.get(Uri.parse('$API_URL/Henriksbergs Konsert & Restaurang AB (Henriksberg)&key=$nyckel'));
+  static Future<String> getPlace(String place) async {
+    var response = await http.get(Uri.parse('$API_URL/$place&key=$nyckel'));
     String bodyString = response.body;
     var json = jsonDecode(bodyString);
     print(json.toString());
     Map<String, dynamic> map = jsonDecode(bodyString);
-    print(json['results'][0]['geometry']['location']['lat']);
-    print(json['results'][0]['geometry']['location']['lng']);
+    String lat = json['results'][0]['geometry']['location']['lat'].toString();
+    String lng = json['results'][0]['geometry']['location']['lng'].toString();
+    String coordinates = lat += ', ' + lng;
+
+    return (coordinates);
   }
 }
