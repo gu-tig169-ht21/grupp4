@@ -3,10 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'Authenticate/authenticate.dart';
 import 'bottom_nav_bar.dart';
 import 'crawl_list_view.dart';
+import 'firebase/Authenticate/authenticate.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

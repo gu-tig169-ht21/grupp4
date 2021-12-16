@@ -5,9 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'bottom_nav_bar.dart';
-
-import 'Authenticate/authenticate.dart';
 import 'crawl_list_view.dart';
+import 'firebase/Authenticate/authenticate.dart';
 
 bool showLogout = false;
 

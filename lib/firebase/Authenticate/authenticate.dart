@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:my_first_app/Authenticate/active_user.dart';
 import 'package:provider/provider.dart';
+
+import 'active_user.dart';
 
 class AuthenticationService {
   final FirebaseAuth _authenticator;
