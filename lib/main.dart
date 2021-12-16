@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'bottom_nav_bar.dart';
 import 'crawl_list_view.dart';
 import 'firebase/Authenticate/authenticate.dart';
+import './google/places_api.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,6 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text('(till crawl screen)'),
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => CrawlView())),
+            ),
+            ElevatedButton(
+              child: Text('(getPlace)'),
+              onPressed: () => Api.getPlace(),
             ),
           ],
         ),
