@@ -34,6 +34,7 @@ class _CrawlDetailsState extends State<CrawlDetails> {
         appBar: AppBar(
           title: Text('View crawls'),
           centerTitle: true,
+          backgroundColor: Colors.amberAccent[400],
         ),
         body: FutureBuilder<List<FirebaseFile>>(
           future: futureFiles,

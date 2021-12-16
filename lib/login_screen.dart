@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login Screen'),
+        backgroundColor: Colors.amberAccent[400],
         actions: [
           Visibility(
             visible: showLogout,

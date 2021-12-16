@@ -27,6 +27,7 @@ class _StartScreenState extends State<StartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Start Screen'),
+        backgroundColor: Colors.amberAccent[400],
       ),
       body: Center(
         child: SingleChildScrollView(

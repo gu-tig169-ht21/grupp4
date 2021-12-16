@@ -28,6 +28,7 @@ class CrawlViewState extends State<CrawlView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('crawl list'),
+        backgroundColor: Colors.amberAccent[400],
       ),
       body: Center(
         child: Column(
