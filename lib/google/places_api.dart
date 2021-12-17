@@ -15,7 +15,7 @@ class Api {
     Map<String, dynamic> map = jsonDecode(bodyString);
     String lat = json['results'][0]['geometry']['location']['lat'].toString();
     String lng = json['results'][0]['geometry']['location']['lng'].toString();
-    String coordinates = lat += ', ' + lng;
+    String coordinates = lat += ',' + lng;
 
     return (coordinates);
   }
