@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:my_first_app/crawl_card.dart';
 import 'package:my_first_app/pub_crawl_model.dart';
 import 'bottom_nav_bar.dart';
+import 'google/places_api.dart';
 import 'interface_theme.dart';
 
 class MapSample extends StatefulWidget {
@@ -107,15 +108,8 @@ class MapSampleState extends State<MapSample> {
               markers: {
                 _kGooglePlexMarker,
                 _bar2,
-                _bar3,
-                //_kLakeMarker,
+                markerLocation(),
               },
-              /*polylines: {
-                _kPolyLine,
-              },
-              polygons: {
-                _kPolygon,
-              },*/
               initialCameraPosition: _CenterGbg,
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
@@ -128,23 +122,19 @@ class MapSampleState extends State<MapSample> {
           ),
         ],
       ),
-      /* bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-                icon: Icon(Icons.favorite_border_outlined), onPressed: () {}),
-            IconButton(icon: Icon(Icons.search), onPressed: () {}),
-            IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
-          ],
-        ),
-      ), */
-      /*
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: Text('To the lake!'),
-        icon: Icon(Icons.directions_boat),
-      ),*/
+    );
+  }
+
+  markerLocation() async {
+    String cords = await Api.getPlace('henriksberg');
+    List<String> splitCords = cords.split(',');
+    double lat = double.parse(splitCords[0]);
+    double lng = double.parse(splitCords[1]);
+    Marker(
+      markerId: MarkerId('Henkeberg'),
+      infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
+      icon: BitmapDescriptor.defaultMarker,
+      position: LatLng(lat, lng),
     );
   }
 
@@ -170,22 +160,6 @@ class MapSampleState extends State<MapSample> {
             trailing: Icon(Icons.info),
           ),
         ),
-        /* Card(
-          child: ListTile(
-            leading: IconButton(
-                onPressed: () {}, icon: Icon(Icons.favorite_border_outlined)),
-            title: Text('Crawl 1'),
-            trailing: Icon(Icons.info),
-          ),
-        ),
-        Card(
-          child: ListTile(
-            leading: IconButton(
-                onPressed: () {}, icon: Icon(Icons.favorite_border_outlined)),
-            title: Text('Crawl 1'),
-            trailing: Icon(Icons.info),
-          ),
-        ), */
       ],
     );
   }
