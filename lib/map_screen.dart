@@ -8,6 +8,7 @@ import 'package:my_first_app/crawl_card.dart';
 import 'package:my_first_app/pub_crawl_model.dart';
 import 'bottom_nav_bar.dart';
 import 'google/places_api.dart';
+import 'interface_theme.dart';
 
 class MapSample extends StatefulWidget {
   final PubCrawlModel crawlModel;
@@ -87,7 +88,7 @@ class MapSampleState extends State<MapSample> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Google Maps'),
-        backgroundColor: Colors.amberAccent[400],
+        backgroundColor: ColorTheme.a,
       ),
       body: Column(
         children: [

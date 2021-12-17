@@ -7,6 +7,7 @@ import 'package:my_first_app/register_user.dart';
 import 'bottom_nav_bar.dart';
 import 'crawl_list_view.dart';
 import 'favorites.dart';
+import 'interface_theme.dart';
 
 class StartScreen extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _StartScreenState extends State<StartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Start Screen'),
-        backgroundColor: Colors.amberAccent[400],
+        backgroundColor: ColorTheme.a,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -76,10 +77,10 @@ class _StartScreenState extends State<StartScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onClicked: onItemTapped,
-      ),
+      // bottomNavigationBar: BottomNavBar(
+      //   selectedIndex: _selectedIndex,
+      //   onClicked: onItemTapped,
+      // ),
     );
   }
 }

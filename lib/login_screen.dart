@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'bottom_nav_bar.dart';
 import 'crawl_list_view.dart';
 import 'firebase/Authenticate/authenticate.dart';
+import 'interface_theme.dart';
 
 bool showLogout = false;
 
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login Screen'),
-        backgroundColor: Colors.amberAccent[400],
+        backgroundColor: ColorTheme.a,
         actions: [
           Visibility(
             visible: showLogout,
@@ -98,10 +99,10 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onClicked: onItemTapped,
-      ),
+      // bottomNavigationBar: BottomNavBar(
+      //   selectedIndex: _selectedIndex,
+      //   onClicked: onItemTapped,
+      // ),
     );
   }
 }
