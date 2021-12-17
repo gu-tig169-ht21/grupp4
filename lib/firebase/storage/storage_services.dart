@@ -1,7 +1,11 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 import 'firebase_file.dart';
 
@@ -38,5 +42,38 @@ class FirebaseApi {
     final file = File('${dir.path}/${ref.name}');
 
     await ref.writeToFile(file);
+  }
+
+  static Future? storeUser() {
+    try {
+      FirebaseFirestore.instance.collection('User').add({
+        'email': FirebaseAuth.instance.currentUser!.email,
+        'Uid': FirebaseAuth.instance.currentUser!.uid,
+        'favorites': ''
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  static Future? regNewUser(email) async {
+    try {
+      await FirebaseFirestore.instance.collection('User').doc(email).set({
+        'email': email,
+        'Uid': FirebaseAuth.instance.currentUser!.uid,
+        'favoriets': ''
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  static void updateFavorites() async {
+    FirebaseFirestore.instance
+        .collection('User')
+        .doc(await FirebaseAuth.instance.currentUser!.email)
+        .update({'favoriets': 'Steampunk, ' 'Brygghuset, ' 'Tacos & tequila'});
   }
 }
