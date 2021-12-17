@@ -56,7 +56,7 @@ Widget _buildLis() {
 
   Widget _buildList() {
     return ListView.builder(
-      itemCount: 4,
+      itemCount: 10,
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       padding: const EdgeInsets.all(16.0),
