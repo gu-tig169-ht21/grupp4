@@ -9,14 +9,18 @@ import 'package:my_first_app/start_screen.dart';
 //import 'theme.dart';
 //import 'card_theme.dart';
 import 'package:flutter/widgets.dart';
+import 'interface_theme.dart';
 
 class CrawlCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amberAccent[400],
-        title: const Text('Crawl list'),
+
+        backgroundColor: ColorTheme.a,
+        title: Text('Crawl list'),
+
+       
       ),
       body: ListView.builder(
         itemCount: 10,
@@ -32,27 +36,7 @@ class CrawlCard extends StatelessWidget {
       );
     
   }
-/*
-class CrawlCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Crawl list'),
-      ),
-      body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          //BuildImageCard(BuildContext context),
-          Column(
-            children: [
-              buildImageCard(context),
-            ],
-          ),
-        ]),
-      ),
-    );
-  }
-*/
+
   Widget buildImageCard(BuildContext context) {
     PubCrawlModel testCrawl = PubCrawlModel(
         crawlID: "123",
