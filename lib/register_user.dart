@@ -4,6 +4,7 @@ import 'bottom_nav_bar.dart';
 import 'crawl_list_view.dart';
 import 'firebase/Authenticate/authenticate.dart';
 import 'interface_theme.dart';
+import 'firebase/storage/storage_services.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -57,9 +58,13 @@ class _RegisterState extends State<Register> {
               onPressed: () async {
                 dynamic result = await _auth.SignUp(
                     email: _email.text, password: _password.text);
+                await FirebaseApi.regNewUser(_email.text);
+                await _auth.SignIn(
+                    email: _email.text, password: _password.text);
                 if (result == null) {
                   print('någonting gick fel');
                 }
+                Navigator.pop(context);
               },
               child: Text('Skapa användare'),
             ),

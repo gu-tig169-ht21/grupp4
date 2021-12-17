@@ -16,20 +16,25 @@ class CrawlCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         backgroundColor: ColorTheme.a,
         title: Text('Crawl list'),
+
+       
       ),
-      body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          //BuildImageCard(BuildContext context),
-          Column(
-            children: [
-              buildImageCard(context),
-            ],
+      body: ListView.builder(
+        itemCount: 10,
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) => Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: buildImageCard(context),
+          
+            
           ),
-        ]),
-      ),
-    );
+        ),
+      );
+    
   }
 
   Widget buildImageCard(BuildContext context) {
@@ -52,9 +57,12 @@ class CrawlCard extends StatelessWidget {
         ]);
 
     return Card(
+      elevation: 2,
+      clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(10),
       ),
+      //child: Column(children: [ListTile(title: Text("test"),subtitle: Text("test again"),)],)
       child: InkWell(
         onTap: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MapSample(crawlModel: testCrawl))),
@@ -79,6 +87,8 @@ class CrawlCard extends StatelessWidget {
                         fontSize: 24,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
+                        //backgroundColor: Colors.amber,
+                        
                       ),
                     ))
               ],
@@ -88,15 +98,18 @@ class CrawlCard extends StatelessWidget {
               padding: EdgeInsets.all(16).copyWith(bottom: 0),
               child: Text(
                 testCrawl.description,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(
+                  fontSize: 16,
+                )
               ),
             ),
             SizedBox(height: 8),
             ButtonBar(
               alignment: MainAxisAlignment.start,
               children: [
-                TextButton(onPressed: () {}, child: Text("share")),
-                TextButton(onPressed: () {}, child: Text("favoriet"))
+                IconButton(
+                onPressed: () {}, icon: Icon(Icons.favorite_border_outlined)),
+                TextButton(onPressed: () {}, child: Text("Learn more / Info / Crawl!"))
               ],
             )
           ],
@@ -104,4 +117,5 @@ class CrawlCard extends StatelessWidget {
       ),
     );
   }
+  
 }
