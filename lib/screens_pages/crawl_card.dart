@@ -24,6 +24,7 @@ class _CrawlCardState extends State<CrawlCard> {
     super.initState();
 
     list = FirebaseApi.getCrawl();
+    //imag = getCrawlImage();
     futureFiles = FirebaseApi.listAll('/PubImages/');
   }
 
@@ -74,6 +75,7 @@ class _CrawlCardState extends State<CrawlCard> {
   Widget buildImageCard(BuildContext context, PubCrawlModel pubCrawl) {
     String cords;
     List<String> splitCords;
+    late var path = FirebaseApi().loadCrawlImage(pubCrawl.imgRef).toString();
 
     return Card(
       elevation: 2,
@@ -101,24 +103,38 @@ class _CrawlCardState extends State<CrawlCard> {
             Stack(
               //alignment: Alignment.center,
               children: [
-                Image.network(
-                  pubCrawl.imgRef,
-                  fit: BoxFit.fill,
-                  height: 240,
-                ),
-                Positioned(
-                    bottom: 16,
-                    right: 16,
-                    left: 16,
-                    child: Text(
-                      pubCrawl.title,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        //backgroundColor: Colors.amber,
-                      ),
-                    ))
+                FutureBuilder(
+                    future: getCrawlImage(pubCrawl.imgRef),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        print(snapshot.toString());
+                        return Center(child: Text('Some error occurred!'));
+                      } else {
+                        final url = snapshot.data.toString();
+
+                        return Stack(children: [
+                          Image.network(
+                            url,
+                            fit: BoxFit.fill,
+                            height: 240,
+                          ),
+                          Positioned(
+                            bottom: 16,
+                            right: 16,
+                            left: 16,
+                            child: Text(
+                              pubCrawl.title,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                //backgroundColor: Colors.amber,
+                              ),
+                            ),
+                          )
+                        ]);
+                      }
+                    })
               ],
             ),
             SizedBox(height: 8),
@@ -154,5 +170,10 @@ class _CrawlCardState extends State<CrawlCard> {
   Future<String> cordinates() async {
     String cords = await Api.getPlace('henriksberg');
     return cords;
+  }
+
+  Future<String> getCrawlImage(String imageName) async {
+    String path = await FirebaseApi().loadCrawlImage(imageName);
+    return path;
   }
 }

@@ -5,18 +5,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'firebase_file.dart';
 
-class Storage {
-  final firebase_storage.FirebaseStorage storage =
-      firebase_storage.FirebaseStorage.instance;
-}
+class Storage {}
 
 class FirebaseApi {
+  final firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
+
+  Future<String> loadCrawlImage(String ref) async {
+    final reference = await storage.ref('/PubImages/$ref').getDownloadURL();
+    return reference;
+    /* print(reference.toString() + '<-- detta är reference');
+    var url = await reference.getDownloadURL();
+    print('Detta är URL:en -->' + url.toString());
+    return url; */
+  }
+
   static Future<List<String>> _getDownloadLinks(List<Reference> refs) =>
       Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
 
@@ -97,6 +107,7 @@ class FirebaseApi {
           description: crawls['crawlDescription'],
           pubs: crawls['crawlPubs'],
           imgRef: crawls['crawlImgRef']));
+      print('image ref: -->' + crawls['crawlImgRef']);
     }
     /* list.add(PubCrawlModel(
         crawlID: json[0]['crawlID'],
