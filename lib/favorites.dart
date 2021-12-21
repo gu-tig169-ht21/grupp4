@@ -3,6 +3,7 @@ import 'bottom_nav_bar.dart';
 import 'package:english_words/english_words.dart';
 import 'crawl_list_view.dart';
 import 'interface_theme.dart';
+import 'pub_crawl_model.dart';
 
 class Favorites extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _FavoritesState extends State<Favorites> {
       appBar: AppBar(
         title: Text('Favorites'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.favorite), onPressed: _pushadd)
+          //IconButton(icon: Icon(Icons.favorite), onPressed: _pushadd)
         ],
         
 
@@ -34,9 +35,11 @@ class _FavoritesState extends State<Favorites> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          //mainAxisAlignment: MainAxisAlignment.center,
           children: /*<Widget>*/ [
-            _buildList(),
+            crawlCard(Pub(pubID: "1", name: "test", adress: "adress")),
+            crawlCard(Pub(pubID: "1", name: "test", adress: "adress")),
+            crawlCard(Pub(pubID: "1", name: "test", adress: "adress")),
           ],
         ),
       ),
@@ -57,26 +60,25 @@ Widget _buildLis() {
   );
 }*/
 
-  Widget _buildList() {
-    return ListView.builder(
-      itemCount: 10,
-      scrollDirection: Axis.vertical,
+  Widget crawlCard(Pub pubs) {
+    return ListView(
       shrinkWrap: true,
-      padding: const EdgeInsets.all(16.0),
-      itemBuilder: (context, item) {
-        if (item.isEven) return Divider();
-
-        final index = item ~/ 2;
-
-        if (index >= _randomWordPairs.length) {
-          _randomWordPairs.addAll(generateWordPairs().take(2));
-        }
-
-        return _buildRow(_randomWordPairs[index]);
-      },
+      children: [
+        Card(
+          child: ListTile(
+            leading: IconButton(
+                onPressed: () {}, icon: Icon(Icons.favorite_border_outlined)),
+            title: Text(pubs.pubname),
+            trailing: IconButton(
+              onPressed: () {}, icon:
+                Icon(Icons.info)),
+          ),
+        ),
+      ],
     );
   }
-
+}
+/*
   Widget _buildRow(WordPair pair) {
     final alreadyadd = _addWordPairs.contains(pair);
 
@@ -112,3 +114,4 @@ Widget _buildLis() {
             body: ListView(children: divided));
       }));
 }
+*/
