@@ -1,9 +1,8 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/firebase/storage/firebase_file.dart';
-import 'bottom_nav_bar.dart';
-import 'firebase/storage/storage_services.dart';
-import 'interface_theme.dart';
+import '../firebase/storage/storage_services.dart';
+import '../cat/interface_theme.dart';
 
 class CrawlDetails extends StatefulWidget {
   @override

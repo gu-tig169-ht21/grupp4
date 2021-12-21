@@ -3,14 +3,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'crawl_list_view.dart';
+import 'admin_navigation/crawl_list_view.dart';
 import 'firebase/Authenticate/authenticate.dart';
 import './google/places_api.dart';
 import 'firebase/storage/firebase_file.dart';
-import 'navbar_page.dart';
-import 'interface_theme.dart';
+import 'cat/navbar_page.dart';
+import 'cat/interface_theme.dart';
 import 'firebase/storage/storage_services.dart';
-import 'splashscreen.dart';
+import 'screens_pages/splashscreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: InkWell(
         child: Stack(
           children: [
-            Splashscreen(),
+            const Splashscreen(),
             Container(
               padding: EdgeInsets.only(bottom: 100),
               alignment: Alignment.bottomCenter,

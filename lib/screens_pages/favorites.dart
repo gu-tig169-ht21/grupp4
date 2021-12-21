@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'bottom_nav_bar.dart';
 import 'package:english_words/english_words.dart';
-import 'crawl_list_view.dart';
-import 'pub_crawl_model.dart';
-import 'interface_theme.dart';
-import 'pub_crawl_model.dart';
+import '../admin_navigation/crawl_list_view.dart';
+import '../models/pub_crawl_model.dart';
+import '../cat/interface_theme.dart';
+import '../models/pub_crawl_model.dart';
 
 class Favorites extends StatefulWidget {
   @override
@@ -15,9 +14,7 @@ class _FavoritesState extends State<Favorites> {
   int _selectedIndex = 0;
   final _randomWordPairs = <WordPair>[];
   final _addWordPairs = Set<WordPair>();
-  final  _pub = <Pub>[];
-
-
+  final _pub = <Pub>[];
 
   void onItemTapped(int index) {
     setState(() {
@@ -33,8 +30,6 @@ class _FavoritesState extends State<Favorites> {
         actions: <Widget>[
           //IconButton(icon: Icon(Icons.favorite), onPressed: _pushadd)
         ],
-        
-
         backgroundColor: ColorTheme.a,
       ),
       body: Center(
@@ -73,9 +68,7 @@ Widget _buildLis() {
             leading: IconButton(
                 onPressed: () {}, icon: Icon(Icons.favorite_border_outlined)),
             title: Text(pubs.pubname),
-            trailing: IconButton(
-              onPressed: () {}, icon:
-                Icon(Icons.info)),
+            trailing: IconButton(onPressed: () {}, icon: Icon(Icons.info)),
           ),
         ),
       ],

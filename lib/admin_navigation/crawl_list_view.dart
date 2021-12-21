@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_first_app/crawl_card.dart';
-import 'package:my_first_app/crawl_details.dart';
-import 'package:my_first_app/favorites.dart';
-import 'package:my_first_app/login_screen.dart';
-import 'package:my_first_app/map_screen.dart';
-import 'package:my_first_app/register_user.dart';
-import 'package:my_first_app/start_screen.dart';
-import 'bottom_nav_bar.dart';
-import 'map_screen.dart';
-import 'interface_theme.dart';
+import 'package:my_first_app/screens_pages/crawl_card.dart';
+import 'package:my_first_app/admin_navigation/crawl_details.dart';
+import 'package:my_first_app/admin_navigation/start_screen.dart';
+import 'package:my_first_app/screens_pages/login_screen.dart';
+import 'package:my_first_app/screens_pages/register_user.dart';
+import '../cat/interface_theme.dart';
 
 class CrawlView extends StatefulWidget {
   @override

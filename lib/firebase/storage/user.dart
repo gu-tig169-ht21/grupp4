@@ -1,4 +1,4 @@
-import 'package:my_first_app/pub_crawl_model.dart';
+import 'package:my_first_app/models/pub_crawl_model.dart';
 
 class User {
   final email;

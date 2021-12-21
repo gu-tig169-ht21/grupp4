@@ -1,6 +1,7 @@
-import 'favorites.dart';
-import 'crawl_card.dart';
-import 'login_screen.dart';
+import 'package:my_first_app/screens_pages/favorites.dart';
+import 'package:my_first_app/screens_pages/login_screen.dart';
+
+import '../screens_pages/crawl_card.dart';
 import 'interface_theme.dart';
 
 import 'package:flutter/material.dart';

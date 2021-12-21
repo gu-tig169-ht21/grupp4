@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print, file_names
 
 import 'package:flutter/material.dart';
-import 'firebase/storage/firebase_file.dart';
-import 'firebase/storage/storage_services.dart';
+import '../firebase/storage/firebase_file.dart';
+import '../firebase/storage/storage_services.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({Key? key}) : super(key: key);

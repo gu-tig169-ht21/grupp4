@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_first_app/register_user.dart';
+import 'register_user.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'bottom_nav_bar.dart';
-import 'crawl_list_view.dart';
-import 'firebase/Authenticate/authenticate.dart';
-import 'interface_theme.dart';
+import '../admin_navigation/crawl_list_view.dart';
+import '../firebase/Authenticate/authenticate.dart';
+import '../cat/interface_theme.dart';
 
 bool showLogout = false;
 

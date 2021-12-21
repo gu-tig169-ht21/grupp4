@@ -2,12 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:my_first_app/login_screen.dart';
-import 'package:my_first_app/register_user.dart';
-import 'bottom_nav_bar.dart';
+import 'package:my_first_app/screens_pages/favorites.dart';
+import 'package:my_first_app/screens_pages/login_screen.dart';
+import 'package:my_first_app/screens_pages/register_user.dart';
 import 'crawl_list_view.dart';
-import 'favorites.dart';
-import 'interface_theme.dart';
+import '../cat/interface_theme.dart';
 
 class StartScreen extends StatefulWidget {
   @override

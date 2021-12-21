@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'bottom_nav_bar.dart';
-import 'crawl_list_view.dart';
-import 'firebase/Authenticate/authenticate.dart';
-import 'interface_theme.dart';
-import 'firebase/storage/storage_services.dart';
+import '../firebase/Authenticate/authenticate.dart';
+import '../cat/interface_theme.dart';
+import '../firebase/storage/storage_services.dart';
 
 class Register extends StatefulWidget {
   @override

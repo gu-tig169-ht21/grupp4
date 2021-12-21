@@ -2,12 +2,13 @@
 
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:my_first_app/crawl_card.dart';
-import 'package:my_first_app/pub_crawl_model.dart';
-import 'bottom_nav_bar.dart';
-import 'google/places_api.dart';
+import 'package:my_first_app/screens_pages/crawl_card.dart';
+import 'package:my_first_app/models/pub_crawl_model.dart';
+import '../google/places_api.dart';
 
 List<Marker> markerList = [];
 
@@ -197,6 +198,24 @@ class MapSampleState extends State<MapSample> {
         });
   }
 
+  void showNotLoggedInDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+                child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: const Text('You have to log in to save favoriets!!!',
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold)),
+            )),
+          );
+        });
+  }
+
   Widget crawlCard(Pub pubs) {
     return ListView(
       shrinkWrap: true,
@@ -214,9 +233,13 @@ class MapSampleState extends State<MapSample> {
                     )
                   : Icon(Icons.favorite_border),
               onPressed: () {
-                setState(() {
-                  pubs.isfavourite = !pubs.isfavourite;
-                });
+                if (FirebaseAuth.instance.currentUser == null) {
+                  showNotLoggedInDialog();
+                } else {
+                  setState(() {
+                    pubs.isfavourite = !pubs.isfavourite;
+                  });
+                }
               },
             ),
             title: Text(pubs.pubname),

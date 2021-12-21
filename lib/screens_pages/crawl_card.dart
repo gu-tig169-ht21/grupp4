@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:my_first_app/crawl_details.dart';
-import 'package:my_first_app/favorites.dart';
-import 'package:my_first_app/login_screen.dart';
-import 'package:my_first_app/map_screen.dart';
-import 'package:my_first_app/pub_crawl_model.dart';
-import 'package:my_first_app/start_screen.dart';
+import 'package:my_first_app/screens_pages/map_screen.dart';
+import 'package:my_first_app/models/pub_crawl_model.dart';
 //import './pics/bottles.jpg';
 //import 'theme.dart';
 //import 'card_theme.dart';
 import 'package:flutter/widgets.dart';
-import 'google/places_api.dart';
-import 'interface_theme.dart';
+import '../google/places_api.dart';
+import '../cat/interface_theme.dart';
 
 class CrawlCard extends StatelessWidget {
   @override
