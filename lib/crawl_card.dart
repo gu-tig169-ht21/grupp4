@@ -9,6 +9,7 @@ import 'package:my_first_app/start_screen.dart';
 //import 'theme.dart';
 //import 'card_theme.dart';
 import 'package:flutter/widgets.dart';
+import 'google/places_api.dart';
 import 'interface_theme.dart';
 
 class CrawlCard extends StatelessWidget {
@@ -16,11 +17,8 @@ class CrawlCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         backgroundColor: ColorTheme.a,
         title: Text('Crawl list'),
-
-       
       ),
       body: ListView.builder(
         itemCount: 10,
@@ -29,15 +27,14 @@ class CrawlCard extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: buildImageCard(context),
-          
-            
-          ),
         ),
-      );
-    
+      ),
+    );
   }
 
   Widget buildImageCard(BuildContext context) {
+    String cords;
+    List<String> splitCords;
     PubCrawlModel testCrawl = PubCrawlModel(
         crawlID: "123",
         title: "TestCrawl",
@@ -64,8 +61,19 @@ class CrawlCard extends StatelessWidget {
       ),
       //child: Column(children: [ListTile(title: Text("test"),subtitle: Text("test again"),)],)
       child: InkWell(
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => MapSample(crawlModel: testCrawl))),
+        onTap: () async {
+          cords = await cordinates();
+          splitCords = cords.split(',');
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MapSample(
+                crawlModel: testCrawl,
+                lat: double.parse(splitCords[0]),
+                lng: double.parse(splitCords[1]),
+              ),
+            ),
+          );
+        },
         child: Column(
           children: [
             Stack(
@@ -88,7 +96,6 @@ class CrawlCard extends StatelessWidget {
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         //backgroundColor: Colors.amber,
-                        
                       ),
                     ))
               ],
@@ -96,20 +103,20 @@ class CrawlCard extends StatelessWidget {
             SizedBox(height: 8),
             Padding(
               padding: EdgeInsets.all(16).copyWith(bottom: 0),
-              child: Text(
-                testCrawl.description,
-                style: const TextStyle(
-                  fontSize: 16,
-                )
-              ),
+              child: Text(testCrawl.description,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  )),
             ),
             SizedBox(height: 8),
             ButtonBar(
               alignment: MainAxisAlignment.start,
               children: [
                 IconButton(
-                onPressed: () {}, icon: Icon(Icons.favorite_border_outlined)),
-                TextButton(onPressed: () {}, child: Text("Learn more / Info / Crawl!"))
+                    onPressed: () {},
+                    icon: Icon(Icons.favorite_border_outlined)),
+                TextButton(
+                    onPressed: () {}, child: Text("Learn more / Info / Crawl!"))
               ],
             )
           ],
@@ -117,5 +124,9 @@ class CrawlCard extends StatelessWidget {
       ),
     );
   }
-  
+
+  Future<String> cordinates() async {
+    String cords = await Api.getPlace('henriksberg');
+    return cords;
+  }
 }

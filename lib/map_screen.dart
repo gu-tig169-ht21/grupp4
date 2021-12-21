@@ -8,24 +8,30 @@ import 'package:my_first_app/crawl_card.dart';
 import 'package:my_first_app/pub_crawl_model.dart';
 import 'bottom_nav_bar.dart';
 import 'google/places_api.dart';
-import 'interface_theme.dart';
+
+List<Marker> markerList = [];
 
 class MapSample extends StatefulWidget {
   final PubCrawlModel crawlModel;
+  double lat;
+  double lng;
 
-  MapSample({required this.crawlModel});
+  MapSample({required this.crawlModel, required this.lat, required this.lng});
 
   @override
-  State<MapSample> createState() => MapSampleState(crawlModel: crawlModel);
+  State<MapSample> createState() =>
+      MapSampleState(crawlModel: crawlModel, lat: lat, lng: lng);
 }
 
 class MapSampleState extends State<MapSample> {
   //int _selectedIndex = 0;
 
   final PubCrawlModel crawlModel;
-
-  MapSampleState({required this.crawlModel});
-
+  double lat;
+  double lng;
+  //Måste göra en metod av det hela istället för att initiera allt i "initalizern"
+  MapSampleState(
+      {required this.crawlModel, required this.lat, required this.lng});
   /* void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -63,6 +69,12 @@ class MapSampleState extends State<MapSample> {
       icon: BitmapDescriptor.defaultMarker,
       position: LatLng(57.699687182039845, 11.936588759846018));
 
+  static final Marker henke = Marker(
+      markerId: MarkerId('Henriksberg'),
+      infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
+      icon: BitmapDescriptor.defaultMarker,
+      position: LatLng(57.699687182039845, 11.936588759846018));
+
   static final Polyline _kPolyLine = Polyline(
       polylineId: PolylineId('_kPolyLine'),
       points: [LatLng(57.708870, 11.974560), LatLng(57.67645, 12.17477)],
@@ -83,12 +95,13 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     final List<Pub> pubList = crawlModel.pubs;
+    //markerList.add(markerLocation());
 
     return new Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text('Google Maps'),
-        backgroundColor: ColorTheme.a,
+        backgroundColor: Colors.amberAccent[400],
       ),
       body: Column(
         children: [
@@ -108,7 +121,13 @@ class MapSampleState extends State<MapSample> {
               markers: {
                 _kGooglePlexMarker,
                 _bar2,
-                markerLocation(),
+                new Marker(
+                    markerId: MarkerId('Henriksberg'),
+                    infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
+                    icon: BitmapDescriptor.defaultMarker,
+                    position: LatLng(lat, lng)),
+                //markerList[0],
+                //markerLocation(),
               },
               initialCameraPosition: _CenterGbg,
               onMapCreated: (GoogleMapController controller) {
@@ -125,18 +144,18 @@ class MapSampleState extends State<MapSample> {
     );
   }
 
-  markerLocation() async {
-    String cords = await Api.getPlace('henriksberg');
-    List<String> splitCords = cords.split(',');
-    double lat = double.parse(splitCords[0]);
-    double lng = double.parse(splitCords[1]);
-    Marker(
-      markerId: MarkerId('Henkeberg'),
-      infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
-      icon: BitmapDescriptor.defaultMarker,
-      position: LatLng(lat, lng),
-    );
-  }
+  // markerLocation() async {
+  //   String cords = await Api.getPlace('henriksberg');
+  //   List<String> splitCords = cords.split(',');
+  //   double lat = double.parse(splitCords[0]);
+  //   double lng = double.parse(splitCords[1]);
+  //   return Marker(
+  //     markerId: MarkerId('Henkeberg'),
+  //     infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
+  //     icon: BitmapDescriptor.defaultMarker,
+  //     position: LatLng(lat, lng),
+  //   );
+  // }
 
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
@@ -164,3 +183,18 @@ class MapSampleState extends State<MapSample> {
     );
   }
 }
+
+// class addMarkerLocations {
+//   markerLocation() async {
+//     String cords = await Api.getPlace('henriksberg');
+//     List<String> splitCords = cords.split(',');
+//     double lat = double.parse(splitCords[0]);
+//     double lng = double.parse(splitCords[1]);
+//     return Marker(
+//       markerId: MarkerId('Henkeberg'),
+//       infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
+//       icon: BitmapDescriptor.defaultMarker,
+//       position: LatLng(lat, lng),
+//     );
+//   }
+// }
