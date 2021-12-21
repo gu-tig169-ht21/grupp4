@@ -14,7 +14,8 @@ class _FavoritesState extends State<Favorites> {
   int _selectedIndex = 0;
   final _randomWordPairs = <WordPair>[];
   final _addWordPairs = Set<WordPair>();
-  final _pub = <Pub>[];
+  
+  final List<Pub> pubList = crawlModel.pubs;
 
   void onItemTapped(int index) {
     setState(() {
