@@ -6,9 +6,11 @@ import 'package:provider/provider.dart';
 import 'crawl_list_view.dart';
 import 'firebase/Authenticate/authenticate.dart';
 import './google/places_api.dart';
+import 'firebase/storage/firebase_file.dart';
 import 'navbar_page.dart';
 import 'interface_theme.dart';
 import 'firebase/storage/storage_services.dart';
+import 'splashscreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,36 +61,39 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    String coordinates = '';
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Grupp 4'),
-        backgroundColor: ColorTheme.a,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: InkWell(
+        child: Stack(
           children: [
-            Text('Splashscreen'),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: ColorTheme.b),
-              child: Text('navbar'),
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => NavbarPage())),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: ColorTheme.b),
-              child: Text('(till crawl screen)'),
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => CrawlView())),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: ColorTheme.b),
-              child: Text('(getPlace)'),
-              onPressed: () async {
-                coordinates = await Api.getPlace('Henriksberg');
-                print('Detta är kordinaterna för Henriksberg: ' + coordinates);
-              },
+            Splashscreen(),
+            Container(
+              padding: EdgeInsets.only(bottom: 100),
+              alignment: Alignment.bottomCenter,
+              child: OutlinedButton(
+                child: const Text(
+                  "Start",
+                  textScaleFactor: 1.7,
+                  style: TextStyle(),
+                ),
+                style: OutlinedButton.styleFrom(
+                    minimumSize: Size(170, 65),
+                    backgroundColor: Colors.white,
+                    side: const BorderSide(
+                      color: Color.fromRGBO(114, 107, 89, 1),
+                      width: 7,
+                    ),
+                    primary: Colors.black),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => NavbarPage(),
+                  ),
+                ),
+                onLongPress: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CrawlView(),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
