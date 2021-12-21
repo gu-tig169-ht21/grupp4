@@ -6,25 +6,33 @@ import '../cat/interface_theme.dart';
 import '../models/pub_crawl_model.dart';
 
 class Favorites extends StatefulWidget {
+  final PubCrawlModel favoriteCrawlModel;
+  
+  Favorites({required this.favoriteCrawlModel});
+
   @override
-  State<Favorites> createState() => _FavoritesState();
+  State<Favorites> createState() => _FavoritesState(favoriteCrawlModel: favoriteCrawlModel);
 }
 
 class _FavoritesState extends State<Favorites> {
+/*
   int _selectedIndex = 0;
-  final _randomWordPairs = <WordPair>[];
-  final _addWordPairs = Set<WordPair>();
-  
-  final List<Pub> pubList = crawlModel.pubs;
-
-  void onItemTapped(int index) {
+   void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+*/
+  final PubCrawlModel favoriteCrawlModel;
+  
+  //final List<Pub> pubList = favoriteCrawlModel.pubs;
+  _FavoritesState({required this.favoriteCrawlModel});
+
+ 
 
   @override
   Widget build(BuildContext context) {
+    final List<Pub> pubList = favoriteCrawlModel.pubs;
     return Scaffold(
       appBar: AppBar(
         title: Text('Favorites'),
@@ -40,6 +48,10 @@ class _FavoritesState extends State<Favorites> {
             crawlCard(Pub(pubID: "1", name: "test", adress: "adress")),
             crawlCard(Pub(pubID: "1", name: "test", adress: "adress")),
             crawlCard(Pub(pubID: "1", name: "test", adress: "adress")),
+            StatefulBuilder(
+            builder: (Context, setState) =>
+                Column(children: pubList.map((fpub) => crawlCard(fpub)).toList()),
+          ),
           ],
         ),
       ),
