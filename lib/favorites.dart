@@ -3,6 +3,8 @@ import 'bottom_nav_bar.dart';
 import 'package:english_words/english_words.dart';
 import 'crawl_list_view.dart';
 import 'pub_crawl_model.dart';
+import 'interface_theme.dart';
+
 class Favorites extends StatefulWidget {
   @override
   State<Favorites> createState() => _FavoritesState();
@@ -30,7 +32,9 @@ class _FavoritesState extends State<Favorites> {
         actions: <Widget>[
           IconButton(icon: Icon(Icons.favorite), onPressed: _pushadd)
         ],
-        backgroundColor: Colors.amberAccent[400],
+        
+
+        backgroundColor: ColorTheme.a,
       ),
       body: Center(
         child: Column(
@@ -40,10 +44,10 @@ class _FavoritesState extends State<Favorites> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onClicked: onItemTapped,
-      ),
+      // bottomNavigationBar: BottomNavBar(
+      //   selectedIndex: _selectedIndex,
+      //   onClicked: onItemTapped,
+      // ),
     );
   }
 

@@ -8,6 +8,7 @@ import 'package:my_first_app/register_user.dart';
 import 'package:my_first_app/start_screen.dart';
 import 'bottom_nav_bar.dart';
 import 'map_screen.dart';
+import 'interface_theme.dart';
 
 class CrawlView extends StatefulWidget {
   @override
@@ -28,7 +29,7 @@ class CrawlViewState extends State<CrawlView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('crawl list'),
-        backgroundColor: Colors.amberAccent[400],
+        backgroundColor: ColorTheme.a,
       ),
       body: Center(
         child: Column(
@@ -67,10 +68,10 @@ class CrawlViewState extends State<CrawlView> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onClicked: onItemTapped,
-      ),
+      // bottomNavigationBar: BottomNavBar(
+      //   selectedIndex: _selectedIndex,
+      //   onClicked: onItemTapped,
+      // ),
     );
   }
 }
