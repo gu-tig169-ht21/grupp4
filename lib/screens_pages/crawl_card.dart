@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/firebase/storage/firebase_file.dart';
+import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/screens_pages/map_screen.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
 //import './pics/bottles.jpg';
@@ -8,7 +10,23 @@ import 'package:flutter/widgets.dart';
 import '../google/places_api.dart';
 import '../cat/interface_theme.dart';
 
-class CrawlCard extends StatelessWidget {
+class CrawlCard extends StatefulWidget {
+  @override
+  State<CrawlCard> createState() => _CrawlCardState();
+}
+
+class _CrawlCardState extends State<CrawlCard> {
+  late Future<List<PubCrawlModel>> list;
+  late Future<List<FirebaseFile>> futureFiles;
+
+  @override
+  void initState() {
+    super.initState();
+
+    list = FirebaseApi.getCrawl();
+    futureFiles = FirebaseApi.listAll('/PubImages/');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,38 +34,46 @@ class CrawlCard extends StatelessWidget {
         backgroundColor: ColorTheme.a,
         title: Text('Crawl list'),
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) => Container(
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: buildImageCard(context),
-        ),
-      ),
+      body: FutureBuilder<List<PubCrawlModel>>(
+          future: list,
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Center(child: CircularProgressIndicator());
+              default:
+                if (snapshot.hasError) {
+                  print(snapshot.toString());
+                  return Center(child: Text('Some error occurred!'));
+                } else {
+                  final list = snapshot.data!;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 12),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: list.length,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) =>
+                              Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            child: buildImageCard(context, list[index]),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+            }
+          }),
     );
   }
 
-  Widget buildImageCard(BuildContext context) {
+  Widget buildImageCard(BuildContext context, PubCrawlModel pubCrawl) {
     String cords;
     List<String> splitCords;
-    PubCrawlModel testCrawl = PubCrawlModel(
-        crawlID: "123",
-        title: "TestCrawl",
-        description: "En bra crawl att göra på distans",
-        pubs: <Pub>[
-          Pub(
-              pubID: "1",
-              name: "Steampunk",
-              adress: "Nybrogatan 3",
-              description: "Gammal"),
-          Pub(pubID: "2", name: "Brygghuset", adress: "Andra Långgatan 2b"),
-          Pub(
-              pubID: "3",
-              name: "Henriksberg",
-              adress: "Gamla vägen 7",
-              description: "Fin")
-        ]);
 
     return Card(
       elevation: 2,
@@ -63,7 +89,7 @@ class CrawlCard extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => MapSample(
-                crawlModel: testCrawl,
+                crawlModel: pubCrawl,
                 lat: double.parse(splitCords[0]),
                 lng: double.parse(splitCords[1]),
               ),
@@ -75,18 +101,17 @@ class CrawlCard extends StatelessWidget {
             Stack(
               //alignment: Alignment.center,
               children: [
-                Ink.image(
-                  image: NetworkImage(
-                      "https://images.pexels.com/photos/1283219/pexels-photo-1283219.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
+                Image.network(
+                  pubCrawl.imgRef,
+                  fit: BoxFit.fill,
                   height: 240,
-                  fit: BoxFit.cover,
                 ),
                 Positioned(
                     bottom: 16,
                     right: 16,
                     left: 16,
                     child: Text(
-                      testCrawl.title,
+                      pubCrawl.title,
                       style: const TextStyle(
                         fontSize: 24,
                         color: Colors.white,
@@ -99,7 +124,7 @@ class CrawlCard extends StatelessWidget {
             SizedBox(height: 8),
             Padding(
               padding: EdgeInsets.all(16).copyWith(bottom: 0),
-              child: Text(testCrawl.description,
+              child: Text(pubCrawl.description,
                   style: const TextStyle(
                     fontSize: 16,
                   )),
@@ -119,6 +144,11 @@ class CrawlCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<List<PubCrawlModel>> _loadCrawls() async {
+    List<PubCrawlModel> crawls = await FirebaseApi.getCrawl();
+    return crawls;
   }
 
   Future<String> cordinates() async {
