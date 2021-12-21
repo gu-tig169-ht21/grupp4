@@ -105,15 +105,6 @@ class MapSampleState extends State<MapSample> {
       ),
       body: Column(
         children: [
-          Row(
-            children: [
-              Expanded(child: TextFormField()),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.search),
-              )
-            ],
-          ),
           Container(
             height: 275,
             child: GoogleMap(
@@ -157,14 +148,53 @@ class MapSampleState extends State<MapSample> {
   //   );
   // }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
-
-  Future<void> _goBackToGbg() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_CenterGbg));
+  void showCustomDialog(Pub pubs, BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+              height: 450,
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      'Name: ' + pubs.name,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Adress: ' + pubs.adress,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Description: ' + pubs.description!,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      'PubID: ' + pubs.pubID,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                    ),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancel')),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   Widget crawlCard(Pub pubs) {
@@ -173,10 +203,23 @@ class MapSampleState extends State<MapSample> {
       children: [
         Card(
           child: ListTile(
+            onTap: () {
+              showCustomDialog(pubs, context);
+            },
             leading: IconButton(
-                onPressed: () {}, icon: Icon(Icons.favorite_border_outlined)),
+              icon: pubs.isfavourite
+                  ? Icon(
+                      Icons.favorite,
+                      color: Colors.amberAccent[400],
+                    )
+                  : Icon(Icons.favorite_border),
+              onPressed: () {
+                setState(() {
+                  pubs.isfavourite = !pubs.isfavourite;
+                });
+              },
+            ),
             title: Text(pubs.pubname),
-            trailing: Icon(Icons.info),
           ),
         ),
       ],

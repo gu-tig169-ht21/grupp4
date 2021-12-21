@@ -32,15 +32,18 @@ class Pub {
   String adress;
   //TODO: få in longitud/lattitud
   String? description;
+  bool isfavourite;
 
   Pub(
       {required this.pubID,
       required this.name,
       required this.adress,
-      this.description});
+      this.description,
+      this.isfavourite = false});
 
   String get ID => pubID;
   String get pubname => name;
   String get pubadress => adress;
   String? get pubdescription => description;
+  bool get favourite => isfavourite;
 }
