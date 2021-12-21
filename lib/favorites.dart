@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'bottom_nav_bar.dart';
 import 'package:english_words/english_words.dart';
 import 'crawl_list_view.dart';
-
+import 'pub_crawl_model.dart';
 class Favorites extends StatefulWidget {
   @override
   State<Favorites> createState() => _FavoritesState();
@@ -12,6 +12,9 @@ class _FavoritesState extends State<Favorites> {
   int _selectedIndex = 0;
   final _randomWordPairs = <WordPair>[];
   final _addWordPairs = Set<WordPair>();
+  final  _pub = <Pub>[];
+
+
 
   void onItemTapped(int index) {
     setState(() {
@@ -56,7 +59,7 @@ Widget _buildLis() {
 
   Widget _buildList() {
     return ListView.builder(
-      itemCount: 10,
+       itemCount: 10,
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       padding: const EdgeInsets.all(16.0),
@@ -74,14 +77,14 @@ Widget _buildLis() {
     );
   }
 
-  Widget _buildRow(WordPair pair) {
+  Widget _buildRow(WordPair pair) { 
     final alreadyadd = _addWordPairs.contains(pair);
 
     // word-pair tile
     return ListTile(
         title: Text(pair.asPascalCase, style: TextStyle(fontSize: 18.0)),
-        trailing: Icon(alreadyadd ? Icons.check : Icons.add,
-            color: alreadyadd ? Colors.green : null),
+        trailing: Icon(alreadyadd ? Icons.favorite : Icons.favorite,
+            color: alreadyadd ? Colors.amber : null),
         onTap: () {
           setState(() {
             if (alreadyadd) {
@@ -105,7 +108,10 @@ Widget _buildLis() {
 
         // saved word-pair page
         return Scaffold(
-            appBar: AppBar(title: Text('Saved Word-Pairs')),
+            appBar: AppBar(
+              title: Text('Sparade favorjet barer'),
+              backgroundColor: Colors.amberAccent[400],
+            ),
             body: ListView(children: divided));
       }));
 }
