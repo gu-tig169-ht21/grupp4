@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -19,7 +20,8 @@ class FirebaseApi {
       firebase_storage.FirebaseStorage.instance;
 
   Future<String> loadCrawlImage(String ref) async {
-    final reference = await storage.ref('/PubImages/$ref').getDownloadURL();
+    final reference =
+        await storage.ref('/crawlPics/PubImages/$ref').getDownloadURL();
     return reference;
     /* print(reference.toString() + '<-- detta är reference');
     var url = await reference.getDownloadURL();
@@ -96,7 +98,7 @@ class FirebaseApi {
 
   static Future<List<PubCrawlModel>> receiveCrawls() async {
     QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection('pubCrawls2').get();
+        await FirebaseFirestore.instance.collection('PubCrawls3').get();
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     var json = jsonDecode(allData.toString());
     List<PubCrawlModel> list = [];
@@ -120,5 +122,33 @@ class FirebaseApi {
         description: json[1]['crawlDescription'],
         pubs: json[1]['crawlPubs'])); */
     return list;
+  }
+
+  Future uploadFile(dynamic _photo, String crawlName) async {
+    if (_photo == null) return;
+    final fileName = basename(_photo!.path);
+    final destination = 'PubImages/$crawlName';
+
+    try {
+      final ref = firebase_storage.FirebaseStorage.instance
+          .ref('/crawlPics/')
+          .child(destination);
+      await ref.putFile(_photo!);
+    } catch (e) {
+      print('error occured');
+    }
+  }
+
+  static void postCrawl(PubCrawlModel modelToUpload) async {
+    FirebaseFirestore.instance
+        .collection('PubCrawls3')
+        .doc(modelToUpload.crawlID)
+        .set({
+      '"crawlTitle"': modelToUpload.crawlTitle,
+      '"crawlID"': modelToUpload.crawlID,
+      '"crawlDescription"': modelToUpload.crawlDescription,
+      '"crawlPubs"': modelToUpload.crawlPubs,
+      '"crawlImgRef"': modelToUpload.title
+    });
   }
 }

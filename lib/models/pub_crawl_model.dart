@@ -6,14 +6,13 @@ class PubCrawlModel {
   String pubs;
   String imgRef;
 
-  PubCrawlModel({
-    required this.crawlID,
-    required this.title,
-    required this.description,
-    this.rating,
-    required this.pubs,
-    required this.imgRef,
-  });
+  PubCrawlModel(
+      {required this.crawlID,
+      required this.title,
+      required this.description,
+      this.rating,
+      required this.pubs,
+      required this.imgRef});
 
   String get ID => crawlID;
   String get crawlTitle => title;

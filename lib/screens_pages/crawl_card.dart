@@ -24,8 +24,6 @@ class _CrawlCardState extends State<CrawlCard> {
     super.initState();
 
     list = FirebaseApi.getCrawl();
-    //imag = getCrawlImage();
-    futureFiles = FirebaseApi.listAll('/PubImages/');
   }
 
   @override
@@ -73,6 +71,7 @@ class _CrawlCardState extends State<CrawlCard> {
   }
 
   Widget buildImageCard(BuildContext context, PubCrawlModel pubCrawl) {
+    const color = Color(0xffA5D5B4);
     String cords;
     List<String> splitCords;
     late var path = FirebaseApi().loadCrawlImage(pubCrawl.imgRef).toString();
@@ -106,33 +105,48 @@ class _CrawlCardState extends State<CrawlCard> {
                 FutureBuilder(
                     future: getCrawlImage(pubCrawl.imgRef),
                     builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        print(snapshot.toString());
-                        return Center(child: Text('Some error occurred!'));
-                      } else {
-                        final url = snapshot.data.toString();
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
+                        default:
+                          if (snapshot.hasError) {
+                            print(snapshot.toString());
+                            return Center(child: Text('Some error occurred!'));
+                          } else {
+                            final url = snapshot.data.toString();
 
-                        return Stack(children: [
-                          Image.network(
-                            url,
-                            fit: BoxFit.fill,
-                            height: 240,
-                          ),
-                          Positioned(
-                            bottom: 16,
-                            right: 16,
-                            left: 16,
-                            child: Text(
-                              pubCrawl.title,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                //backgroundColor: Colors.amber,
+                            return Stack(children: [
+                              Image.network(
+                                url,
+                                fit: BoxFit.fill,
+                                height: 240,
                               ),
-                            ),
-                          )
-                        ]);
+                              Positioned(
+                                bottom: 16,
+                                //right: 16,
+                                left: 16,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffD9B250),
+                                    border: Border.all(
+                                        color: Colors.black, width: 2),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      pubCrawl.title,
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        //backgroundColor: Colors.amber,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ]);
+                          }
                       }
                     })
               ],
