@@ -41,12 +41,12 @@ class _StartScreenState extends State<StartScreen> {
                 child: Text('CRAWL!'),
                 onPressed: () => Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => CrawlView())),
-              ),
+              ),/*
               ElevatedButton(
                 child: Text('Favoriter'),
                 onPressed: () => Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => Favorites())),
-              ),
+              ),*/
               ElevatedButton(
                 child: Text('Lägg till Crawl (Not yet implemented)'),
                 onPressed: () =>
