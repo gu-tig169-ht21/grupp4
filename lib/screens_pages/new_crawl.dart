@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
+import 'package:my_first_app/screens_pages/add_bar_screen.dart';
 import 'register_user.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -70,7 +71,13 @@ class _newCrawlState extends State<newCrawl> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(context).push(
+                      (MaterialPageRoute(builder: (context) => AddBarMap()))),
+                  child: Text('Select bars'),
+                ),
+
+                /*  TextField(
                   controller: _crawlPubs,
                   decoration: InputDecoration(
                       label: Text(
@@ -78,7 +85,7 @@ class _newCrawlState extends State<newCrawl> {
                         style: TextStyle(color: hintTextColor),
                       ),
                       border: const OutlineInputBorder()),
-                ),
+                ), */
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
