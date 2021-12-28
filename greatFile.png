@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+import 'package:habit/Pages/Groupmanagement.dart';
+
+class HomeBottomAppBar extends StatefulWidget {
+  @override
+  _HomeBottomAppBarState createState() => _HomeBottomAppBarState();
+}
+
+class _HomeBottomAppBarState extends State<HomeBottomAppBar> {
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      child: Container(
+        padding: EdgeInsets.all(20),
+        color: Color(0xFFc9434a),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(
+              width: 125,
+              height: 50,
+              child: RaisedButton.icon(
+                color: Color(0xFFc9434a),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => GroupManagement()));
+                },
+                icon: Icon(
+                  Icons.home,
+                  color: Color(0xFFfffad9),
+                ),
+                label: Text(
+                  'Home',
+                  style: TextStyle(
+                    color: Color(0xFFfffad9),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: 125,
+              height: 50,
+              child: RaisedButton.icon(
+                color: Color(0xFFc9434a),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => GroupManagement()));
+                },
+                icon: Icon(
+                  Icons.group,
+                  color: Color(0xFFfffad9),
+                ),
+                label: Text(
+                  'Groups',
+                  style: TextStyle(
+                    color: Color(0xFFfffad9),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
