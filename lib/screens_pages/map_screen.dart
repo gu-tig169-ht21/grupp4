@@ -27,28 +27,30 @@ class MapSampleState extends State<MapSample> {
   late Future<List<Marker>> markerList;
   final PubCrawlModel crawlModel;
   MapSampleState({required this.crawlModel});
-  late List<Pub> pubbar;
+  late Future<List<Pub>> pubbar;
 
-  Set<Marker> _markers = {};
-  void _onMapCreated(GoogleMapController controller) {
-    setState(() async {
-      List<String> pubList = crawlModel.pubs.split(";,");
-      for (int i = 0; i < pubList.length; i++) {
-        _markers.add(await Api.callGetPlace(pubList[i]));
-      }
-      // _markers.add(await Api.callGetPlace(pubList[0]));
-      // _markers.add(await Api.callGetPlace(pubList[1]));
-      // _markers.add(await Api.callGetPlace(pubList[2]));
-    });
+  final Set<Marker> _markers = {};
+  final List<Pub> _pubs = [];
+
+  void _getListOfPubs() async {
+    List<String> pubList = crawlModel.pubs.split(",,");
+    for (int i = 0; i < pubList.length; i++) {
+      _pubs.add(await Api.getPubInfo(pubList[i]));
+    }
   }
 
-  //int _selectedIndex = 0;
-
-  //Måste göra en metod av det hela istället för att initiera allt i "initalizern"
+  void _onMapCreated(GoogleMapController controller) async {
+    List<String> pubList = crawlModel.pubs.split(";,");
+    for (int i = 0; i < pubList.length; i++) {
+      _markers.add(await Api.callGetPlace(pubList[i]));
+      setState(() {});
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _getListOfPubs();
     markerList = Api.callAllPlaces(crawlModel.pubs);
   }
   /* void onItemTapped(int index) {
@@ -59,7 +61,7 @@ class MapSampleState extends State<MapSample> {
 
   //Completer<GoogleMapController> _controller = Completer();
 
-  static final CameraPosition _CenterGbg = CameraPosition(
+  static final CameraPosition _centerGbg = CameraPosition(
     target: LatLng(57.702870438939414, 11.957678856217141),
     zoom: 14.4746,
   );
@@ -75,27 +77,30 @@ class MapSampleState extends State<MapSample> {
         title: Text('Google Maps'),
         backgroundColor: ColorTheme.a,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 275,
-              child: FutureBuilder(
-                future: markerList,
-                builder: (context, snapshot) => GoogleMap(
-                  mapType: MapType.normal,
-                  //markers: Set<Marker>.from(snapshot.data.values),
-                  onMapCreated: _onMapCreated,
-                  markers: _markers, initialCameraPosition: _CenterGbg,
-                ),
+      body: Column(
+        children: [
+          Container(
+            height: 275,
+            child: FutureBuilder(
+              future: markerList,
+              builder: (context, snapshot) => GoogleMap(
+                mapType: MapType.normal,
+                //markers: Set<Marker>.from(snapshot.data.values),
+                onMapCreated: _onMapCreated,
+                markers: _markers, initialCameraPosition: _centerGbg,
               ),
             ),
-            StatefulBuilder(
-              builder: (Context, setState) => Column(
-                  children: pubbar.map((pub) => crawlCard(pub)).toList()),
-            ),
-          ],
-        ),
+          ),
+          FutureBuilder(
+            future: markerList,
+            builder: (context, snapshot) =>
+                Column(children: _pubs.map((pub) => crawlCard(pub)).toList()),
+          ),
+          StatefulBuilder(
+            builder: (Context, setState) =>
+                Column(children: _pubs.map((pub) => crawlCard(pub)).toList()),
+          ),
+        ],
       ),
     );
   }

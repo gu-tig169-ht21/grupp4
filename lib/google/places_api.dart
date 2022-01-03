@@ -21,7 +21,7 @@ class Api {
     var response = await http.get(Uri.parse('$API_URL/$place&key=$nyckel'));
     String bodyString = response.body;
     var json = jsonDecode(bodyString);
-    // print(json.toString());
+    //print(json.toString());
     // Map<String, dynamic> map = jsonDecode(bodyString);
     double lat = json['results'][0]['geometry']['location']['lat'];
     double lng = json['results'][0]['geometry']['location']['lng'];
@@ -53,5 +53,30 @@ class Api {
     }
 
     return markerList;
+  }
+
+  static Future<Pub> callGetPubInfo(String place) {
+    Future<Pub> pub = getPubInfo(place);
+    return pub;
+  }
+
+  static Future<Pub> getPubInfo(String pubNames) async {
+    print('I GET PUB INFO');
+    List<String> allPlaces = pubNames.split(';,');
+    Pub pubInfo;
+    String name = '';
+    String adress = '';
+    bool isfavourite = false;
+    for (int i = 0; i < pubNames.length; i++) {
+      var response = await http
+          .get(Uri.parse('$API_URL/ ' + allPlaces[i] + '&key=$nyckel'));
+      String bodyString = response.body;
+      var json = jsonDecode(bodyString);
+      print(json.toString());
+      adress = json['results'][0]['geometry']['location']['lat'];
+
+      name = pubNames[i];
+    }
+    return Pub(name: name, adress: adress, isfavourite: isfavourite);
   }
 }
