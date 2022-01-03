@@ -73,9 +73,9 @@ class Api {
       String bodyString = response.body;
       var json = jsonDecode(bodyString);
       print(json.toString());
-      adress = json['results'][0]['geometry']['location']['lat'];
-
-      name = pubNames[i];
+      adress = json['results'][0]['formatted_address'];
+      name = allPlaces[i];
+      print('TITTA HÄÄÄR:' + name + '  ' + adress);
     }
     return Pub(name: name, adress: adress, isfavourite: isfavourite);
   }
