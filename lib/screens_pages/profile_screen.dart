@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/cat/interface_theme.dart';
+import 'package:my_first_app/firebase/Authenticate/authenticate.dart';
 import 'package:my_first_app/screens_pages/login_screen.dart';
 import 'package:my_first_app/screens_pages/register_user.dart';
+import 'package:provider/src/provider.dart';
 
 import 'not_signed_in.dart';
 
@@ -78,11 +81,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 50,
             ),
             ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => LoginScreen(),
-                ),
-              ),
+              onPressed: () async {
+                await context.read<AuthenticationService>().signOut();
+                if (FirebaseAuth.instance.currentUser == null) {
+                  setState(() {});
+                }
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (context) => NotSignedInScreen(),
+                //   ),
+                // );
+              },
               child: Padding(
                 padding: const EdgeInsets.only(
                     left: 50, right: 50, top: 15, bottom: 15),
@@ -101,51 +110,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               height: 20,
             ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Register(),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 50, right: 50, top: 15, bottom: 15),
-                child: Text(
-                  'Register',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.b,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-            ),
-            Container(
-              height: 20,
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => NotSignedInScreen(),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 50, right: 50, top: 15, bottom: 15),
-                child: Text(
-                  'Log in',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.b,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-            ),
+            // ElevatedButton(
+            //   onPressed: () => Navigator.of(context).push(
+            //     MaterialPageRoute(
+            //       builder: (context) => Register(),
+            //     ),
+            //   ),
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(
+            //         left: 50, right: 50, top: 15, bottom: 15),
+            //     child: Text(
+            //       'Register',
+            //       style: TextStyle(color: Colors.white),
+            //     ),
+            //   ),
+            //   style: ElevatedButton.styleFrom(
+            //     primary: ColorTheme.b,
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(25),
+            //     ),
+            //   ),
+            // ),
+            // Container(
+            //   height: 20,
+            // ),
+            // ElevatedButton(
+            //   onPressed: () => Navigator.of(context).push(
+            //     MaterialPageRoute(
+            //       builder: (context) => NotSignedInScreen(),
+            //     ),
+            //   ),
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(
+            //         left: 50, right: 50, top: 15, bottom: 15),
+            //     child: Text(
+            //       'Log in',
+            //       style: TextStyle(color: Colors.white),
+            //     ),
+            //   ),
+            //   style: ElevatedButton.styleFrom(
+            //     primary: ColorTheme.b,
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(25),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
