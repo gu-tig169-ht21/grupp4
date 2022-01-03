@@ -13,94 +13,60 @@ import 'package:my_first_app/screens_pages/favorites.dart';
 import '../google/places_api.dart';
 import 'login_screen.dart';
 
-List<Marker> markerList = [];
-
 class MapSample extends StatefulWidget {
   final PubCrawlModel crawlModel;
-  double lat;
-  double lng;
 
-  MapSample({required this.crawlModel, required this.lat, required this.lng});
+  MapSample({required this.crawlModel});
 
   @override
-  State<MapSample> createState() =>
-      MapSampleState(crawlModel: crawlModel, lat: lat, lng: lng);
+  State<MapSample> createState() => MapSampleState(crawlModel: crawlModel);
 }
 
 class MapSampleState extends State<MapSample> {
+  late Future<List<Marker>> markerList;
+  final PubCrawlModel crawlModel;
+  MapSampleState({required this.crawlModel});
+
+  Set<Marker> _markers = {};
+  void _onMapCreated(GoogleMapController controller) {
+    setState(() async {
+      List<String> pubList = crawlModel.pubs.split(";,");
+      for (int i = 0; i < pubList.length; i++) {
+        _markers.add(await Api.callGetPlace(pubList[i]));
+      }
+      // _markers.add(await Api.callGetPlace(pubList[0]));
+      // _markers.add(await Api.callGetPlace(pubList[1]));
+      // _markers.add(await Api.callGetPlace(pubList[2]));
+    });
+  }
+
   //int _selectedIndex = 0;
 
-  final PubCrawlModel crawlModel;
-  double lat;
-  double lng;
   //Måste göra en metod av det hela istället för att initiera allt i "initalizern"
-  MapSampleState(
-      {required this.crawlModel, required this.lat, required this.lng});
+
+  @override
+  void initState() {
+    super.initState();
+    markerList = Api.callAllPlaces(crawlModel.pubs);
+  }
   /* void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   } */
 
-  Completer<GoogleMapController> _controller = Completer();
+  //Completer<GoogleMapController> _controller = Completer();
 
   static final CameraPosition _CenterGbg = CameraPosition(
     target: LatLng(57.702870438939414, 11.957678856217141),
     zoom: 14.4746,
   );
 
-  static final Marker _kGooglePlexMarker = Marker(
-      markerId: MarkerId('_CenterGbg'),
-      infoWindow: InfoWindow(title: 'This is the Center of Gothenburg'),
-      icon: BitmapDescriptor.defaultMarker,
-      position: LatLng(57.702870438939414, 11.957678856217141));
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(57.7028102, 11.9554687),
-      tilt: 59.440717697143555,
-      zoom: 14.0);
-
-  static final Marker _bar2 = Marker(
-      markerId: MarkerId('Brygghuset'),
-      infoWindow: InfoWindow(title: 'Ta en bira!'),
-      icon: BitmapDescriptor.defaultMarker,
-      position: LatLng(57.69975767647727, 11.952226705868245));
-
-  static final Marker _bar3 = Marker(
-      markerId: MarkerId('Henriksberg'),
-      infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
-      icon: BitmapDescriptor.defaultMarker,
-      position: LatLng(57.699687182039845, 11.936588759846018));
-
-  static final Marker henke = Marker(
-      markerId: MarkerId('Henriksberg'),
-      infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
-      icon: BitmapDescriptor.defaultMarker,
-      position: LatLng(57.699687182039845, 11.936588759846018));
-
-  static final Polyline _kPolyLine = Polyline(
-      polylineId: PolylineId('_kPolyLine'),
-      points: [LatLng(57.708870, 11.974560), LatLng(57.67645, 12.17477)],
-      width: 5);
-
-  static final Polygon _kPolygon = Polygon(
-    polygonId: PolygonId('_kPolygon'),
-    points: [
-      LatLng(57.708870, 11.974560),
-      LatLng(57.67645, 12.17477),
-      LatLng(57.4156, 12.8),
-      LatLng(57.3915, 12.211)
-    ],
-    strokeWidth: 5,
-    fillColor: Colors.transparent,
-  );
-
   @override
   Widget build(BuildContext context) {
-    final List<Pub> pubList = crawlModel.pubs;
-    //markerList.add(markerLocation());
-
+    List<String> pubList = crawlModel.crawlPubs.split(';,');
+    /* final List<Pub> pubList = crawlModel.pubs;
+    markerList.add(markerLocation()); */
     return new Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -112,24 +78,15 @@ class MapSampleState extends State<MapSample> {
           children: [
             Container(
               height: 275,
-              child: GoogleMap(
+              child: FutureBuilder(
+              future: markerList,
+              builder: (context, snapshot) => GoogleMap(
                 mapType: MapType.normal,
-                markers: {
-                  _kGooglePlexMarker,
-                  _bar2,
-                  new Marker(
-                      markerId: MarkerId('Henriksberg'),
-                      infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
-                      icon: BitmapDescriptor.defaultMarker,
-                      position: LatLng(lat, lng)),
-                  //markerList[0],
-                  //markerLocation(),
-                },
-                initialCameraPosition: _CenterGbg,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                },
+                //markers: Set<Marker>.from(snapshot.data.values),
+                onMapCreated: _onMapCreated,
+                markers: _markers,
               ),
+            ),
             ),
             StatefulBuilder(
               builder: (Context, setState) => Column(
@@ -137,9 +94,14 @@ class MapSampleState extends State<MapSample> {
             ),
           ],
         ),
+
       ),
     );
   }
+
+  //  List<String> barSplits = pubCrawl.crawlPubs.split(';,');
+  //         cords = await cordinates(barSplits[0]);
+  //         splitCords = cords.split(',');
 
   // markerLocation() async {
   //   String cords = await Api.getPlace('henriksberg');
@@ -251,19 +213,20 @@ class MapSampleState extends State<MapSample> {
         Card(
           child: ExpansionTile(
             leading: IconButton(
-              icon: pubs.isfavourite
+              icon: /* pubs.isfavourite
                   ? Icon(
                       Icons.favorite,
                       color: Colors.amberAccent[400],
                     )
-                  : Icon(Icons.favorite_border),
+                  : */
+                  Icon(Icons.favorite_border),
               onPressed: () {
                 /*
                 if (FirebaseAuth.instance.currentUser == null) {
                   showAlertDialog();
                 } else {
                   setState(() {
-                    pubs.isfavourite = !pubs.isfavourite;
+                    //pubs.isfavourite = !pubs.isfavourite;
                   });
                 }*/
 
@@ -322,6 +285,16 @@ class MapSampleState extends State<MapSample> {
       ],
     );
   }
+
+  Marker addMarkers() {
+    List<Marker> markerList = [];
+    for (int i = 0; i < crawlModel.crawlPubs.length; i++) {}
+    return Marker(
+        markerId: MarkerId('Henriksberg'),
+        infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
+        icon: BitmapDescriptor.defaultMarker,
+        position: LatLng(57.699687182039845, 11.936588759846018));
+  }
 }
 
 // class addMarkerLocations {
@@ -338,3 +311,55 @@ class MapSampleState extends State<MapSample> {
 //     );
 //   }
 // }
+
+
+
+
+
+
+  // static final Marker _kGooglePlexMarker = Marker(
+  //     markerId: MarkerId('_CenterGbg'),
+  //     infoWindow: InfoWindow(title: 'This is the Center of Gothenburg'),
+  //     icon: BitmapDescriptor.defaultMarker,
+  //     position: LatLng(57.702870438939414, 11.957678856217141));
+
+  // static final CameraPosition _kLake = CameraPosition(
+  //     bearing: 192.8334901395799,
+  //     target: LatLng(57.7028102, 11.9554687),
+  //     tilt: 59.440717697143555,
+  //     zoom: 14.0);
+
+  // static final Marker _bar2 = Marker(
+  //     markerId: MarkerId('Brygghuset'),
+  //     infoWindow: InfoWindow(title: 'Ta en bira!'),
+  //     icon: BitmapDescriptor.defaultMarker,
+  //     position: LatLng(57.69975767647727, 11.952226705868245));
+
+  // static final Marker _bar3 = Marker(
+  //     markerId: MarkerId('Henriksberg'),
+  //     infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
+  //     icon: BitmapDescriptor.defaultMarker,
+  //     position: LatLng(57.699687182039845, 11.936588759846018));
+
+  // static final Marker henke = Marker(
+  //     markerId: MarkerId('Henriksberg'),
+  //     infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
+  //     icon: BitmapDescriptor.defaultMarker,
+  //     position: LatLng(57.699687182039845, 11.936588759846018));
+
+  // static final Polyline _kPolyLine = Polyline(
+  //     polylineId: PolylineId('_kPolyLine'),
+  //     points: [LatLng(57.708870, 11.974560), LatLng(57.67645, 12.17477)],
+  //     width: 5);
+
+  // static final Polygon _kPolygon = Polygon(
+  //   polygonId: PolygonId('_kPolygon'),
+  //   points: const [
+  //     LatLng(57.708870, 11.974560),
+  //     LatLng(57.67645, 12.17477),
+  //     LatLng(57.4156, 12.8),
+  //     LatLng(57.3915, 12.211)
+  //   ],
+  //   strokeWidth: 5,
+  //   fillColor: Colors.transparent,
+  // );
