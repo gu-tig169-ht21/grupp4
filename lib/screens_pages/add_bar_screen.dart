@@ -40,11 +40,6 @@ class AddBarMapState extends State<AddBarMap> {
       icon: BitmapDescriptor.defaultMarker,
       position: LatLng(57.699687182039845, 11.936588759846018));
 
-  static final Polyline _kPolyLine = Polyline(
-      polylineId: PolylineId('_kPolyLine'),
-      points: [LatLng(57.708870, 11.974560), LatLng(57.67645, 12.17477)],
-      width: 5);
-
   @override
   Widget build(BuildContext context) {
     int x = 0;

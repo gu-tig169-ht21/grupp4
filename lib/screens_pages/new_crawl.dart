@@ -204,13 +204,13 @@ class _newCrawlState extends State<newCrawl> {
         });
   }
 
-  Future imgFromGallery(String crawlName) async {
+  Future imgFromGallery(String crawlTitle) async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (pickedFile != null) {
         _photo = File(pickedFile.path);
-        FirebaseApi().uploadFile(_photo, crawlName);
+        FirebaseApi().uploadFile(_photo, crawlTitle);
       } else {
         print('No image selected.');
       }

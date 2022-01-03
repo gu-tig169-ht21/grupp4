@@ -109,7 +109,6 @@ class FirebaseApi {
           description: crawls['crawlDescription'],
           pubs: crawls['crawlPubs'],
           imgRef: crawls['crawlImgRef']));
-      print('image ref: -->' + crawls['crawlImgRef']);
     }
     /* list.add(PubCrawlModel(
         crawlID: json[0]['crawlID'],
