@@ -36,8 +36,8 @@ class _newCrawlState extends State<newCrawl> {
     Size size = MediaQuery.of(context).size;
     Color hintTextColor = Colors.grey.shade700;
     List<Pub> _pubs = [
-      Pub(name: "Brygghuset", adress: 'Järntorget 4'),
-      Pub(name: "Steampunk Bar", adress: 'Kungsgatan 7A')
+      Pub(name: "Brygghuset", adress: 'Järntorget 4', isfavourite: false),
+      Pub(name: "Steampunk Bar", adress: 'Kungsgatan 7A', isfavourite: false)
     ];
     Pub? _selectedBar;
     bool loggedIn;

@@ -27,6 +27,7 @@ class MapSampleState extends State<MapSample> {
   late Future<List<Marker>> markerList;
   final PubCrawlModel crawlModel;
   MapSampleState({required this.crawlModel});
+  late List<Pub> pubbar;
 
   Set<Marker> _markers = {};
   void _onMapCreated(GoogleMapController controller) {
@@ -80,22 +81,21 @@ class MapSampleState extends State<MapSample> {
             Container(
               height: 275,
               child: FutureBuilder(
-              future: markerList,
-              builder: (context, snapshot) => GoogleMap(
-                mapType: MapType.normal,
-                //markers: Set<Marker>.from(snapshot.data.values),
-                onMapCreated: _onMapCreated,
-                markers: _markers,
+                future: markerList,
+                builder: (context, snapshot) => GoogleMap(
+                  mapType: MapType.normal,
+                  //markers: Set<Marker>.from(snapshot.data.values),
+                  onMapCreated: _onMapCreated,
+                  markers: _markers, initialCameraPosition: _CenterGbg,
+                ),
               ),
-            ),
             ),
             StatefulBuilder(
               builder: (Context, setState) => Column(
-                  children: pubList.map((pub) => crawlCard(pub)).toList()),
+                  children: pubbar.map((pub) => crawlCard(pub)).toList()),
             ),
           ],
         ),
-
       ),
     );
   }
@@ -140,12 +140,6 @@ class MapSampleState extends State<MapSample> {
                 ListTile(
                   title: Text(
                     'Description: ' + pubs.description!,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'PubID: ' + pubs.pubID,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
                 ),

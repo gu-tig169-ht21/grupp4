@@ -26,12 +26,13 @@ class Pub {
   String adress;
   //TODO: få in longitud/lattitud
   String? description;
-  //bool isfavourite;
+  bool isfavourite = false;
 
   Pub({
     required this.name,
     required this.adress,
     this.description,
+    required this.isfavourite,
   });
 
   String get pubname => name;

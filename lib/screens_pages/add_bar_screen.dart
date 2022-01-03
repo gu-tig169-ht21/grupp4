@@ -158,8 +158,10 @@ class AddBarMapState extends State<AddBarMap> {
         next_page_token = result.nextPageToken;
         places = result.results;
         for (var pub in result.results) {
-          _pubsGbg.add(
-              Pub(name: pub.name, adress: pub.formattedAddress.toString()));
+          _pubsGbg.add(Pub(
+              name: pub.name,
+              adress: pub.formattedAddress.toString(),
+              isfavourite: false));
         }
       }
     });
@@ -172,8 +174,10 @@ class AddBarMapState extends State<AddBarMap> {
           places = result2.results;
           next_page_token = result2.nextPageToken;
           for (var pub2 in result2.results) {
-            _pubsGbg.add(
-                Pub(name: pub2.name, adress: pub2.formattedAddress.toString()));
+            _pubsGbg.add(Pub(
+                name: pub2.name,
+                adress: pub2.formattedAddress.toString(),
+                isfavourite: false));
           }
         }
       });
@@ -187,7 +191,9 @@ class AddBarMapState extends State<AddBarMap> {
             places = result3.results;
             for (var pub3 in result3.results) {
               _pubsGbg.add(Pub(
-                  name: pub3.name, adress: pub3.formattedAddress.toString()));
+                  name: pub3.name,
+                  adress: pub3.formattedAddress.toString(),
+                  isfavourite: false));
             }
           }
           isLoading = false;

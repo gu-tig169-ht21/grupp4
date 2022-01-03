@@ -91,12 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),
-              ElevatedButton(
-                child: Text('Registrera'),
-                onPressed: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Register())),
-                onLongPress: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => newCrawl())),
               ),
               onPressed: () async {
                 //LOGGA IN
@@ -116,6 +110,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   );
                 }
               },
+            ),
+            ElevatedButton(
+              child: Text('Registrera'),
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Register())),
+              onLongPress: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => newCrawl())),
             ),
           ],
         ),
