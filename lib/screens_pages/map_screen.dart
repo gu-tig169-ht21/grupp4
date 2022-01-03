@@ -27,7 +27,7 @@ class MapSampleState extends State<MapSample> {
   late Future<List<Marker>> markerList;
   final PubCrawlModel crawlModel;
   MapSampleState({required this.crawlModel});
-  late List<Pub> pubbar;
+  late List<Pub> pubbar = [];
 
   Set<Marker> _markers = {};
   void _onMapCreated(GoogleMapController controller) {
