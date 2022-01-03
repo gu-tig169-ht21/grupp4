@@ -8,4 +8,11 @@ class ColorTheme {
   static Color d = const Color.fromRGBO(187, 217, 80, 1); // extrafärg, grön
   static Color e = const Color.fromRGBO(119, 217, 80, 1); // extrafärg, klargrön
   static Color? f = Colors.yellow[200]; // navbar
+
+  Color get yellow => a;
+  Color get blue => b;
+  Color get orange => c;
+  Color get green => d;
+  Color get greenBright => e;
+  Color? get navbarYellow => f;
 }

@@ -43,7 +43,7 @@ class SplashscreenState extends State<Splashscreen> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: files.length,
+                        itemCount: 1,
                         itemBuilder: (context, index) {
                           final file = files[index];
 

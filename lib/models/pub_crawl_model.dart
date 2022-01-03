@@ -2,48 +2,39 @@ class PubCrawlModel {
   String crawlID;
   String title;
   String description;
-  double? rating;
-  List<Pub> pubs = [
-    Pub(
-        pubID: "1",
-        name: "Steampunk",
-        adress: "Nybrogatan 3",
-        description: "Gammal"),
-    Pub(pubID: "2", name: "Brygghuset", adress: "Andra Långgatan 2b"),
-    Pub(
-        pubID: "3",
-        name: "Henriksberg",
-        adress: "Gamla vägen 7",
-        description: "Fin")
-  ];
+  String? rating;
+  String pubs;
+  String imgRef;
 
-  PubCrawlModel({
-    required this.crawlID,
-    required this.title,
-    required this.description,
-    this.rating,
-    required this.pubs,
-  });
+  PubCrawlModel(
+      {required this.crawlID,
+      required this.title,
+      required this.description,
+      this.rating,
+      required this.pubs,
+      required this.imgRef});
+
+  String get ID => crawlID;
+  String get crawlTitle => title;
+  String get crawlDescription => description;
+  String? get crawlRating => rating;
+  String get crawlPubs => pubs;
 }
 
 class Pub {
-  String pubID;
   String name;
   String adress;
   //TODO: få in longitud/lattitud
   String? description;
-  bool isfavourite;
+  //bool isfavourite;
 
-  Pub(
-      {required this.pubID,
-      required this.name,
-      required this.adress,
-      this.description,
-      this.isfavourite = false});
+  Pub({
+    required this.name,
+    required this.adress,
+    this.description,
+  });
 
-  String get ID => pubID;
   String get pubname => name;
   String get pubadress => adress;
   String? get pubdescription => description;
-  bool get favourite => isfavourite;
 }

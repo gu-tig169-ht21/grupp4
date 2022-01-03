@@ -95,8 +95,8 @@ class MapSampleState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Pub> pubList = crawlModel.pubs;
-    //markerList.add(markerLocation());
+    /* final List<Pub> pubList = crawlModel.pubs;
+    markerList.add(markerLocation()); */
 
     return new Scaffold(
       appBar: AppBar(
@@ -127,10 +127,10 @@ class MapSampleState extends State<MapSample> {
               },
             ),
           ),
-          StatefulBuilder(
+          /* StatefulBuilder(
             builder: (Context, setState) =>
                 Column(children: pubList.map((pub) => crawlCard(pub)).toList()),
-          ),
+          ), */
         ],
       ),
     );
@@ -179,13 +179,6 @@ class MapSampleState extends State<MapSample> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                   ),
-                  ListTile(
-                    title: Text(
-                      'PubID: ' + pubs.pubID,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
-                  ),
                   ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -226,18 +219,19 @@ class MapSampleState extends State<MapSample> {
               showCustomDialog(pubs, context);
             },
             leading: IconButton(
-              icon: pubs.isfavourite
+              icon: /* pubs.isfavourite
                   ? Icon(
                       Icons.favorite,
                       color: Colors.amberAccent[400],
                     )
-                  : Icon(Icons.favorite_border),
+                  : */
+                  Icon(Icons.favorite_border),
               onPressed: () {
                 if (FirebaseAuth.instance.currentUser == null) {
                   showNotLoggedInDialog();
                 } else {
                   setState(() {
-                    pubs.isfavourite = !pubs.isfavourite;
+                    //pubs.isfavourite = !pubs.isfavourite;
                   });
                 }
               },
