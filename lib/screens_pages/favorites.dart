@@ -6,10 +6,10 @@ import '../models/pub_crawl_model.dart';
 
 class Favorites extends StatefulWidget {
   @override
-  State<Favorites> createState() => _FavoritesState();
+  State<Favorites> createState() => FavoritesState();
 }
 
-class _FavoritesState extends State<Favorites> {
+class FavoritesState extends State<Favorites> {
   int _selectedIndex = 0;
   final _pub = <Pub>[];
 
@@ -18,6 +18,8 @@ class _FavoritesState extends State<Favorites> {
       _selectedIndex = index;
     });
   }
+
+  static List<String> favourites = [];
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +35,14 @@ class _FavoritesState extends State<Favorites> {
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.center,
           children: /*<Widget>*/ [
-            crawlCard(Pub(name: "test", adress: "adress")),
-            crawlCard(Pub(name: "test", adress: "adress")),
-            crawlCard(Pub(name: "test", adress: "adress")),
+
+            StatefulBuilder(
+              builder: (Context, setState) => Column(
+                  children: favourites
+                      .map((favourite) => crawlCard(favourite))
+                      .toList()),
+            ),
+
           ],
         ),
       ),
@@ -56,16 +63,20 @@ Widget _buildLis() {
   );
 }*/
 
-  Widget crawlCard(Pub pubs) {
+  Widget crawlCard(favourites) {
     return ListView(
       shrinkWrap: true,
       children: [
         Card(
           child: ListTile(
-            leading: IconButton(
-                onPressed: () {}, icon: Icon(Icons.favorite_border_outlined)),
-            title: Text(pubs.pubname),
-            trailing: IconButton(onPressed: () {}, icon: Icon(Icons.info)),
+            title: Text(favourites),
+            trailing: IconButton(
+                onPressed: () {
+                  setState(() {
+                    FavoritesState.favourites.remove(favourites);
+                  });
+                },
+                icon: Icon(Icons.delete)),
           ),
         ),
       ],

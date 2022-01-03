@@ -6,9 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/screens_pages/crawl_card.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
+import 'package:my_first_app/screens_pages/favorites.dart';
 import '../google/places_api.dart';
+import 'login_screen.dart';
 
 class MapSample extends StatefulWidget {
   final PubCrawlModel crawlModel;
@@ -70,26 +73,28 @@ class MapSampleState extends State<MapSample> {
         title: Text('Google Maps'),
         backgroundColor: Colors.amberAccent[400],
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 275,
-            child: FutureBuilder(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 275,
+              child: FutureBuilder(
               future: markerList,
               builder: (context, snapshot) => GoogleMap(
                 mapType: MapType.normal,
                 //markers: Set<Marker>.from(snapshot.data.values),
-                initialCameraPosition: _CenterGbg,
                 onMapCreated: _onMapCreated,
                 markers: _markers,
               ),
             ),
-          ),
-          /* StatefulBuilder(
-            builder: (Context, setState) =>
-                Column(children: pubList.map((pub) => crawlCard(pub)).toList()),
-          ), */
-        ],
+            ),
+            StatefulBuilder(
+              builder: (Context, setState) => Column(
+                  children: pubList.map((pub) => crawlCard(pub)).toList()),
+            ),
+          ],
+        ),
+
       ),
     );
   }
@@ -116,38 +121,39 @@ class MapSampleState extends State<MapSample> {
         context: context,
         builder: (context) {
           return Dialog(
-            child: Container(
-              height: 450,
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(
-                      'Name: ' + pubs.name,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: Text(
+                    'Name: ' + pubs.name,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  ListTile(
-                    title: Text(
-                      'Adress: ' + pubs.adress,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Adress: ' + pubs.adress,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  ListTile(
-                    title: Text(
-                      'Description: ' + pubs.description!,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Description: ' + pubs.description!,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Cancel')),
-                ],
-              ),
+                ),
+                ListTile(
+                  title: Text(
+                    'PubID: ' + pubs.pubID,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  ),
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Cancel')),
+              ],
             ),
           );
         });
@@ -171,15 +177,41 @@ class MapSampleState extends State<MapSample> {
         });
   }
 
+  void showAlertDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Alert!'),
+            content: Text('You have to log in to save favourites'),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Keep crawling')),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => LoginScreen()));
+                      },
+                      child: Text('Log in')),
+                ],
+              )
+            ],
+          );
+        });
+  }
+
   Widget crawlCard(Pub pubs) {
     return ListView(
       shrinkWrap: true,
       children: [
         Card(
-          child: ListTile(
-            onTap: () {
-              showCustomDialog(pubs, context);
-            },
+          child: ExpansionTile(
             leading: IconButton(
               icon: /* pubs.isfavourite
                   ? Icon(
@@ -189,17 +221,66 @@ class MapSampleState extends State<MapSample> {
                   : */
                   Icon(Icons.favorite_border),
               onPressed: () {
+                /*
                 if (FirebaseAuth.instance.currentUser == null) {
-                  showNotLoggedInDialog();
+                  showAlertDialog();
                 } else {
                   setState(() {
                     //pubs.isfavourite = !pubs.isfavourite;
+                  });
+                }*/
+
+                if (pubs.isfavourite) {
+                  FavoritesState.favourites.remove(pubs.name);
+                  print(FavoritesState.favourites);
+                  setState(() {
+                    pubs.isfavourite = !pubs.isfavourite;
+                  });
+                } else {
+                  FirebaseApi.updateFavorites(pubs.name);
+                  FavoritesState.favourites.add(pubs.name);
+                  print(FavoritesState.favourites);
+                  setState(() {
+                    pubs.isfavourite = !pubs.isfavourite;
                   });
                 }
               },
             ),
             title: Text(pubs.pubname),
+            children: [
+              ListTile(
+                title: Text('Name: ' + pubs.pubname),
+              ),
+              ListTile(
+                title: Text('Adress: ' + pubs.adress),
+              )
+            ],
           ),
+
+          /* ListTile(
+                onTap: () {
+                  showCustomDialog(pubs, context);
+                },
+                leading: IconButton(
+                  icon: pubs.isfavourite
+                      ? Icon(
+                          Icons.favorite,
+                          color: Colors.amberAccent[400],
+                        )
+                      : Icon(Icons.favorite_border),
+                  onPressed: () {
+                    if (FirebaseAuth.instance.currentUser == null) {
+                      showAlertDialog();
+                    } else {
+                      setState(() {
+                        pubs.isfavourite = !pubs.isfavourite;
+                      });
+                    }
+                  },
+                ),
+                title: Text(pubs.pubname),
+              ),
+          ),*/
         ),
       ],
     );

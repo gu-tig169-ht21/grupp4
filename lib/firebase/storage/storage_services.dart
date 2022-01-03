@@ -84,11 +84,11 @@ class FirebaseApi {
     return null;
   }
 
-  static void updateFavorites() async {
+  static void updateFavorites(String fav) async {
     FirebaseFirestore.instance
         .collection('User')
         .doc(await FirebaseAuth.instance.currentUser!.email)
-        .update({'favoriets': 'Steampunk, ' 'Brygghuset, ' 'Tacos & tequila'});
+        .update({'favoriets': fav});
   }
 
   static Future<List<PubCrawlModel>> getCrawl() {
