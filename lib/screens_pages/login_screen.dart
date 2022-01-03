@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/screens_pages/profile_screen.dart';
+import 'package:my_first_app/screens_pages/new_crawl.dart';
 import 'register_user.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -35,15 +36,15 @@ class _LoginScreenState extends State<LoginScreen> {
         actions: [
           Visibility(
             visible: showLogout,
-            child: ElevatedButton(
+            child: TextButton(
               onPressed: () async {
                 await context.read<AuthenticationService>().signOut();
-                if (FirebaseAuth.instance.currentUser == null) {
-                  showLogout = false;
+                if (FirebaseAuth.instance.currentUser != null) {
+                  showLogout = true;
                   setState(() {});
                 }
               },
-              child: Text('Logga ut'),
+              child: const Text('Logga ut'),
             ),
           ),
         ],
@@ -90,6 +91,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),
+              ElevatedButton(
+                child: Text('Registrera'),
+                onPressed: () => Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => Register())),
+                onLongPress: () => Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => newCrawl())),
               ),
               onPressed: () async {
                 //LOGGA IN
