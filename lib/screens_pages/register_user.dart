@@ -23,6 +23,8 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     TextEditingController _email = TextEditingController();
     TextEditingController _password = TextEditingController();
+    TextEditingController _confirmpassword = TextEditingController();
+
     final AuthenticationService _auth =
         AuthenticationService(FirebaseAuth.instance);
 
@@ -33,9 +35,12 @@ class _RegisterState extends State<Register> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text('Fill info below:'),
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Text('Fill in the following information:'),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
@@ -45,14 +50,41 @@ class _RegisterState extends State<Register> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
               child: TextField(
                 controller: _password,
                 decoration: InputDecoration(
                     labelText: 'Password', border: OutlineInputBorder()),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _confirmpassword,
+                decoration: InputDecoration(
+                  labelText: 'Confirm password',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            Container(
+              height: 22,
+            ),
             ElevatedButton(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 30, right: 30, top: 15, bottom: 15),
+                child: Text(
+                  'Create account',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: ColorTheme.b,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
               onPressed: () async {
                 dynamic result = await _auth.SignUp(
                     email: _email.text, password: _password.text);
@@ -64,7 +96,6 @@ class _RegisterState extends State<Register> {
                 }
                 Navigator.pop(context);
               },
-              child: Text('Skapa användare'),
             ),
           ],
         ),

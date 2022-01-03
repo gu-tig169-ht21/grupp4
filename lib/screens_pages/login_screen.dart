@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/screens_pages/profile_screen.dart';
 import 'package:my_first_app/screens_pages/new_crawl.dart';
 import 'register_user.dart';
 import 'package:provider/provider.dart';
@@ -49,46 +50,47 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text('Login Screen'),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: _email,
-                  decoration: InputDecoration(
-                      labelText: 'Email', border: OutlineInputBorder()),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Text('Sign in'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _email,
+                decoration: InputDecoration(
+                    labelText: 'Email', border: OutlineInputBorder()),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                obscureText: true,
+                controller: _password,
+                decoration: InputDecoration(
+                    labelText: 'Password', border: OutlineInputBorder()),
+              ),
+            ),
+            Container(
+              height: 22,
+            ),
+            ElevatedButton(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 30, right: 30, top: 15, bottom: 15),
+                child: Text(
+                  'Sign in',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  obscureText: true,
-                  controller: _password,
-                  decoration: InputDecoration(
-                      labelText: 'Password', border: OutlineInputBorder()),
+              style: ElevatedButton.styleFrom(
+                primary: ColorTheme.b,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
                 ),
-              ),
-              ElevatedButton(
-                child: Text('Logga in'),
-                onPressed: () async {
-                  //LOGGA IN
-                  await context
-                      .read<AuthenticationService>()
-                      .SignIn(email: _email.text, password: _password.text);
-                  print('Firebase USER INFO: ' +
-                      FirebaseAuth.instance.currentUser.toString());
-                  var user = FirebaseAuth.instance.currentUser;
-                  if (user != null) {
-                    showLogout = true;
-                    setState(() {});
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => CrawlView()));
-                  }
-                },
-              ),
               ElevatedButton(
                 child: Text('Registrera'),
                 onPressed: () => Navigator.of(context)
@@ -96,8 +98,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 onLongPress: () => Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => newCrawl())),
               ),
-            ],
-          ),
+              onPressed: () async {
+                //LOGGA IN
+                await context
+                    .read<AuthenticationService>()
+                    .SignIn(email: _email.text, password: _password.text);
+                print('Firebase USER INFO: ' +
+                    FirebaseAuth.instance.currentUser.toString());
+                var user = FirebaseAuth.instance.currentUser;
+                if (user != null) {
+                  showLogout = true;
+                  setState(() {});
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CrawlView(),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
         ),
       ),
       // bottomNavigationBar: BottomNavBar(

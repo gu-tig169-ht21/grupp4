@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/screens_pages/crawl_card.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
@@ -71,7 +72,7 @@ class MapSampleState extends State<MapSample> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Google Maps'),
-        backgroundColor: Colors.amberAccent[400],
+        backgroundColor: ColorTheme.a,
       ),
       body: SingleChildScrollView(
         child: Column(
