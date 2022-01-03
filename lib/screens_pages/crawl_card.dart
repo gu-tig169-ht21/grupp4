@@ -32,6 +32,7 @@ class _CrawlCardState extends State<CrawlCard> {
       appBar: AppBar(
         backgroundColor: ColorTheme.a,
         title: Text('Crawl list'),
+        automaticallyImplyLeading: false,
       ),
       body: FutureBuilder<List<PubCrawlModel>>(
           future: list,

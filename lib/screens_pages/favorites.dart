@@ -30,19 +30,18 @@ class FavoritesState extends State<Favorites> {
           //IconButton(icon: Icon(Icons.favorite), onPressed: _pushadd)
         ],
         backgroundColor: ColorTheme.a,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.center,
           children: /*<Widget>*/ [
-
             StatefulBuilder(
               builder: (Context, setState) => Column(
                   children: favourites
                       .map((favourite) => crawlCard(favourite))
                       .toList()),
             ),
-
           ],
         ),
       ),

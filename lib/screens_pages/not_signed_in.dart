@@ -18,6 +18,7 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
         backgroundColor: ColorTheme.a,
         shadowColor: ColorTheme.a,
         elevation: 0,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
@@ -96,7 +97,7 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
                 padding: const EdgeInsets.only(
                     left: 50, right: 50, top: 15, bottom: 15),
                 child: Text(
-                  'View profile screen',
+                  'View profile screen [developer]',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
