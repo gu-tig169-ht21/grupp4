@@ -85,14 +85,10 @@ class _CrawlCardState extends State<CrawlCard> {
       //child: Column(children: [ListTile(title: Text("test"),subtitle: Text("test again"),)],)
       child: InkWell(
         onTap: () async {
-          cords = await cordinates();
-          splitCords = cords.split(',');
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => MapSample(
                 crawlModel: pubCrawl,
-                lat: double.parse(splitCords[0]),
-                lng: double.parse(splitCords[1]),
               ),
             ),
           );
@@ -185,10 +181,10 @@ class _CrawlCardState extends State<CrawlCard> {
     return crawls;
   }
 
-  Future<String> cordinates() async {
-    String cords = await Api.getPlace('henriksberg');
-    return cords;
-  }
+  // Future<String> cordinates(String bar) async {
+  //   String cords = await Api.getPlace(bar);
+  //   return cords;
+  // }
 
   Future<String> getCrawlImage(String imageName) async {
     String path = await FirebaseApi().loadCrawlImage(imageName);
