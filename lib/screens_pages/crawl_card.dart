@@ -116,10 +116,14 @@ class _CrawlCardState extends State<CrawlCard> {
                             final url = snapshot.data.toString();
 
                             return Stack(children: [
-                              Image.network(
-                                url,
-                                fit: BoxFit.fill,
-                                height: 240,
+                              ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(15)),
+                                child: Image.network(
+                                  url,
+                                  fit: BoxFit.fill,
+                                  height: 240,
+                                ),
                               ),
                               Positioned(
                                 bottom: 16,

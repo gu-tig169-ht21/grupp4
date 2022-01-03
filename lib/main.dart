@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             const Splashscreen(),
             Container(
-              padding: EdgeInsets.only(bottom: 100),
+              padding: const EdgeInsets.only(bottom: 100),
               alignment: Alignment.bottomCenter,
               child: OutlinedButton(
                 child: const Text(
@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(),
                 ),
                 style: OutlinedButton.styleFrom(
-                    minimumSize: Size(170, 65),
+                    minimumSize: const Size(170, 65),
                     backgroundColor: Colors.white,
                     side: const BorderSide(
                       color: Color.fromRGBO(114, 107, 89, 1),
@@ -85,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     primary: Colors.black),
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => NavbarPage(),
+                    builder: (context) => const NavbarPage(),
                   ),
                 ),
                 onLongPress: () => Navigator.of(context).push(

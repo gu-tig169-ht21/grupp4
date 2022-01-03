@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http; //namespace
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:my_first_app/models/pub_crawl_model.dart';
 
 var nyckel = 'AIzaSyCuPHW1WY319HfTCohnUXfBc7zMwVfgbmk';
 const API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address=';

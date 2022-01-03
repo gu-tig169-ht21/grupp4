@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
 import 'package:my_first_app/screens_pages/add_bar_screen.dart';
@@ -21,18 +22,32 @@ class newCrawl extends StatefulWidget {
 }
 
 class _newCrawlState extends State<newCrawl> {
+  String crawlTitleLabel = 'Crawl Title';
+  Color crawlTitleLabelColor = Colors.grey;
   File? _photo;
   final ImagePicker _picker = ImagePicker();
 
-  TextEditingController _crawlTitle = TextEditingController();
-  TextEditingController _crawlDesc = TextEditingController();
-  TextEditingController _crawlPubs = TextEditingController();
+  final TextEditingController _crawlTitle = TextEditingController();
+  final TextEditingController _crawlDesc = TextEditingController();
+  final TextEditingController _crawlPubs = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     Color hintTextColor = Colors.grey.shade700;
-
+    List<Pub> _pubs = [
+      Pub(name: "Brygghuset", adress: 'Järntorget 4'),
+      Pub(name: "Steampunk Bar", adress: 'Kungsgatan 7A')
+    ];
+    Pub? _selectedBar;
+    bool loggedIn;
+    print('Current User: ' + FirebaseAuth.instance.currentUser.toString());
+    if (FirebaseAuth.instance.currentUser == null) {
+      print('inte inloggad');
+      loggedIn = false;
+    } else {
+      loggedIn = true;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Create New Crawl'),
@@ -45,17 +60,16 @@ class _newCrawlState extends State<newCrawl> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    const Text('Please fill out all information below:'),
-                    TextField(
-                      controller: _crawlTitle,
-                      decoration: const InputDecoration(
-                          labelText: 'Crawl Title',
-                          border: OutlineInputBorder()),
-                    ),
-                  ],
-                ),
+                child: Column(children: [
+                  const Text('Please fill out all information below:'),
+                  TextField(
+                    controller: _crawlTitle,
+                    decoration: InputDecoration(
+                        labelStyle: TextStyle(color: crawlTitleLabelColor),
+                        labelText: crawlTitleLabel,
+                        border: OutlineInputBorder()),
+                  ),
+                ]),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -71,21 +85,34 @@ class _newCrawlState extends State<newCrawl> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).push(
-                      (MaterialPageRoute(builder: (context) => AddBarMap()))),
-                  child: Text('Select bars'),
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.of(context).push(
+                          (MaterialPageRoute(
+                              builder: (context) => AddBarMap()))),
+                      child: Text('Select bars'),
+                    ),
+                    DropdownButton<Pub>(
+                      onChanged: (value) {
+                        _selectedBar = value;
+                      },
+                      value: _selectedBar,
+                      items: _pubs
+                          .map((e) => DropdownMenuItem(
+                                child: Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    e.pubname,
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ),
+                                value: e,
+                              ))
+                          .toList(),
+                    )
+                  ],
                 ),
-
-                /*  TextField(
-                  controller: _crawlPubs,
-                  decoration: InputDecoration(
-                      label: Text(
-                        'Pubs: (separate with ";," between pubs)',
-                        style: TextStyle(color: hintTextColor),
-                      ),
-                      border: const OutlineInputBorder()),
-                ), */
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -119,18 +146,29 @@ class _newCrawlState extends State<newCrawl> {
                   ),
                 ),
               ),
-              ElevatedButton(
-                  child: const Text(
-                    'Post you new Crawl!',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xffD9B250),
-                  ),
-                  onPressed: () async {
-                    createPubCrawl(
-                        _crawlTitle.text, _crawlDesc.text, _crawlPubs.text);
-                  }),
+              Visibility(
+                visible: loggedIn,
+                child: ElevatedButton(
+                    child: const Text(
+                      'Post you new Crawl!',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: const Color(0xffD9B250),
+                    ),
+                    onPressed: () async {
+                      if (_crawlTitle.text.isEmpty) {
+                        setState(() {
+                          crawlTitleLabel = '*CrawlTitle is required';
+                          crawlTitleLabelColor = Colors.red;
+                        });
+                        print('Label: ' + crawlTitleLabel);
+                      } else {
+                        createPubCrawl(
+                            _crawlTitle.text, _crawlDesc.text, _crawlPubs.text);
+                      }
+                    }),
+              ),
             ],
           ),
         ),
