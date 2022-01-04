@@ -24,18 +24,21 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  late Future<List<Marker>> markerList;
-  final PubCrawlModel crawlModel;
   MapSampleState({required this.crawlModel});
-  late Future<List<Pub>> pubbar;
+  final PubCrawlModel crawlModel;
+
+  late Future<List<Marker>> markerList;
+  late Future<List<Pub>> pubInfoList;
 
   final Set<Marker> _markers = {};
   final List<Pub> _pubs = [];
 
   void _getListOfPubs() async {
-    List<String> pubList = crawlModel.pubs.split(",,");
-    for (int i = 0; i < pubList.length; i++) {
-      _pubs.add(await Api.getPubInfo(pubList[i]));
+    print('Metod körs!');
+    print(crawlModel.pubs);
+    for (int i = 0; i < crawlModel.pubs.length; i++) {
+      _pubs.add(await Api.getPubInfo(crawlModel.pubs[i]));
+      print('pub ' + i.toString() + 'tillagd!');
     }
   }
 
@@ -43,14 +46,12 @@ class MapSampleState extends State<MapSample> {
     List<String> pubList = crawlModel.pubs.split(";,");
     for (int i = 0; i < pubList.length; i++) {
       _markers.add(await Api.callGetPlace(pubList[i]));
-      setState(() {});
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _getListOfPubs();
     markerList = Api.callAllPlaces(crawlModel.pubs);
   }
   /* void onItemTapped(int index) {
@@ -68,9 +69,7 @@ class MapSampleState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> pubList = crawlModel.crawlPubs.split(';,');
-    /* final List<Pub> pubList = crawlModel.pubs;
-    markerList.add(markerLocation()); */
+    _getListOfPubs();
     return new Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -94,10 +93,6 @@ class MapSampleState extends State<MapSample> {
           FutureBuilder(
             future: markerList,
             builder: (context, snapshot) =>
-                Column(children: _pubs.map((pub) => crawlCard(pub)).toList()),
-          ),
-          StatefulBuilder(
-            builder: (Context, setState) =>
                 Column(children: _pubs.map((pub) => crawlCard(pub)).toList()),
           ),
         ],

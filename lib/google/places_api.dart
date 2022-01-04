@@ -23,8 +23,10 @@ class Api {
     var json = jsonDecode(bodyString);
     //print(json.toString());
     // Map<String, dynamic> map = jsonDecode(bodyString);
+
     double lat = json['results'][0]['geometry']['location']['lat'];
     double lng = json['results'][0]['geometry']['location']['lng'];
+
     //String coordinates = lat += ';,' + lng;
 
     return Marker(markerId: MarkerId(place), position: LatLng(lat, lng));
@@ -43,13 +45,15 @@ class Api {
           .get(Uri.parse('$API_URL/' + allPlaces[i] + '&key=$nyckel'));
       String bodyString = response.body;
       var json = jsonDecode(bodyString);
-      double lat = json['results'][0]['geometry']['location']['lat'];
-      double lng = json['results'][0]['geometry']['location']['lng'];
-      markerList.add(Marker(
-        markerId: MarkerId(place[i]),
-        icon: BitmapDescriptor.defaultMarker,
-        position: LatLng(lat, lng),
-      ));
+      if (json['results'][0]['status'] != null) {
+        double lat = json['results'][0]['geometry']['location']['lat'];
+        double lng = json['results'][0]['geometry']['location']['lng'];
+        markerList.add(Marker(
+          markerId: MarkerId(place[i]),
+          icon: BitmapDescriptor.defaultMarker,
+          position: LatLng(lat, lng),
+        ));
+      }
     }
 
     return markerList;
@@ -62,20 +66,27 @@ class Api {
 
   static Future<Pub> getPubInfo(String pubNames) async {
     print('I GET PUB INFO');
-    List<String> allPlaces = pubNames.split(';,');
-    Pub pubInfo;
+    List<String> allPlaces = pubNames.split(";,");
+    print(allPlaces.length);
+    print(allPlaces.elementAt(0));
+    print(allPlaces.elementAt(1));
+    print(allPlaces.elementAt(2));
     String name = '';
     String adress = '';
     bool isfavourite = false;
-    for (int i = 0; i < pubNames.length; i++) {
+    for (int i = 0; i <= allPlaces.length; i++) {
       var response = await http
           .get(Uri.parse('$API_URL/ ' + allPlaces[i] + '&key=$nyckel'));
       String bodyString = response.body;
       var json = jsonDecode(bodyString);
       print(json.toString());
-      adress = json['results'][0]['geometry']['location']['lat'];
-
-      name = pubNames[i];
+      if (json['results'][0]['status'] == 'OK') {
+        print('slut på barer!');
+      } else {
+        adress = json['results'][0]['formatted_address'];
+        name = allPlaces[i];
+      }
+      print('bar: ' + i.toString() + ' = $name, med adress: $adress');
     }
     return Pub(name: name, adress: adress, isfavourite: isfavourite);
   }
