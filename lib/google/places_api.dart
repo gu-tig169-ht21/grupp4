@@ -80,6 +80,7 @@ class Api {
       String bodyString = response.body;
       var json = jsonDecode(bodyString);
       print(json.toString());
+
       if (json['results'][0]['status'] == 'OK') {
         print('slut på barer!');
       } else {
@@ -87,6 +88,10 @@ class Api {
         name = allPlaces[i];
       }
       print('bar: ' + i.toString() + ' = $name, med adress: $adress');
+
+      adress = json['results'][0]['formatted_address'];
+      name = allPlaces[i];
+      print('TITTA HÄÄÄR:' + name + '  ' + adress);
     }
     return Pub(name: name, adress: adress, isfavourite: isfavourite);
   }
