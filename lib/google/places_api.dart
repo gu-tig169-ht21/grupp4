@@ -21,10 +21,12 @@ class Api {
     var response = await http.get(Uri.parse('$API_URL/$place&key=$nyckel'));
     String bodyString = response.body;
     var json = jsonDecode(bodyString);
-    // print(json.toString());
+    //print(json.toString());
     // Map<String, dynamic> map = jsonDecode(bodyString);
+
     double lat = json['results'][0]['geometry']['location']['lat'];
     double lng = json['results'][0]['geometry']['location']['lng'];
+
     //String coordinates = lat += ';,' + lng;
 
     return Marker(markerId: MarkerId(place), position: LatLng(lat, lng));
@@ -43,15 +45,39 @@ class Api {
           .get(Uri.parse('$API_URL/' + allPlaces[i] + '&key=$nyckel'));
       String bodyString = response.body;
       var json = jsonDecode(bodyString);
-      double lat = json['results'][0]['geometry']['location']['lat'];
-      double lng = json['results'][0]['geometry']['location']['lng'];
-      markerList.add(Marker(
-        markerId: MarkerId(place[i]),
-        icon: BitmapDescriptor.defaultMarker,
-        position: LatLng(lat, lng),
-      ));
+      if (json['results'][0]['status'] != null) {
+        double lat = json['results'][0]['geometry']['location']['lat'];
+        double lng = json['results'][0]['geometry']['location']['lng'];
+        markerList.add(Marker(
+          markerId: MarkerId(place[i]),
+          icon: BitmapDescriptor.defaultMarker,
+          position: LatLng(lat, lng),
+        ));
+      }
     }
 
     return markerList;
+  }
+
+  static Future<Pub> callGetPubInfo(String place) {
+    Future<Pub> pub = getPubInfo(place);
+    return pub;
+  }
+
+  static Future<Pub> getPubInfo(String pubName) async {
+    String name = '';
+    String adress = '';
+    bool isfavourite = false;
+    var response =
+        await http.get(Uri.parse('$API_URL/ ' + pubName + '&key=$nyckel'));
+    String bodyString = response.body;
+    var json = jsonDecode(bodyString);
+    String svar = json['status'];
+    if (json['status'] == 'OK') {
+      adress = json['results'][0]['formatted_address'];
+      name = pubName;
+      print('bar:  = $name, med adress: $adress');
+    }
+    return Pub(name: name, adress: adress, isfavourite: isfavourite);
   }
 }

@@ -24,22 +24,35 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  late Future<List<Marker>> markerList;
-  final PubCrawlModel crawlModel;
   MapSampleState({required this.crawlModel});
-  late List<Pub> pubbar;
+  final PubCrawlModel crawlModel;
 
-  Set<Marker> _markers = {};
-  void _onMapCreated(GoogleMapController controller) {
-    setState(() async {
-      List<String> pubList = crawlModel.pubs.split(";,");
-      for (int i = 0; i < pubList.length; i++) {
-        _markers.add(await Api.callGetPlace(pubList[i]));
-      }
-      // _markers.add(await Api.callGetPlace(pubList[0]));
-      // _markers.add(await Api.callGetPlace(pubList[1]));
-      // _markers.add(await Api.callGetPlace(pubList[2]));
-    });
+  late Future<List<Marker>> markerList;
+  late Future<List<Pub>> pubInfoList;
+
+  final Set<Marker> _markers = {};
+  final List<Pub> _pubs = [];
+
+  Future<List<Pub>> _getListOfPubs() async {
+    print('Metod _getListOfPubs körs!');
+    print('Hela listan: ' + crawlModel.pubs);
+    print('längden på stränge = ' + crawlModel.pubs.length.toString());
+    List<String> allPlaces = crawlModel.pubs.split(";,");
+    print('pubbar i list-format: ' + allPlaces.toString());
+    for (int i = 0; i < allPlaces.length; i++) {
+      print('i for loop, varv: ' + i.toString());
+      _pubs.add(await Api.callGetPubInfo(allPlaces[i]));
+      print('pub ' + _pubs[i].toString() + 'tillagd!');
+    }
+    print('antal pubbar: ' + _pubs.length.toString());
+    return _pubs;
+  }
+
+  void _onMapCreated(GoogleMapController controller) async {
+    List<String> pubList = crawlModel.pubs.split(";,");
+    for (int i = 0; i < pubList.length; i++) {
+      _markers.add(await Api.callGetPlace(pubList[i]));
+    }
   }
 
   //int _selectedIndex = 0;
@@ -59,16 +72,13 @@ class MapSampleState extends State<MapSample> {
 
   //Completer<GoogleMapController> _controller = Completer();
 
-  static final CameraPosition _CenterGbg = CameraPosition(
+  final CameraPosition _CenterGbg = CameraPosition(
     target: LatLng(57.702870438939414, 11.957678856217141),
     zoom: 14.4746,
   );
 
   @override
   Widget build(BuildContext context) {
-    List<String> pubList = crawlModel.crawlPubs.split(';,');
-    /* final List<Pub> pubList = crawlModel.pubs;
-    markerList.add(markerLocation()); */
     return new Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -90,9 +100,14 @@ class MapSampleState extends State<MapSample> {
                 ),
               ),
             ),
-            StatefulBuilder(
-              builder: (Context, setState) => Column(
-                  children: pubbar.map((pub) => crawlCard(pub)).toList()),
+/*           StatefulBuilder(
+            builder: (Context, setState) => Column(
+                children: _pubs.map((pub) => crawlCard(pub)).toList()),
+          ), */
+            FutureBuilder(
+              future: _getListOfPubs(),
+              builder: (context, snapshot) => Column(
+                  children: _pubs.map((pub) => pubInfoCard(pub)).toList()),
             ),
           ],
         ),
@@ -117,7 +132,7 @@ class MapSampleState extends State<MapSample> {
   //   );
   // }
 
-  void showCustomDialog(Pub pubs, BuildContext context) {
+  void showCustomDialog(Pub pub, BuildContext context) {
     showDialog(
         context: context,
         builder: (context) {
@@ -127,22 +142,22 @@ class MapSampleState extends State<MapSample> {
               children: [
                 ListTile(
                   title: Text(
-                    'Name: ' + pubs.name,
+                    'Name: ' + pub.pubname,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
                 ),
-                ListTile(
+                /* ListTile(
                   title: Text(
                     'Adress: ' + pubs.adress,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                ),
-                ListTile(
+                ), */
+                /* ListTile(
                   title: Text(
                     'Description: ' + pubs.description!,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                ),
+                ), */
                 ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -201,20 +216,19 @@ class MapSampleState extends State<MapSample> {
         });
   }
 
-  Widget crawlCard(Pub pubs) {
+  Widget pubInfoCard(Pub pub) {
     return ListView(
       shrinkWrap: true,
       children: [
         Card(
           child: ExpansionTile(
             leading: IconButton(
-              icon: /* pubs.isfavourite
+              icon: pub.isfavourite
                   ? Icon(
                       Icons.favorite,
                       color: Colors.amberAccent[400],
                     )
-                  : */
-                  Icon(Icons.favorite_border),
+                  : Icon(Icons.favorite_border),
               onPressed: () {
                 /*
                 if (FirebaseAuth.instance.currentUser == null) {
@@ -225,7 +239,7 @@ class MapSampleState extends State<MapSample> {
                   });
                 }*/
 
-                if (pubs.isfavourite) {
+                /* if (pub.isfavourite) {
                   FavoritesState.favourites.remove(pubs.name);
                   print(FavoritesState.favourites);
                   setState(() {
@@ -238,16 +252,16 @@ class MapSampleState extends State<MapSample> {
                   setState(() {
                     pubs.isfavourite = !pubs.isfavourite;
                   });
-                }
+                } */
               },
             ),
-            title: Text(pubs.pubname),
+            title: Text(pub.pubname),
             children: [
               ListTile(
-                title: Text('Name: ' + pubs.pubname),
+                title: Text('Name: ' + pub.pubname),
               ),
               ListTile(
-                title: Text('Adress: ' + pubs.adress),
+                title: Text('Adress: ' + pub.pubadress),
               )
             ],
           ),
@@ -281,7 +295,7 @@ class MapSampleState extends State<MapSample> {
     );
   }
 
-  Marker addMarkers() {
+/*   Marker addMarkers() {
     List<Marker> markerList = [];
     for (int i = 0; i < crawlModel.crawlPubs.length; i++) {}
     return Marker(
@@ -289,7 +303,7 @@ class MapSampleState extends State<MapSample> {
         infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
         icon: BitmapDescriptor.defaultMarker,
         position: LatLng(57.699687182039845, 11.936588759846018));
-  }
+  } */
 }
 
 // class addMarkerLocations {
