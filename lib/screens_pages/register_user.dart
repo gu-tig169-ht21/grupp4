@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_first_app/cat/navbar_page.dart';
 import '../firebase/Authenticate/authenticate.dart';
 import '../cat/interface_theme.dart';
 import '../firebase/storage/storage_services.dart';
@@ -51,19 +52,44 @@ class _RegisterState extends State<Register> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
-              child: TextField(
+              child: TextFormField(
                 controller: _password,
+                obscureText: true,
+                validator: (passwordMatch) {
+                  if (passwordMatch!.isEmpty)
+                    return 'You need to confirm your password';
+                  return null;
+                },
                 decoration: InputDecoration(
-                    labelText: 'Password', border: OutlineInputBorder()),
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: TextField(
+              child: TextFormField(
                 controller: _confirmpassword,
+                obscureText: true,
+                validator: (passwordMatch) {
+                  if (passwordMatch!.isEmpty)
+                    print(
+                      Text('You need to confirm your password'),
+                    );
+                  if (_confirmpassword.text != _password.text) {
+                    //WIP
+                    print('Invalid');
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                   labelText: 'Confirm password',
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: _password == _confirmpassword
+                            ? Colors.pink
+                            : Colors.amber),
+                  ),
                 ),
               ),
             ),
@@ -94,7 +120,14 @@ class _RegisterState extends State<Register> {
                 if (result == null) {
                   print('någonting gick fel');
                 }
-                Navigator.pop(context);
+                if (_password.text == _confirmpassword.text) {
+                  setState(() {});
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => NavbarPage(),
+                    ),
+                  );
+                }
               },
             ),
           ],
@@ -106,4 +139,6 @@ class _RegisterState extends State<Register> {
       // ),
     );
   }
+
+  void passwordNoMatch() {}
 }

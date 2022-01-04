@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/cat/interface_theme.dart';
+import 'package:my_first_app/cat/navbar_page.dart';
 import 'package:my_first_app/firebase/Authenticate/authenticate.dart';
 import 'package:my_first_app/screens_pages/login_screen.dart';
 import 'package:my_first_app/screens_pages/register_user.dart';
@@ -22,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: ColorTheme.a,
         shadowColor: ColorTheme.a,
         elevation: 0,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
@@ -57,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ListTile(
                       leading: Container(width: 120),
                       title: Text(
-                        'Username',
+                        'User',
                         style: TextStyle(
                             shadows: [
                               Shadow(
@@ -86,11 +88,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 if (FirebaseAuth.instance.currentUser == null) {
                   setState(() {});
                 }
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => NotSignedInScreen(),
-                //   ),
-                // );
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => NavbarPage(),
+                  ),
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.only(

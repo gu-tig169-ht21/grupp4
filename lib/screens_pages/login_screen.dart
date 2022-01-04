@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/cat/navbar_page.dart';
 import 'package:my_first_app/screens_pages/profile_screen.dart';
 import 'package:my_first_app/screens_pages/new_crawl.dart';
 import 'register_user.dart';
@@ -33,21 +34,21 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: Text('Login Screen'),
         backgroundColor: ColorTheme.a,
-        actions: [
-          Visibility(
-            visible: showLogout,
-            child: TextButton(
-              onPressed: () async {
-                await context.read<AuthenticationService>().signOut();
-                if (FirebaseAuth.instance.currentUser != null) {
-                  showLogout = true;
-                  setState(() {});
-                }
-              },
-              child: const Text('Logga ut'),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Visibility(
+        //     visible: showLogout,
+        //     child: TextButton(
+        //       onPressed: () async {
+        //         await context.read<AuthenticationService>().signOut();
+        //         if (FirebaseAuth.instance.currentUser != null) {
+        //           showLogout = true;
+        //           setState(() {});
+        //         }
+        //       },
+        //       child: const Text('Logga ut'),
+        //     ),
+        //   ),
+        // ],
       ),
       body: Center(
         child: Column(
@@ -105,18 +106,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   setState(() {});
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => CrawlView(),
+                      builder: (context) => NavbarPage(),
                     ),
                   );
                 }
               },
-            ),
-            ElevatedButton(
-              child: Text('Registrera'),
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => Register())),
-              onLongPress: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => newCrawl())),
             ),
           ],
         ),

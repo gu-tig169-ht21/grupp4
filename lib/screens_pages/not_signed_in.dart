@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/cat/interface_theme.dart';
+import 'package:my_first_app/screens_pages/new_crawl.dart';
 import 'package:my_first_app/screens_pages/register_user.dart';
 import 'login_screen.dart';
 import 'profile_screen.dart';
@@ -18,6 +19,7 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
         backgroundColor: ColorTheme.a,
         shadowColor: ColorTheme.a,
         elevation: 0,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
@@ -92,11 +94,13 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
                   builder: (context) => ProfileScreen(),
                 ),
               ),
+              onLongPress: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => newCrawl())),
               child: Padding(
                 padding: const EdgeInsets.only(
                     left: 50, right: 50, top: 15, bottom: 15),
                 child: Text(
-                  'View profile screen',
+                  'View profile screen [developer]',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
