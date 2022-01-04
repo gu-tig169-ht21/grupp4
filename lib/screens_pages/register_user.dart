@@ -34,7 +34,7 @@ class _RegisterState extends State<Register> {
         title: Text('Register User'),
         backgroundColor: ColorTheme.a,
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

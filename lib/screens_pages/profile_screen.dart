@@ -46,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 Positioned.fill(
-                  top: 60,
+                  top: 40,
                   left: 153,
                   child: Text(
                     'Hello',
@@ -59,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ListTile(
                       leading: Container(width: 120),
                       title: Text(
-                        'User',
+                        FirebaseAuth.instance.currentUser!.email.toString(),
                         style: TextStyle(
                             shadows: [
                               Shadow(

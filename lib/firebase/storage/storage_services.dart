@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -51,13 +50,6 @@ class FirebaseApi {
         .toList();
   }
 
-  static Future downloadFile(Reference ref) async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/${ref.name}');
-
-    await ref.writeToFile(file);
-  }
-
   static Future? storeUser() {
     try {
       FirebaseFirestore.instance.collection('User').add({
@@ -85,6 +77,7 @@ class FirebaseApi {
   }
 
   static void updateFavorites(String fav) async {
+    print('detta är baren vi vill uppdatera: ' + fav);
     FirebaseFirestore.instance
         .collection('User')
         .doc(await FirebaseAuth.instance.currentUser!.email)
@@ -149,5 +142,35 @@ class FirebaseApi {
       '"crawlPubs"': modelToUpload.crawlPubs,
       '"crawlImgRef"': modelToUpload.title
     });
+  }
+
+  static bool checkFavourites() {
+    return true;
+  }
+
+  static void removeFav(String pubname) async {
+    String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
+    DocumentSnapshot<Object> documentSnapshot =
+        (await FirebaseFirestore.instance.collection('User').doc(userEmail))
+            as DocumentSnapshot<Object>;
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('User')
+        .startAtDocument(documentSnapshot)
+        .get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    var json = jsonDecode(allData.toString());
+
+    print('HÄÄÄR     ' + json);
+    /* final allData = documentSnapshot.docs.map((doc) => doc.data()).toList(); 
+    var json = jsonDecode(allData.toString());
+    List<PubCrawlModel> list = [];
+    for (var crawls in json) {
+      list.add(PubCrawlModel(
+          crawlID: crawls['crawlID'],
+          title: crawls['crawlTitle'],
+          description: crawls['crawlDescription'],
+          pubs: crawls['crawlPubs'],
+          imgRef: crawls['crawlImgRef']));
+    }*/
   }
 }

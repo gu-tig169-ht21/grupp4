@@ -11,6 +11,7 @@ import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/screens_pages/crawl_card.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
 import 'package:my_first_app/screens_pages/favorites.dart';
+import 'package:my_first_app/screens_pages/not_signed_in.dart';
 import '../google/places_api.dart';
 import 'login_screen.dart';
 
@@ -34,17 +35,10 @@ class MapSampleState extends State<MapSample> {
   final List<Pub> _pubs = [];
 
   Future<List<Pub>> _getListOfPubs() async {
-    print('Metod _getListOfPubs körs!');
-    print('Hela listan: ' + crawlModel.pubs);
-    print('längden på stränge = ' + crawlModel.pubs.length.toString());
     List<String> allPlaces = crawlModel.pubs.split(";,");
-    print('pubbar i list-format: ' + allPlaces.toString());
     for (int i = 0; i < allPlaces.length; i++) {
-      print('i for loop, varv: ' + i.toString());
       _pubs.add(await Api.callGetPubInfo(allPlaces[i]));
-      print('pub ' + _pubs[i].toString() + 'tillagd!');
     }
-    print('antal pubbar: ' + _pubs.length.toString());
     return _pubs;
   }
 
@@ -80,6 +74,7 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      extendBody: true,
       appBar: AppBar(
         centerTitle: true,
         title: Text('Google Maps'),
@@ -100,11 +95,13 @@ class MapSampleState extends State<MapSample> {
                 ),
               ),
             ),
-            FutureBuilder(
-              future: _getListOfPubs(),
-              builder: (context, snapshot) => Column(
-                  children: _pubs.map((pub) => pubInfoCard(pub)).toList()),
-            ),
+            SingleChildScrollView(
+              child: FutureBuilder(
+                future: _getListOfPubs(),
+                builder: (context, snapshot) => Column(
+                    children: _pubs.map((pub) => pubInfoCard(pub)).toList()),
+              ),
+            )
           ],
         ),
       ),
@@ -185,7 +182,7 @@ class MapSampleState extends State<MapSample> {
                   ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => LoginScreen()));
+                            builder: (context) => NotSignedInScreen()));
                       },
                       child: Text('Log in')),
                 ],
@@ -196,52 +193,69 @@ class MapSampleState extends State<MapSample> {
   }
 
   Widget pubInfoCard(Pub pub) {
-    return ListView(shrinkWrap: true, children: [
-      Card(
-        child: ExpansionTile(
-          leading: IconButton(
-            icon: pub.isfavourite
-                ? Icon(
-                    Icons.favorite,
-                    color: Colors.amberAccent[400],
-                  )
-                : Icon(Icons.favorite_border),
-            onPressed: () {
-              if (FirebaseAuth.instance.currentUser == null) {
-                showAlertDialog();
-              } else {
-                setState(() {
-                  pub.isfavourite = !pub.isfavourite;
-                });
-              }
+    return ListView(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        children: [
+          Card(
+            child: ExpansionTile(
+              trailing: Text('Info'),
+              leading: IconButton(
+                icon: pub.isfavourite
+                    ? Icon(
+                        Icons.favorite,
+                        color: Colors.amberAccent[400],
+                      )
+                    : Icon(Icons.favorite_border),
+                onPressed: () {
+                  if (FirebaseAuth.instance.currentUser == null) {
+                    showAlertDialog();
+                  } else {
+                    print('Denna pub: ' + pub.pubname);
+                    bool check = FirebaseApi.checkFavourites();
+                    if (check) {
+                      //den redan är favoritlistad
+                      FirebaseApi.removeFav(pub.name);
+                    }
 
-              if (pub.isfavourite) {
-                FavoritesState.favourites.remove(pub.name);
-                print(FavoritesState.favourites);
-                setState(() {
-                  pub.isfavourite = !pub.isfavourite;
-                });
-              } else {
-                FirebaseApi.updateFavorites(pub.name);
-                FavoritesState.favourites.add(pub.name);
-                print(FavoritesState.favourites);
-                setState(() {
-                  pub.isfavourite = !pub.isfavourite;
-                });
-              }
-            },
-          ),
-          title: Text(pub.pubname),
-          children: [
-            ListTile(
-              title: Text('Name: ' + pub.pubname),
+                    setState(() {
+                      print('Vi är inloggade!!');
+                      print('innan förändring' + pub.isfavourite.toString());
+                      pub.isfavourite = !pub.isfavourite;
+                      print('efter förändring: ' + pub.isfavourite.toString());
+                    });
+                  }
+
+                  if (pub.isfavourite) {
+                    print('puben är favorit');
+                    FavoritesState.favourites.remove(pub.name);
+                    print(FavoritesState.favourites);
+                    setState(() {
+                      pub.isfavourite = !pub.isfavourite;
+                    });
+                  } else {
+                    print('puben är inte favorit');
+                    FirebaseApi.updateFavorites(pub.name);
+                    print('puben vi vill ha som favorit: ' + pub.name);
+                    FavoritesState.favourites.add(pub.name);
+                    print('HEJ!' + FavoritesState.favourites.toString());
+                    setState(() {
+                      pub.isfavourite = !pub.isfavourite;
+                    });
+                  }
+                },
+              ),
+              title: Text(pub.pubname),
+              children: [
+                ListTile(
+                  title: Text('Name: ' + pub.pubname),
+                ),
+                ListTile(
+                  title: Text('Adress: ' + pub.pubadress),
+                )
+              ],
             ),
-            ListTile(
-              title: Text('Adress: ' + pub.pubadress),
-            )
-          ],
-        ),
-      ),
-    ]);
+          ),
+        ]);
   }
 }
