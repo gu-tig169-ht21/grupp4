@@ -100,10 +100,6 @@ class MapSampleState extends State<MapSample> {
                 ),
               ),
             ),
-/*           StatefulBuilder(
-            builder: (Context, setState) => Column(
-                children: _pubs.map((pub) => crawlCard(pub)).toList()),
-          ), */
             FutureBuilder(
               future: _getListOfPubs(),
               builder: (context, snapshot) => Column(
@@ -114,23 +110,6 @@ class MapSampleState extends State<MapSample> {
       ),
     );
   }
-
-  //  List<String> barSplits = pubCrawl.crawlPubs.split(';,');
-  //         cords = await cordinates(barSplits[0]);
-  //         splitCords = cords.split(',');
-
-  // markerLocation() async {
-  //   String cords = await Api.getPlace('henriksberg');
-  //   List<String> splitCords = cords.split(',');
-  //   double lat = double.parse(splitCords[0]);
-  //   double lng = double.parse(splitCords[1]);
-  //   return Marker(
-  //     markerId: MarkerId('Henkeberg'),
-  //     infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
-  //     icon: BitmapDescriptor.defaultMarker,
-  //     position: LatLng(lat, lng),
-  //   );
-  // }
 
   void showCustomDialog(Pub pub, BuildContext context) {
     showDialog(
@@ -217,158 +196,52 @@ class MapSampleState extends State<MapSample> {
   }
 
   Widget pubInfoCard(Pub pub) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Card(
-          child: ExpansionTile(
-            leading: IconButton(
-              icon: pub.isfavourite
-                  ? Icon(
-                      Icons.favorite,
-                      color: Colors.amberAccent[400],
-                    )
-                  : Icon(Icons.favorite_border),
-              onPressed: () {
-                /*
-                if (FirebaseAuth.instance.currentUser == null) {
-                  showAlertDialog();
-                } else {
-                  setState(() {
-                    //pubs.isfavourite = !pubs.isfavourite;
-                  });
-                }*/
+    return ListView(shrinkWrap: true, children: [
+      Card(
+        child: ExpansionTile(
+          leading: IconButton(
+            icon: pub.isfavourite
+                ? Icon(
+                    Icons.favorite,
+                    color: Colors.amberAccent[400],
+                  )
+                : Icon(Icons.favorite_border),
+            onPressed: () {
+              if (FirebaseAuth.instance.currentUser == null) {
+                showAlertDialog();
+              } else {
+                setState(() {
+                  pub.isfavourite = !pub.isfavourite;
+                });
+              }
 
-                /* if (pub.isfavourite) {
-                  FavoritesState.favourites.remove(pubs.name);
-                  print(FavoritesState.favourites);
-                  setState(() {
-                    pubs.isfavourite = !pubs.isfavourite;
-                  });
-                } else {
-                  FirebaseApi.updateFavorites(pubs.name);
-                  FavoritesState.favourites.add(pubs.name);
-                  print(FavoritesState.favourites);
-                  setState(() {
-                    pubs.isfavourite = !pubs.isfavourite;
-                  });
-                } */
-              },
-            ),
-            title: Text(pub.pubname),
-            children: [
-              ListTile(
-                title: Text('Name: ' + pub.pubname),
-              ),
-              ListTile(
-                title: Text('Adress: ' + pub.pubadress),
-              )
-            ],
+              if (pub.isfavourite) {
+                FavoritesState.favourites.remove(pub.name);
+                print(FavoritesState.favourites);
+                setState(() {
+                  pub.isfavourite = !pub.isfavourite;
+                });
+              } else {
+                FirebaseApi.updateFavorites(pub.name);
+                FavoritesState.favourites.add(pub.name);
+                print(FavoritesState.favourites);
+                setState(() {
+                  pub.isfavourite = !pub.isfavourite;
+                });
+              }
+            },
           ),
-
-          /* ListTile(
-                onTap: () {
-                  showCustomDialog(pubs, context);
-                },
-                leading: IconButton(
-                  icon: pubs.isfavourite
-                      ? Icon(
-                          Icons.favorite,
-                          color: Colors.amberAccent[400],
-                        )
-                      : Icon(Icons.favorite_border),
-                  onPressed: () {
-                    if (FirebaseAuth.instance.currentUser == null) {
-                      showAlertDialog();
-                    } else {
-                      setState(() {
-                        pubs.isfavourite = !pubs.isfavourite;
-                      });
-                    }
-                  },
-                ),
-                title: Text(pubs.pubname),
-              ),
-          ),*/
+          title: Text(pub.pubname),
+          children: [
+            ListTile(
+              title: Text('Name: ' + pub.pubname),
+            ),
+            ListTile(
+              title: Text('Adress: ' + pub.pubadress),
+            )
+          ],
         ),
-      ],
-    );
+      ),
+    ]);
   }
-
-/*   Marker addMarkers() {
-    List<Marker> markerList = [];
-    for (int i = 0; i < crawlModel.crawlPubs.length; i++) {}
-    return Marker(
-        markerId: MarkerId('Henriksberg'),
-        infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
-        icon: BitmapDescriptor.defaultMarker,
-        position: LatLng(57.699687182039845, 11.936588759846018));
-  } */
 }
-
-// class addMarkerLocations {
-//   markerLocation() async {
-//     String cords = await Api.getPlace('henriksberg');
-//     List<String> splitCords = cords.split(',');
-//     double lat = double.parse(splitCords[0]);
-//     double lng = double.parse(splitCords[1]);
-//     return Marker(
-//       markerId: MarkerId('Henkeberg'),
-//       infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
-//       icon: BitmapDescriptor.defaultMarker,
-//       position: LatLng(lat, lng),
-//     );
-//   }
-// }
-
-
-
-
-
-
-  // static final Marker _kGooglePlexMarker = Marker(
-  //     markerId: MarkerId('_CenterGbg'),
-  //     infoWindow: InfoWindow(title: 'This is the Center of Gothenburg'),
-  //     icon: BitmapDescriptor.defaultMarker,
-  //     position: LatLng(57.702870438939414, 11.957678856217141));
-
-  // static final CameraPosition _kLake = CameraPosition(
-  //     bearing: 192.8334901395799,
-  //     target: LatLng(57.7028102, 11.9554687),
-  //     tilt: 59.440717697143555,
-  //     zoom: 14.0);
-
-  // static final Marker _bar2 = Marker(
-  //     markerId: MarkerId('Brygghuset'),
-  //     infoWindow: InfoWindow(title: 'Ta en bira!'),
-  //     icon: BitmapDescriptor.defaultMarker,
-  //     position: LatLng(57.69975767647727, 11.952226705868245));
-
-  // static final Marker _bar3 = Marker(
-  //     markerId: MarkerId('Henriksberg'),
-  //     infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
-  //     icon: BitmapDescriptor.defaultMarker,
-  //     position: LatLng(57.699687182039845, 11.936588759846018));
-
-  // static final Marker henke = Marker(
-  //     markerId: MarkerId('Henriksberg'),
-  //     infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
-  //     icon: BitmapDescriptor.defaultMarker,
-  //     position: LatLng(57.699687182039845, 11.936588759846018));
-
-  // static final Polyline _kPolyLine = Polyline(
-  //     polylineId: PolylineId('_kPolyLine'),
-  //     points: [LatLng(57.708870, 11.974560), LatLng(57.67645, 12.17477)],
-  //     width: 5);
-
-  // static final Polygon _kPolygon = Polygon(
-  //   polygonId: PolygonId('_kPolygon'),
-  //   points: const [
-  //     LatLng(57.708870, 11.974560),
-  //     LatLng(57.67645, 12.17477),
-  //     LatLng(57.4156, 12.8),
-  //     LatLng(57.3915, 12.211)
-  //   ],
-  //   strokeWidth: 5,
-  //   fillColor: Colors.transparent,
-  // );
