@@ -173,4 +173,32 @@ class FirebaseApi {
           imgRef: crawls['crawlImgRef']));
     }*/
   }
+
+  static void retrieveFavorites() {
+    List<Pub> favPubs = [];
+    Stream<QuerySnapshot> favorites =
+        FirebaseFirestore.instance.collection('User').snapshots();
+    StreamBuilder<QuerySnapshot>(
+        stream: favorites,
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<QuerySnapshot> snapshot,
+        ) {
+          if (snapshot.hasError) {
+            print('Something went wrong');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            print('Loading favorites...');
+          }
+          final data = snapshot.requireData;
+          ListView.builder(
+              itemCount: data.size,
+              itemBuilder: (context, index) {
+                favPubs.add((data.docs[index][favorites]));
+                print(favPubs);
+                return Text('hej');
+              });
+          return Text('hej2');
+        });
+  }
 }
