@@ -33,13 +33,19 @@ class MapSampleState extends State<MapSample> {
   final Set<Marker> _markers = {};
   final List<Pub> _pubs = [];
 
-  void _getListOfPubs() async {
-    print('Metod körs!');
-    print(crawlModel.pubs);
-    for (int i = 0; i < crawlModel.pubs.length; i++) {
-      _pubs.add(await Api.getPubInfo(crawlModel.pubs[i]));
-      print('pub ' + i.toString() + 'tillagd!');
+  Future<List<Pub>> _getListOfPubs() async {
+    print('Metod _getListOfPubs körs!');
+    print('Hela listan: ' + crawlModel.pubs);
+    print('längden på stränge = ' + crawlModel.pubs.length.toString());
+    List<String> allPlaces = crawlModel.pubs.split(";,");
+    print('pubbar i list-format: ' + allPlaces.toString());
+    for (int i = 0; i < allPlaces.length; i++) {
+      print('i for loop, varv: ' + i.toString());
+      _pubs.add(await Api.callGetPubInfo(allPlaces[i]));
+      print('pub ' + _pubs[i].toString() + 'tillagd!');
     }
+    print('antal pubbar: ' + _pubs.length.toString());
+    return _pubs;
   }
 
   void _onMapCreated(GoogleMapController controller) async {
@@ -47,7 +53,6 @@ class MapSampleState extends State<MapSample> {
     for (int i = 0; i < pubList.length; i++) {
       _markers.add(await Api.callGetPlace(pubList[i]));
     }
-    print('antal pubbar: ' + _pubs.length.toString());
   }
 
   //int _selectedIndex = 0;
@@ -57,7 +62,6 @@ class MapSampleState extends State<MapSample> {
   @override
   void initState() {
     super.initState();
-    _getListOfPubs();
     markerList = Api.callAllPlaces(crawlModel.pubs);
   }
   /* void onItemTapped(int index) {
@@ -75,7 +79,6 @@ class MapSampleState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
-    _getListOfPubs();
     return new Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -102,9 +105,9 @@ class MapSampleState extends State<MapSample> {
                 children: _pubs.map((pub) => crawlCard(pub)).toList()),
           ), */
             FutureBuilder(
-              future: markerList,
-              builder: (context, snapshot) =>
-                  Column(children: _pubs.map((pub) => crawlCard(pub)).toList()),
+              future: _getListOfPubs(),
+              builder: (context, snapshot) => Column(
+                  children: _pubs.map((pub) => pubInfoCard(pub)).toList()),
             ),
           ],
         ),
@@ -213,7 +216,7 @@ class MapSampleState extends State<MapSample> {
         });
   }
 
-  Widget crawlCard(Pub pub) {
+  Widget pubInfoCard(Pub pub) {
     return ListView(
       shrinkWrap: true,
       children: [

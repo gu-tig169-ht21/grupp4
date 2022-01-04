@@ -64,34 +64,19 @@ class Api {
     return pub;
   }
 
-  static Future<Pub> getPubInfo(String pubNames) async {
-    print('I GET PUB INFO');
-    List<String> allPlaces = pubNames.split(";,");
-    print(allPlaces.length);
-    print(allPlaces.elementAt(0));
-    print(allPlaces.elementAt(1));
-    print(allPlaces.elementAt(2));
+  static Future<Pub> getPubInfo(String pubName) async {
     String name = '';
     String adress = '';
     bool isfavourite = false;
-    for (int i = 0; i <= allPlaces.length; i++) {
-      var response = await http
-          .get(Uri.parse('$API_URL/ ' + allPlaces[i] + '&key=$nyckel'));
-      String bodyString = response.body;
-      var json = jsonDecode(bodyString);
-      print(json.toString());
-
-      if (json['results'][0]['status'] == 'OK') {
-        print('slut på barer!');
-      } else {
-        adress = json['results'][0]['formatted_address'];
-        name = allPlaces[i];
-      }
-      print('bar: ' + i.toString() + ' = $name, med adress: $adress');
-
+    var response =
+        await http.get(Uri.parse('$API_URL/ ' + pubName + '&key=$nyckel'));
+    String bodyString = response.body;
+    var json = jsonDecode(bodyString);
+    String svar = json['status'];
+    if (json['status'] == 'OK') {
       adress = json['results'][0]['formatted_address'];
-      name = allPlaces[i];
-      print('TITTA HÄÄÄR:' + name + '  ' + adress);
+      name = pubName;
+      print('bar:  = $name, med adress: $adress');
     }
     return Pub(name: name, adress: adress, isfavourite: isfavourite);
   }
