@@ -76,10 +76,10 @@ class _RegisterState extends State<Register> {
                     print(
                       Text('You need to confirm your password'),
                     );
-                  if (_confirmpassword.text != _password.text)
-                    print(
-                      Text(('The passwords you have entered does not match')),
-                    );
+                  if (_confirmpassword.text != _password.text) {
+                    //WIP
+                    print('Invalid');
+                  }
                   return null;
                 },
                 decoration: InputDecoration(
