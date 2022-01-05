@@ -3,6 +3,8 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -92,6 +94,7 @@ class MapSampleState extends State<MapSample> {
                   //markers: Set<Marker>.from(snapshot.data.values),
                   onMapCreated: _onMapCreated,
                   markers: _markers, initialCameraPosition: _CenterGbg,
+                  gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
                 ),
               ),
             ),
