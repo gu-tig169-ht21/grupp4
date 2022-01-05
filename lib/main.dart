@@ -88,8 +88,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           builder: (context) => const NavbarPage(),
                         ),
                       ),
-                  onLongPress: () =>
-                      print('Här finns ett utrymme för att testa funktioner!')),
+                  onLongPress: () async {
+                    //'Här finns ett utrymme för att testa funktioner!
+                  }),
             ),
           ],
         ),
