@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:my_first_app/firebase/storage/storage_services.dart';
 import '../admin_navigation/crawl_list_view.dart';
 import '../models/pub_crawl_model.dart';
 import '../cat/interface_theme.dart';
@@ -42,6 +44,8 @@ class FavoritesState extends State<Favorites> {
                       .map((favourite) => crawlCard(favourite))
                       .toList()),
             ),
+            const ElevatedButton(
+                onPressed: FirebaseApi.retrieveFavorites, child: Text('tryck')),
           ],
         ),
       ),
