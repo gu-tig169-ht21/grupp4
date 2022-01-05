@@ -79,7 +79,7 @@ class MapSampleState extends State<MapSample> {
       extendBody: true,
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Google Maps'),
+        title: Text(crawlModel.title),
         backgroundColor: ColorTheme.a,
       ),
       body: SingleChildScrollView(
