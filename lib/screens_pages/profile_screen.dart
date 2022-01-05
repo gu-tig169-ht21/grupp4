@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/cat/navbar_page.dart';
 import 'package:my_first_app/firebase/Authenticate/authenticate.dart';
+import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/screens_pages/login_screen.dart';
 import 'package:my_first_app/screens_pages/register_user.dart';
 import 'package:provider/src/provider.dart';
@@ -17,6 +19,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String? email = FirebaseAuth.instance.currentUser!.email;
+  String admin = '';
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,6 +117,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               height: 20,
             ),
+            Positioned.fill(
+              top: 40,
+              left: 153,
+              child: Text(
+                FirebaseFirestore.instance
+                    .collection('User')
+                    .doc(admin)
+                    .toString(),
+                style: TextStyle(color: ColorTheme.b),
+              ),
+            ),
+            Positioned.fill(
+              top: 40,
+              left: 153,
+              child: Text(
+                FirebaseAuth.instance.currentUser!.tenantId.toString(),
+                style: TextStyle(color: ColorTheme.b),
+              ),
+            ),
+
             // ElevatedButton(
             //   onPressed: () => Navigator.of(context).push(
             //     MaterialPageRoute(
