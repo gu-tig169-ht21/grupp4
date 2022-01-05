@@ -94,7 +94,9 @@ class MapSampleState extends State<MapSample> {
                   //markers: Set<Marker>.from(snapshot.data.values),
                   onMapCreated: _onMapCreated,
                   markers: _markers, initialCameraPosition: _CenterGbg,
-                  gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
+                  gestureRecognizers: Set()
+                    ..add(Factory<EagerGestureRecognizer>(
+                        () => EagerGestureRecognizer())),
                 ),
               ),
             ),
@@ -202,7 +204,7 @@ class MapSampleState extends State<MapSample> {
         children: [
           Card(
             child: ExpansionTile(
-              trailing: Text('Info'),
+              trailing: Icon(Icons.info),
               leading: IconButton(
                 icon: pub.isfavourite
                     ? Icon(

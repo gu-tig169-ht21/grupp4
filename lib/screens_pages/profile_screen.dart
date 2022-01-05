@@ -16,6 +16,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String? email = FirebaseAuth.instance.currentUser!.email;
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ListTile(
                       leading: Container(width: 120),
                       title: Text(
-                        FirebaseAuth.instance.currentUser!.email.toString(),
+                        email != null ? email.toString() : 'User',
                         style: TextStyle(
                             shadows: [
                               Shadow(
