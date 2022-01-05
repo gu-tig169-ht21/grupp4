@@ -15,7 +15,6 @@ import 'firebase_file.dart';
 class Storage {}
 
 class FirebaseApi {
-  String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
   final firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
@@ -64,25 +63,33 @@ class FirebaseApi {
     return null;
   }
 
+  Future uploadCrawlImage(dynamic _photo, String crawlName) async {
+    if (_photo == null) return;
+    final fileName = basename(_photo!.path);
+    final destination = 'PubImages/$crawlName';
+
+    try {
+      final ref = firebase_storage.FirebaseStorage.instance
+          .ref('/crawlPics/')
+          .child(destination);
+      await ref.putFile(_photo!);
+    } catch (e) {
+      print('error occured');
+    }
+  }
+
   static Future? regNewUser(email) async {
     try {
       await FirebaseFirestore.instance.collection('User').doc(email).set({
         'email': email,
         'Uid': FirebaseAuth.instance.currentUser!.uid,
+        'admin': false,
         'favoriets': ''
       });
     } catch (e) {
       print(e.toString());
     }
     return null;
-  }
-
-  static void updateFavorites(String fav) async {
-    print('detta är baren vi vill uppdatera: ' + fav);
-    FirebaseFirestore.instance
-        .collection('User')
-        .doc(await FirebaseAuth.instance.currentUser!.email)
-        .update({'favoriets': fav});
   }
 
   static Future<List<PubCrawlModel>> getCrawl() {
@@ -117,7 +124,7 @@ class FirebaseApi {
     return list;
   }
 
-  Future uploadFile(dynamic _photo, String crawlName) async {
+  Future uploadProfileImage(dynamic _photo, String crawlName) async {
     if (_photo == null) return;
     final fileName = basename(_photo!.path);
     final destination = 'PubImages/$crawlName';
@@ -174,21 +181,37 @@ class FirebaseApi {
   static void removeFavourite(
       String pubToRemove, List<dynamic> favourites) async {
     String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
-    String Uid = FirebaseAuth.instance.currentUser!.uid.toString();
+    String uid = FirebaseAuth.instance.currentUser!.uid.toString();
     favourites.remove(pubToRemove);
     FirebaseFirestore.instance
         .collection('User')
         .doc(userEmail)
-        .set({"uid": Uid, "email": userEmail, "favoriets": favourites});
+        .update({"favoriets": favourites});
   }
 
   static void addFavourite(String pubToAdd, List<dynamic> favourites) async {
     String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
-    String Uid = FirebaseAuth.instance.currentUser!.uid.toString();
+    String uid = FirebaseAuth.instance.currentUser!.uid.toString();
     favourites.add(pubToAdd);
     FirebaseFirestore.instance
         .collection('User')
         .doc(userEmail)
-        .set({"uid": Uid, "email": userEmail, "favoriets": favourites});
+        .update({"favoriets": favourites});
+  }
+
+  static Future<bool> isAdmin() async {
+    bool admin = false;
+    String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
+    var collection = FirebaseFirestore.instance.collection('User');
+    var docSnapshot = await collection.doc(userEmail).get();
+    if (docSnapshot.exists) {
+      var data = docSnapshot.data();
+      try {
+        admin = data!['admin'];
+      } catch (e) {
+        return admin;
+      }
+    }
+    return false;
   }
 }

@@ -234,7 +234,7 @@ class MapSampleState extends State<MapSample> {
                     });
                   } else {
                     print('puben är inte favorit');
-                    FirebaseApi.updateFavorites(pub.name);
+                    FirebaseApi.checkIfFavorite(pub.name);
                     print('puben vi vill ha som favorit: ' + pub.name);
                     FavoritesState.favourites.add(pub.name);
                     print('HEJ!' + FavoritesState.favourites.toString());
