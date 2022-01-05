@@ -47,7 +47,7 @@ class _CrawlCardState extends State<CrawlCard> {
                 } else {
                   final list = snapshot.data!;
                   return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(height: 12),
                       Expanded(
@@ -58,7 +58,7 @@ class _CrawlCardState extends State<CrawlCard> {
                               Container(
                             width: MediaQuery.of(context).size.width,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
+                                horizontal: 5, vertical: 5),
                             child: buildImageCard(context, list[index]),
                           ),
                         ),
@@ -118,8 +118,8 @@ class _CrawlCardState extends State<CrawlCard> {
                                     const BorderRadius.all(Radius.circular(15)),
                                 child: Image.network(
                                   url,
-                                  fit: BoxFit.fill,
-                                  height: 240,
+                                  fit: BoxFit.cover,
+                                  height: 110,
                                 ),
                               ),
                               Positioned(
@@ -161,16 +161,6 @@ class _CrawlCardState extends State<CrawlCard> {
                   )),
             ),
             SizedBox(height: 8),
-            ButtonBar(
-              alignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.favorite_border_outlined)),
-                TextButton(
-                    onPressed: () {}, child: Text("Learn more / Info / Crawl!"))
-              ],
-            )
           ],
         ),
       ),
