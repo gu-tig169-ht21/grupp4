@@ -212,11 +212,7 @@ class MapSampleState extends State<MapSample> {
                     showAlertDialog();
                   } else {
                     print('Denna pub: ' + pub.pubname);
-                    bool check = FirebaseApi.checkFavourites();
-                    if (check) {
-                      //den redan är favoritlistad
-                      FirebaseApi.removeFav(pub.name);
-                    }
+                    bool check = false; //
 
                     setState(() {
                       print('Vi är inloggade!!');
