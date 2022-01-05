@@ -85,6 +85,18 @@ class _newCrawlState extends State<newCrawl> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _crawlPubs,
+                  decoration: InputDecoration(
+                      label: Text(
+                        'Pubs: Separate with ";," between pubs',
+                        style: TextStyle(color: hintTextColor),
+                      ),
+                      border: const OutlineInputBorder()),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
                     ElevatedButton(

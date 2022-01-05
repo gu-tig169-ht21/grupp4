@@ -5,6 +5,7 @@ import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/cat/navbar_page.dart';
 import 'package:my_first_app/firebase/Authenticate/authenticate.dart';
 import 'package:my_first_app/screens_pages/login_screen.dart';
+import 'package:my_first_app/screens_pages/new_crawl.dart';
 import 'package:my_first_app/screens_pages/register_user.dart';
 import 'package:provider/src/provider.dart';
 
@@ -93,6 +94,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     builder: (context) => NavbarPage(),
                   ),
                 );
+              },
+              onLongPress: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => newCrawl()));
               },
               child: Padding(
                 padding: const EdgeInsets.only(
