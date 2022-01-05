@@ -15,6 +15,7 @@ import 'firebase_file.dart';
 class Storage {}
 
 class FirebaseApi {
+  String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
   final firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
@@ -144,61 +145,50 @@ class FirebaseApi {
     });
   }
 
-  static bool checkFavourites() {
-    return true;
-  }
-
-  static void removeFav(String pubname) async {
+  static Future<bool> checkIfFavorite(String pubToRemove) async {
+    String testbar = pubToRemove;
     String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
-    DocumentSnapshot<Object> documentSnapshot =
-        (await FirebaseFirestore.instance.collection('User').doc(userEmail))
-            as DocumentSnapshot<Object>;
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('User')
-        .startAtDocument(documentSnapshot)
-        .get();
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    var json = jsonDecode(allData.toString());
-
-    print('HÄÄÄR     ' + json);
-    /* final allData = documentSnapshot.docs.map((doc) => doc.data()).toList(); 
-    var json = jsonDecode(allData.toString());
-    List<PubCrawlModel> list = [];
-    for (var crawls in json) {
-      list.add(PubCrawlModel(
-          crawlID: crawls['crawlID'],
-          title: crawls['crawlTitle'],
-          description: crawls['crawlDescription'],
-          pubs: crawls['crawlPubs'],
-          imgRef: crawls['crawlImgRef']));
-    }*/
+    var collection = FirebaseFirestore.instance.collection('User');
+    var docSnapshot = await collection.doc(userEmail).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      print(data.toString());
+      List<dynamic> favourites = data?['favoriets'].toList();
+      print(favourites);
+      if (favourites.contains(pubToRemove)) {
+        print('True! ' + pubToRemove + ' finns i listan och ska tas bort');
+        removeFavourite(pubToRemove, favourites);
+        return true;
+      } else {
+        String pubToAdd = pubToRemove;
+        print('False! ' +
+            pubToAdd +
+            ' finns inte i listan och ska därför läggas till');
+        addFavourite(pubToAdd, favourites);
+        return false;
+      }
+    }
+    return false;
   }
 
-  static void retrieveFavorites() {
-    List<Pub> favPubs = [];
-    Stream<QuerySnapshot> favorites =
-        FirebaseFirestore.instance.collection('User').snapshots();
-    StreamBuilder<QuerySnapshot>(
-        stream: favorites,
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<QuerySnapshot> snapshot,
-        ) {
-          if (snapshot.hasError) {
-            print('Something went wrong');
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            print('Loading favorites...');
-          }
-          final data = snapshot.requireData;
-          ListView.builder(
-              itemCount: data.size,
-              itemBuilder: (context, index) {
-                favPubs.add((data.docs[index][favorites]));
-                print(favPubs);
-                return Text('hej');
-              });
-          return Text('hej2');
-        });
+  static void removeFavourite(
+      String pubToRemove, List<dynamic> favourites) async {
+    String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
+    String Uid = FirebaseAuth.instance.currentUser!.uid.toString();
+    favourites.remove(pubToRemove);
+    FirebaseFirestore.instance
+        .collection('User')
+        .doc(userEmail)
+        .set({"uid": Uid, "email": userEmail, "favoriets": favourites});
+  }
+
+  static void addFavourite(String pubToAdd, List<dynamic> favourites) async {
+    String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
+    String Uid = FirebaseAuth.instance.currentUser!.uid.toString();
+    favourites.add(pubToAdd);
+    FirebaseFirestore.instance
+        .collection('User')
+        .doc(userEmail)
+        .set({"uid": Uid, "email": userEmail, "favoriets": favourites});
   }
 }
