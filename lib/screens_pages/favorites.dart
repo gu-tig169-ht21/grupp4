@@ -42,42 +42,49 @@ class FavoritesState extends State<Favorites> {
         backgroundColor: ColorTheme.a,
         automaticallyImplyLeading: false,
       ),
-      body: Center(
-        child: ListView(
-          children: [
-            StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-              stream: collection.doc(currentUser).snapshots(),
-              builder: (_, snapshot) {
-                if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+      body: Column(
+        children: [
+          StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            stream: collection.doc(currentUser).snapshots(),
+            builder: (_, snapshot) {
+              if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
-                if (snapshot.hasData) {
-                  var output = snapshot.data!.data();
-                  List<dynamic> value = output!['favoriets'];
-                  print(value);
+              if (snapshot.hasData) {
+                var output = snapshot.data!.data();
+                List<dynamic> value = output!['favoriets'];
+                List<Widget> favList = [];
+                for (int i = 0; i < value.length; i++) {
+                  print(value.length);
+                  print(value[i]);
 
-                  for (int i = 0; i <= value.length; i++) {
-                    print(value.length);
-                    return crawlCard(value[i]);
-                  }
+                  favList.add(crawlCard(value[i]));
                 }
-                return const Center(child: CircularProgressIndicator());
-              },
-            )
-          ],
-        ),
+                return (ListView(
+                  children: favList,
+                  shrinkWrap: true,
+                ));
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
+          )
+        ],
       ),
     );
   }
 
-  Widget crawlCard(favourites) {
+  Widget crawlCard(value) {
+    String f = value;
+    String barnameB4 = value.toString();
+    if (barnameB4.contains('%20')) {
+      f = barnameB4.replaceFirst(RegExp(r'%20'), ' ');
+      print(f);
+    }
     return Card(
       child: ListTile(
-        title: Text(favourites),
+        title: Text(f),
         trailing: IconButton(
             onPressed: () {
-              setState(() {
-                FavoritesState.favourites.remove(favourites);
-              });
+              FirebaseApi.updateFavourite(value);
             },
             icon: Icon(Icons.delete)),
       ),

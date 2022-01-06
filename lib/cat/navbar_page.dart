@@ -46,7 +46,10 @@ class _NavbarPageState extends State<NavbarPage> {
         controller: _pageController,
         children: <Widget>[
           CrawlCard(),
-          Favorites(),
+          if (FirebaseAuth.instance.currentUser == null)
+            NotSignedInScreen()
+          else if (FirebaseAuth.instance.currentUser != null)
+            Favorites(),
           if (FirebaseAuth.instance.currentUser == null)
             NotSignedInScreen()
           else if (FirebaseAuth.instance.currentUser != null)

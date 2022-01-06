@@ -202,6 +202,11 @@ class MapSampleState extends State<MapSample> {
   }
 
   Widget pubInfoCard(Pub pub) {
+    String barname = pub.pubname;
+    String barnameB4 = pub.pubname.toString();
+    if (barnameB4.contains('%20')) {
+      barname = barnameB4.replaceFirst(RegExp(r'%20'), ' ');
+    }
     bool isFavourite;
     return FutureBuilder(
         future: FirebaseApi.checkIfFavourite(pub.name),
@@ -230,13 +235,15 @@ class MapSampleState extends State<MapSample> {
                             : Icon(Icons.favorite_border),
                         onPressed: () {
                           FirebaseApi.updateFavourite(pub.name);
-                          setState(() {});
+                          setState(() {
+                            _pubs.clear();
+                          });
                         },
                       ),
-                      title: Text(pub.pubname),
+                      title: Text(barname),
                       children: [
                         ListTile(
-                          title: Text('Name: ' + pub.pubname),
+                          title: Text('Name: ' + barname),
                         ),
                         ListTile(
                           title: Text('Adress: ' + pub.pubadress),
@@ -247,7 +254,7 @@ class MapSampleState extends State<MapSample> {
                 ]);
           }
           ;
-          return Text('faaaaaaaaaaaaaaan');
+          return Text('Loading...');
         });
   }
 }
