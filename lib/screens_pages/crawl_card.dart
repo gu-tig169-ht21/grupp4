@@ -1,3 +1,4 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/firebase/storage/firebase_file.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
@@ -155,12 +156,31 @@ class _CrawlCardState extends State<CrawlCard> {
             SizedBox(height: 2),
             Padding(
               padding: EdgeInsets.all(16).copyWith(bottom: 0),
-              child: Text(pubCrawl.description,
+              child: ExpandablePanel(
+                header: Text(
+                  pubCrawl.title,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                collapsed: Text(
+                  pubCrawl.description,
                   style: const TextStyle(
                     fontSize: 16,
-                  )),
+                  ),
+                  softWrap: true,
+                  maxLines: 1,
+                ),
+                expanded: Text(
+                  pubCrawl.description,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
             ),
-            SizedBox(height: 2),
           ],
         ),
       ),
