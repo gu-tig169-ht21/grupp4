@@ -73,6 +73,31 @@ class MapSampleState extends State<MapSample> {
     zoom: 14.4746,
   );
 
+  LatLngBounds boundsFromLatLngList(List<LatLng> list) {
+    assert(list.isNotEmpty);
+    double x0, x1, y0, y1;
+    for (LatLng latLng in list) {
+      if (x0 == null) {
+        x0 = x1 = latLng.latitude;
+        y0 = y1 = latLng.longitude;
+      } else {
+        if (latLng.latitude > x1) x1 = latLng.latitude;
+        if (latLng.latitude < x0) x0 = latLng.latitude;
+        if (latLng.longitude > y1) y1 = latLng.longitude;
+        if (latLng.longitude < y0) y0 = latLng.longitude;
+      }
+    }
+    return LatLngBounds(northeast: LatLng(x1, y1), southwest: LatLng(x0, y0));
+  }
+
+  final _mapController.animateCamera(CameraUpdate.newLatLngBounds(
+                  LatLngBounds(
+                      southwest: LatLng(latMin, longMin),
+                      northeast: LatLng(latMax, longMax),
+                  ),
+                  100
+                ));
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -89,12 +114,16 @@ class MapSampleState extends State<MapSample> {
               height: 275,
               child: FutureBuilder(
                 future: markerList,
+                
                 builder: (context, snapshot) => GoogleMap(
+                  
                   mapType: MapType.normal,
                   //markers: Set<Marker>.from(snapshot.data.values),
                   onMapCreated: _onMapCreated,
-                  markers: _markers, initialCameraPosition: _CenterGbg,
+                  markers: _markers, 
+                  initialCameraPosition: _CenterGbg,
                   gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
+                  
                 ),
               ),
             ),
