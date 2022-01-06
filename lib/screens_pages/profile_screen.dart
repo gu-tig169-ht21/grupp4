@@ -1,11 +1,17 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/cat/navbar_page.dart';
 import 'package:my_first_app/firebase/Authenticate/authenticate.dart';
+import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/screens_pages/login_screen.dart';
-import 'package:my_first_app/screens_pages/new_crawl.dart';
 import 'package:my_first_app/screens_pages/register_user.dart';
 import 'package:provider/src/provider.dart';
 
@@ -17,7 +23,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String? email = FirebaseAuth.instance.currentUser!.email;
+  String admin = FirebaseApi.isAdmin().toString();
+  File? _photo;
+  final ImagePicker _picker = ImagePicker();
+
   Widget build(BuildContext context) {
+    final TextEditingController _imageTitle = TextEditingController();
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
@@ -29,52 +43,72 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Stack(
               children: [
-                ClipPath(
-                  child: Container(
-                    width: double.infinity,
-                    height: 200.0,
+                Container(
+                  width: double.infinity,
+                  height: 250.0,
+                  decoration: BoxDecoration(
                     color: ColorTheme.a,
+                    borderRadius: new BorderRadius.vertical(
+                      bottom: Radius.elliptical(450, 60),
+                    ),
                   ),
                 ),
                 Positioned.fill(
+                  top: -50,
+                  left: 5,
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: profileCard(),
                   ),
                 ),
                 Positioned.fill(
-                  top: 40,
-                  left: 153,
-                  child: Text(
-                    'Hello',
-                    style: TextStyle(color: ColorTheme.f),
+                  top: 50,
+                  left: 80,
+                  child: GestureDetector(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: changeProfilePic(),
+                    ),
+                    onTap: () {
+                      _showPicker(context, _imageTitle.text);
+                    },
                   ),
                 ),
                 Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: ListTile(
-                      leading: Container(width: 120),
-                      title: Text(
-                        FirebaseAuth.instance.currentUser!.email.toString(),
-                        style: TextStyle(
-                            shadows: [
-                              Shadow(
-                                  color: Colors.black45,
-                                  offset: Offset.fromDirection(45, 3.0),
-                                  blurRadius: 10)
-                            ],
-                            fontWeight: FontWeight.bold,
-                            fontSize: 36,
-                            color: Colors.white),
-                      ),
-                      trailing: Container(
-                        width: 20,
-                      ),
+                  left: 150,
+                  child: Container(
+                    // width: 160,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 35,
+                        ),
+                        Text(
+                          'Hello',
+                          style: TextStyle(color: ColorTheme.f),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          email != null ? email.toString() : 'User',
+                          style: TextStyle(
+                              shadows: [
+                                Shadow(
+                                    color: Colors.black45,
+                                    offset: Offset.fromDirection(45, 3.0),
+                                    blurRadius: 10)
+                              ],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 32,
+                              color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -95,10 +129,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 );
               },
-              onLongPress: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => newCrawl()));
-              },
               child: Padding(
                 padding: const EdgeInsets.only(
                     left: 50, right: 50, top: 15, bottom: 15),
@@ -117,53 +147,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               height: 20,
             ),
-            // ElevatedButton(
-            //   onPressed: () => Navigator.of(context).push(
-            //     MaterialPageRoute(
-            //       builder: (context) => Register(),
-            //     ),
-            //   ),
-            //   child: Padding(
-            //     padding: const EdgeInsets.only(
-            //         left: 50, right: 50, top: 15, bottom: 15),
-            //     child: Text(
-            //       'Register',
-            //       style: TextStyle(color: Colors.white),
-            //     ),
-            //   ),
-            //   style: ElevatedButton.styleFrom(
-            //     primary: ColorTheme.b,
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(25),
-            //     ),
-            //   ),
-            // ),
-            // Container(
-            //   height: 20,
-            // ),
-            // ElevatedButton(
-            //   onPressed: () => Navigator.of(context).push(
-            //     MaterialPageRoute(
-            //       builder: (context) => NotSignedInScreen(),
-            //     ),
-            //   ),
-            //   child: Padding(
-            //     padding: const EdgeInsets.only(
-            //         left: 50, right: 50, top: 15, bottom: 15),
-            //     child: Text(
-            //       'Log in',
-            //       style: TextStyle(color: Colors.white),
-            //     ),
-            //   ),
-            //   style: ElevatedButton.styleFrom(
-            //     primary: ColorTheme.b,
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(25),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget changeProfilePic() {
+    return ClipOval(
+      child: Stack(
+        alignment: Alignment.center,
+        fit: StackFit.passthrough,
+        children: [
+          Icon(
+            Icons.circle,
+            size: 40,
+            color: ColorTheme.b,
+          ),
+          const IconButton(
+              icon: Icon(Icons.camera_alt),
+              iconSize: 20,
+              color: Colors.black,
+              onPressed: null),
+        ],
       ),
     );
   }
@@ -171,21 +177,130 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget profileCard() {
     return ClipOval(
       child: Stack(
-        alignment: Alignment.center,
         fit: StackFit.passthrough,
         children: [
-          const Icon(
-            Icons.circle,
-            size: 130,
-            color: Colors.white60,
-          ),
-          const Icon(
-            Icons.person,
-            size: 105,
-            color: Colors.black,
-          ),
+          FutureBuilder(
+            future: getProfileImage(
+                FirebaseAuth.instance.currentUser!.email.toString()),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(child: CircularProgressIndicator());
+                default:
+                  if (snapshot.hasError) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Stack(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              size: 155,
+                              color: ColorTheme.f,
+                            ),
+                            ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(15)),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 13, top: 10),
+                                child: Icon(
+                                  Icons.person,
+                                  size: 130,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  } else {
+                    final url = snapshot.data.toString();
+
+                    return Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15)),
+                          child: Image.network(
+                            url,
+                            fit: BoxFit.fill,
+                            height: 130,
+                            width: 130,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+              }
+            },
+          )
         ],
       ),
     );
+  }
+
+  Future<String> getProfileImage(String imageName) async {
+    String path = await FirebaseApi().loadProfileImage(imageName);
+    return path;
+  }
+
+  void _showPicker(context, String imageName) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('Gallery'),
+                  onTap: () {
+                    imgFromGallery(imageName);
+                    Navigator.of(context).pop();
+                  }),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: () {
+                  imgFromCamera(imageName);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future imgFromGallery(String imageTitle) async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _photo = File(pickedFile.path);
+        imageTitle = FirebaseAuth.instance.currentUser!.email.toString();
+        FirebaseApi().uploadProfileImage(_photo, imageTitle);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future imgFromCamera(String imageTitle) async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _photo = File(pickedFile.path);
+        imageTitle = FirebaseAuth.instance.currentUser!.email.toString();
+        FirebaseApi().uploadProfileImage(_photo, imageTitle);
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 }

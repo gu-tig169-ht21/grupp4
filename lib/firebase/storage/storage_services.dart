@@ -28,6 +28,12 @@ class FirebaseApi {
     return url; */
   }
 
+  Future<String> loadProfileImage(String ref) async {
+    final reference =
+        await storage.ref('/profilePics/profilePics/$ref').getDownloadURL();
+    return reference;
+  }
+
   static Future<List<String>> _getDownloadLinks(List<Reference> refs) =>
       Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
 
@@ -124,14 +130,14 @@ class FirebaseApi {
     return list;
   }
 
-  Future uploadProfileImage(dynamic _photo, String crawlName) async {
+  Future uploadProfileImage(dynamic _photo, String imageName) async {
     if (_photo == null) return;
     final fileName = basename(_photo!.path);
-    final destination = 'PubImages/$crawlName';
+    final destination = 'profilePics/$imageName';
 
     try {
       final ref = firebase_storage.FirebaseStorage.instance
-          .ref('/crawlPics/')
+          .ref('/profilePics/')
           .child(destination);
       await ref.putFile(_photo!);
     } catch (e) {
