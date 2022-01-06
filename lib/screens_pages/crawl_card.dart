@@ -118,8 +118,8 @@ class _CrawlCardState extends State<CrawlCard> {
                                     const BorderRadius.all(Radius.circular(15)),
                                 child: Image.network(
                                   url,
-                                  fit: BoxFit.cover,
-                                  height: 110,
+                                  fit: BoxFit.scaleDown,
+                                  height: 100,
                                 ),
                               ),
                               Positioned(
@@ -152,7 +152,7 @@ class _CrawlCardState extends State<CrawlCard> {
                     })
               ],
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 2),
             Padding(
               padding: EdgeInsets.all(16).copyWith(bottom: 0),
               child: Text(pubCrawl.description,
@@ -160,7 +160,7 @@ class _CrawlCardState extends State<CrawlCard> {
                     fontSize: 16,
                   )),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 2),
           ],
         ),
       ),
