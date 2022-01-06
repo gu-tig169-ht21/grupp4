@@ -152,7 +152,7 @@ class FirebaseApi {
     });
   }
 
-  static Future<bool> checkIfFavorite(String pubToRemove) async {
+  static Future<bool> updateFavourite(String pubToRemove) async {
     String testbar = pubToRemove;
     String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
     var collection = FirebaseFirestore.instance.collection('User');
@@ -187,6 +187,7 @@ class FirebaseApi {
         .collection('User')
         .doc(userEmail)
         .update({"favoriets": favourites});
+    print(favourites.toString());
   }
 
   static void addFavourite(String pubToAdd, List<dynamic> favourites) async {
@@ -197,6 +198,7 @@ class FirebaseApi {
         .collection('User')
         .doc(userEmail)
         .update({"favoriets": favourites});
+    print(favourites.toString());
   }
 
   static Future<bool> isAdmin() async {
@@ -210,6 +212,26 @@ class FirebaseApi {
         admin = data!['admin'];
       } catch (e) {
         return admin;
+      }
+    }
+    return false;
+  }
+
+  Future<bool> callcheckIfFavourite(String pubname) async {
+    bool x = await checkIfFavourite(pubname);
+    return x;
+  }
+
+  static Future<bool> checkIfFavourite(String pubToRemove) async {
+    String testbar = pubToRemove;
+    String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
+    var collection = FirebaseFirestore.instance.collection('User');
+    var docSnapshot = await collection.doc(userEmail).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      List<dynamic> favourites = data?['favoriets'].toList();
+      if (favourites.contains(pubToRemove)) {
+        return true;
       }
     }
     return false;

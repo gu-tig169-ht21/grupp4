@@ -39,7 +39,11 @@ class MapSampleState extends State<MapSample> {
   Future<List<Pub>> _getListOfPubs() async {
     List<String> allPlaces = crawlModel.pubs.split(";,");
     for (int i = 0; i < allPlaces.length; i++) {
-      _pubs.add(await Api.callGetPubInfo(allPlaces[i]));
+      if (_pubs.contains(allPlaces[i])) {
+        print(allPlaces[i] + ' finns redan i listan');
+      } else {
+        _pubs.add(await Api.callGetPubInfo(allPlaces[i]));
+      }
     }
     return _pubs;
   }
@@ -94,7 +98,9 @@ class MapSampleState extends State<MapSample> {
                   //markers: Set<Marker>.from(snapshot.data.values),
                   onMapCreated: _onMapCreated,
                   markers: _markers, initialCameraPosition: _CenterGbg,
-                  gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
+                  gestureRecognizers: Set()
+                    ..add(Factory<EagerGestureRecognizer>(
+                        () => EagerGestureRecognizer())),
                 ),
               ),
             ),
@@ -196,65 +202,52 @@ class MapSampleState extends State<MapSample> {
   }
 
   Widget pubInfoCard(Pub pub) {
-    return ListView(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        children: [
-          Card(
-            child: ExpansionTile(
-              trailing: Text('Info'),
-              leading: IconButton(
-                icon: pub.isfavourite
-                    ? Icon(
-                        Icons.favorite,
-                        color: Colors.amberAccent[400],
-                      )
-                    : Icon(Icons.favorite_border),
-                onPressed: () {
-                  if (FirebaseAuth.instance.currentUser == null) {
-                    showAlertDialog();
-                  } else {
-                    print('Denna pub: ' + pub.pubname);
-                    bool check = false; //
+    bool isFavourite;
+    return FutureBuilder(
+        future: FirebaseApi.checkIfFavourite(pub.name),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            String x = snapshot.data.toString();
+            if (x == 'true') {
+              isFavourite = true;
+            } else {
+              isFavourite = false;
+            }
 
-                    setState(() {
-                      print('Vi är inloggade!!');
-                      print('innan förändring' + pub.isfavourite.toString());
-                      pub.isfavourite = !pub.isfavourite;
-                      print('efter förändring: ' + pub.isfavourite.toString());
-                    });
-                  }
-
-                  if (pub.isfavourite) {
-                    print('puben är favorit');
-                    FavoritesState.favourites.remove(pub.name);
-                    print(FavoritesState.favourites);
-                    setState(() {
-                      pub.isfavourite = !pub.isfavourite;
-                    });
-                  } else {
-                    print('puben är inte favorit');
-                    FirebaseApi.checkIfFavorite(pub.name);
-                    print('puben vi vill ha som favorit: ' + pub.name);
-                    FavoritesState.favourites.add(pub.name);
-                    print('HEJ!' + FavoritesState.favourites.toString());
-                    setState(() {
-                      pub.isfavourite = !pub.isfavourite;
-                    });
-                  }
-                },
-              ),
-              title: Text(pub.pubname),
-              children: [
-                ListTile(
-                  title: Text('Name: ' + pub.pubname),
-                ),
-                ListTile(
-                  title: Text('Adress: ' + pub.pubadress),
-                )
-              ],
-            ),
-          ),
-        ]);
+            return ListView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  Card(
+                    child: ExpansionTile(
+                      trailing: Text('Info'),
+                      leading: IconButton(
+                        icon: isFavourite
+                            ? Icon(
+                                Icons.favorite,
+                                color: Colors.amberAccent[400],
+                              )
+                            : Icon(Icons.favorite_border),
+                        onPressed: () {
+                          FirebaseApi.updateFavourite(pub.name);
+                          setState(() {});
+                        },
+                      ),
+                      title: Text(pub.pubname),
+                      children: [
+                        ListTile(
+                          title: Text('Name: ' + pub.pubname),
+                        ),
+                        ListTile(
+                          title: Text('Adress: ' + pub.pubadress),
+                        )
+                      ],
+                    ),
+                  ),
+                ]);
+          }
+          ;
+          return Text('faaaaaaaaaaaaaaan');
+        });
   }
 }
