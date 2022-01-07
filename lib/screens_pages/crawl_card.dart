@@ -1,3 +1,4 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/firebase/storage/firebase_file.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
@@ -47,7 +48,7 @@ class _CrawlCardState extends State<CrawlCard> {
                 } else {
                   final list = snapshot.data!;
                   return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(height: 12),
                       Expanded(
@@ -58,7 +59,7 @@ class _CrawlCardState extends State<CrawlCard> {
                               Container(
                             width: MediaQuery.of(context).size.width,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
+                                horizontal: 5, vertical: 5),
                             child: buildImageCard(context, list[index]),
                           ),
                         ),
@@ -118,8 +119,8 @@ class _CrawlCardState extends State<CrawlCard> {
                                     const BorderRadius.all(Radius.circular(15)),
                                 child: Image.network(
                                   url,
-                                  fit: BoxFit.fill,
-                                  height: 240,
+                                  fit: BoxFit.scaleDown,
+                                  height: 100,
                                 ),
                               ),
                               Positioned(
@@ -152,25 +153,34 @@ class _CrawlCardState extends State<CrawlCard> {
                     })
               ],
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 2),
             Padding(
               padding: EdgeInsets.all(16).copyWith(bottom: 0),
-              child: Text(pubCrawl.description,
+              child: ExpandablePanel(
+                header: Text(
+                  pubCrawl.title,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                collapsed: Text(
+                  pubCrawl.description,
                   style: const TextStyle(
                     fontSize: 16,
-                  )),
+                  ),
+                  softWrap: true,
+                  maxLines: 1,
+                ),
+                expanded: Text(
+                  pubCrawl.description,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
             ),
-            SizedBox(height: 8),
-            ButtonBar(
-              alignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.favorite_border_outlined)),
-                TextButton(
-                    onPressed: () {}, child: Text("Learn more / Info / Crawl!"))
-              ],
-            )
           ],
         ),
       ),
