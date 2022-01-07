@@ -175,13 +175,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget profileCard() {
+    bool x = false;
+    if (FirebaseAuth.instance.currentUser != null) {
+      x = true;
+    }
     return ClipOval(
       child: Stack(
         fit: StackFit.passthrough,
         children: [
           FutureBuilder(
-            future: getProfileImage(
-                FirebaseAuth.instance.currentUser!.email.toString()),
+            future: x
+                ? getProfileImage(
+                    FirebaseAuth.instance.currentUser!.email.toString())
+                : getIcon(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
@@ -192,7 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 20,
+                          height: 75,
                         ),
                         Stack(
                           children: [
@@ -302,5 +308,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         print('No image selected.');
       }
     });
+  }
+
+  Future<Positioned> getIcon() async {
+    return Positioned.fill(
+      top: -50,
+      left: 5,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Icon(
+          Icons.circle,
+          size: 155,
+          color: ColorTheme.f,
+        ),
+      ),
+    );
   }
 }

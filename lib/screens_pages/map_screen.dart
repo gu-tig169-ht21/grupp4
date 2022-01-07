@@ -77,7 +77,7 @@ class MapSampleState extends State<MapSample> {
     zoom: 12.4746,
   );
 
-  LatLngBounds boundsFromLatLngList(List<LatLng> list) {
+/*   LatLngBounds boundsFromLatLngList(List<LatLng> list) {
     assert(list.isNotEmpty);
     double x0, x1, y0, y1;
     for (LatLng latLng in list) {
@@ -100,7 +100,7 @@ class MapSampleState extends State<MapSample> {
                       northeast: LatLng(latMax, longMax),
                   ),
                   100
-                ));
+                )); */
 
   @override
   Widget build(BuildContext context) {
@@ -118,16 +118,15 @@ class MapSampleState extends State<MapSample> {
               height: 275,
               child: FutureBuilder(
                 future: markerList,
-                
                 builder: (context, snapshot) => GoogleMap(
-                  
                   mapType: MapType.normal,
                   //markers: Set<Marker>.from(snapshot.data.values),
                   onMapCreated: _onMapCreated,
-                  markers: _markers, 
+                  markers: _markers,
                   initialCameraPosition: _CenterGbg,
-                  gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
-                  
+                  gestureRecognizers: Set()
+                    ..add(Factory<EagerGestureRecognizer>(
+                        () => EagerGestureRecognizer())),
                 ),
               ),
             ),
@@ -232,7 +231,7 @@ class MapSampleState extends State<MapSample> {
     String barname = pub.pubname;
     String barnameB4 = pub.pubname.toString();
     if (barnameB4.contains('%20')) {
-      barname = barnameB4.replaceFirst(RegExp(r'%20'), ' ');
+      barname = barnameB4.replaceAll(RegExp(r'%20'), ' ');
     }
     bool isFavourite;
     return FutureBuilder(

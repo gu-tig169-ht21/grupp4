@@ -18,7 +18,9 @@ class Api {
   }
 
   static Future<Marker> getPlace(String place) async {
-    var response = await http.get(Uri.parse('$API_URL/$place&key=$nyckel'));
+    String corrPlace = place;
+    var response =
+        await http.get(Uri.parse('$API_URL/$place%bGothenburg&key=$nyckel'));
     String bodyString = response.body;
     var json = jsonDecode(bodyString);
     //print(json.toString());
@@ -28,11 +30,13 @@ class Api {
     double lng = json['results'][0]['geometry']['location']['lng'];
 
     //String coordinates = lat += ';,' + lng;
-
+    if (place.contains('%20')) {
+      corrPlace = place.replaceAll(RegExp(r'%20'), ' ');
+    }
     return Marker(
         markerId: MarkerId(place),
         position: LatLng(lat, lng),
-        infoWindow: InfoWindow(title: place));
+        infoWindow: InfoWindow(title: corrPlace));
   }
 
   static Future<List<Marker>> callAllPlaces(String place) {
