@@ -126,6 +126,7 @@ class AddBarMapState extends State<AddBarMap> {
   }
 
   Widget _oneBar(Pub pub, context, int x) {
+    String pubnamn = pub.pubname.toString();
     return Card(
       child: InkWell(
         child: ListTile(
@@ -134,7 +135,7 @@ class AddBarMapState extends State<AddBarMap> {
           trailing: IconButton(
             onPressed: () {
               setState(() {
-                _selectedPubs.removeWhere((pub) => pub.pubname == pub.pubname);
+                _selectedPubs.remove(pub);
               });
             },
             icon: const Icon(Icons.close),
