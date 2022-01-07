@@ -242,4 +242,15 @@ class FirebaseApi {
     }
     return false;
   }
+
+  bool checkIfProfilePic(String email) {
+    bool x = false;
+    try {
+      loadProfileImage(email);
+      x = true;
+    } catch (e) {
+      return x;
+    }
+    return x;
+  }
 }

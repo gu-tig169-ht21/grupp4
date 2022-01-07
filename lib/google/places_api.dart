@@ -48,8 +48,8 @@ class Api {
     List<Marker> markerList = [];
     List<String> allPlaces = place.split(';,');
     for (int i = 0; i < allPlaces.length; i++) {
-      var response = await http
-          .get(Uri.parse('$API_URL/' + allPlaces[i] + '&key=$nyckel'));
+      var response = await http.get(
+          Uri.parse('$API_URL/' + allPlaces[i] + 'Gothenburg&key=$nyckel'));
       String bodyString = response.body;
       var json = jsonDecode(bodyString);
       if (json['results'][0]['status'] != null) {
@@ -75,8 +75,8 @@ class Api {
     String name = '';
     String adress = '';
     bool isfavourite = false;
-    var response =
-        await http.get(Uri.parse('$API_URL/ ' + pubName + '&key=$nyckel'));
+    var response = await http
+        .get(Uri.parse('$API_URL/ ' + pubName + 'Gothenburg&key=$nyckel'));
     String bodyString = response.body;
     var json = jsonDecode(bodyString);
     String svar = json['status'];
