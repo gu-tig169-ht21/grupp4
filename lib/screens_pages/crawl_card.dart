@@ -120,7 +120,7 @@ class _CrawlCardState extends State<CrawlCard> {
                                 child: Image.network(
                                   url,
                                   fit: BoxFit.scaleDown,
-                                  height: 100,
+                                  height: 240,
                                 ),
                               ),
                               Positioned(
