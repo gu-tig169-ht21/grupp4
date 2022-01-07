@@ -76,7 +76,7 @@ class FavoritesState extends State<Favorites> {
     String f = value;
     String barnameB4 = value.toString();
     if (barnameB4.contains('%20')) {
-      f = barnameB4.replaceFirst(RegExp(r'%20'), ' ');
+      f = barnameB4.replaceAll(RegExp(r'%20'), ' ');
       print(f);
     }
     return Card(
