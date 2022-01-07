@@ -48,9 +48,9 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
                     builder: (context) => Register(),
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 30, right: 30, top: 15, bottom: 15),
+                child: const Padding(
+                  padding:
+                      EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
                   child: Text(
                     'Create an account',
                     style: TextStyle(color: Colors.white),
@@ -69,9 +69,9 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
                     builder: (context) => LoginScreen(),
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 30, right: 30, top: 15, bottom: 15),
+                child: const Padding(
+                  padding:
+                      EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
                   child: Text(
                     'Sign in',
                     style: TextStyle(color: Colors.white),
@@ -96,9 +96,9 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
               ),
               onLongPress: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => newCrawl())),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 50, right: 50, top: 15, bottom: 15),
+              child: const Padding(
+                padding:
+                    EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),
                 child: Text(
                   'View profile screen [developer]',
                   style: TextStyle(color: Colors.white),
