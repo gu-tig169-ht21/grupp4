@@ -85,6 +85,18 @@ class _newCrawlState extends State<newCrawl> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _crawlPubs,
+                  decoration: InputDecoration(
+                      label: Text(
+                        'Pubs: Separate with ";," between pubs',
+                        style: TextStyle(color: hintTextColor),
+                      ),
+                      border: const OutlineInputBorder()),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
                     ElevatedButton(
@@ -210,7 +222,7 @@ class _newCrawlState extends State<newCrawl> {
     setState(() {
       if (pickedFile != null) {
         _photo = File(pickedFile.path);
-        FirebaseApi().uploadFile(_photo, crawlTitle);
+        FirebaseApi().uploadCrawlImage(_photo, crawlTitle);
       } else {
         print('No image selected.');
       }
@@ -223,7 +235,7 @@ class _newCrawlState extends State<newCrawl> {
     setState(() {
       if (pickedFile != null) {
         _photo = File(pickedFile.path);
-        FirebaseApi().uploadFile(_photo, crawltitle);
+        FirebaseApi().uploadCrawlImage(_photo, crawltitle);
       } else {
         print('No image selected.');
       }

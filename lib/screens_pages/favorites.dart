@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
 import '../admin_navigation/crawl_list_view.dart';
 import '../models/pub_crawl_model.dart';
 import '../cat/interface_theme.dart';
 import '../models/pub_crawl_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Favorites extends StatefulWidget {
   @override
@@ -12,6 +15,11 @@ class Favorites extends StatefulWidget {
 }
 
 class FavoritesState extends State<Favorites> {
+  var currentUser = FirebaseAuth.instance.currentUser!.email;
+  var collection = FirebaseFirestore.instance.collection('User');
+  Stream<QuerySnapshot> favorites =
+      FirebaseFirestore.instance.collection('User').snapshots();
+  List<Pub> favPubs = [];
   int _selectedIndex = 0;
   final _pub = <Pub>[];
 
@@ -34,55 +42,52 @@ class FavoritesState extends State<Favorites> {
         backgroundColor: ColorTheme.a,
         automaticallyImplyLeading: false,
       ),
-      body: Center(
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          children: /*<Widget>*/ [
-            StatefulBuilder(
-              builder: (Context, setState) => Column(
-                  children: favourites
-                      .map((favourite) => crawlCard(favourite))
-                      .toList()),
-            ),
-            const ElevatedButton(
-                onPressed: FirebaseApi.retrieveFavorites, child: Text('tryck')),
-          ],
-        ),
+      body: Column(
+        children: [
+          StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            stream: collection.doc(currentUser).snapshots(),
+            builder: (_, snapshot) {
+              if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+
+              if (snapshot.hasData) {
+                var output = snapshot.data!.data();
+                List<dynamic> value = output!['favoriets'];
+                List<Widget> favList = [];
+                for (int i = 0; i < value.length; i++) {
+                  print(value.length);
+                  print(value[i]);
+
+                  favList.add(crawlCard(value[i]));
+                }
+                return (ListView(
+                  children: favList,
+                  shrinkWrap: true,
+                ));
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
+          )
+        ],
       ),
-      // bottomNavigationBar: BottomNavBar(
-      //   selectedIndex: _selectedIndex,
-      //   onClicked: onItemTapped,
-      // ),
     );
   }
 
-/*
-Widget _buildLis() {
-  return ListView.builder(
-    itemCount: 1,
-    itemBuilder: (BuildContext context, int index) {
-      return ListTile(title: Text('favo bar'));
-    },
-  );
-}*/
-
-  Widget crawlCard(favourites) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Card(
-          child: ListTile(
-            title: Text(favourites),
-            trailing: IconButton(
-                onPressed: () {
-                  setState(() {
-                    FavoritesState.favourites.remove(favourites);
-                  });
-                },
-                icon: Icon(Icons.delete)),
-          ),
-        ),
-      ],
+  Widget crawlCard(value) {
+    String f = value;
+    String barnameB4 = value.toString();
+    if (barnameB4.contains('%20')) {
+      f = barnameB4.replaceFirst(RegExp(r'%20'), ' ');
+      print(f);
+    }
+    return Card(
+      child: ListTile(
+        title: Text(f),
+        trailing: IconButton(
+            onPressed: () {
+              FirebaseApi.updateFavourite(value);
+            },
+            icon: Icon(Icons.delete)),
+      ),
     );
   }
 }
