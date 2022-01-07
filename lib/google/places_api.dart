@@ -29,7 +29,10 @@ class Api {
 
     //String coordinates = lat += ';,' + lng;
 
-    return Marker(markerId: MarkerId(place), position: LatLng(lat, lng));
+    return Marker(
+        markerId: MarkerId(place),
+        position: LatLng(lat, lng),
+        infoWindow: InfoWindow(title: place));
   }
 
   static Future<List<Marker>> callAllPlaces(String place) {

@@ -74,7 +74,7 @@ class MapSampleState extends State<MapSample> {
 
   final CameraPosition _CenterGbg = CameraPosition(
     target: LatLng(57.702870438939414, 11.957678856217141),
-    zoom: 14.4746,
+    zoom: 12.4746,
   );
 
   LatLngBounds boundsFromLatLngList(List<LatLng> list) {
