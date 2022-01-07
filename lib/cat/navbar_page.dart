@@ -25,15 +25,15 @@ class _NavbarPageState extends State<NavbarPage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.public),
-            label: 'Hem',
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
-            label: 'Favoriter',
+            label: 'Favourites',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profil',
+            label: 'Profile',
           )
         ],
         currentIndex: _selectedIndex,
