@@ -233,7 +233,7 @@ class MapSampleState extends State<MapSample> {
     if (barnameB4.contains('%20')) {
       barname = barnameB4.replaceAll(RegExp(r'%20'), ' ');
     }
-    bool isFavourite;
+    bool isFavourite = false;
     return FutureBuilder(
         future: FirebaseApi.checkIfFavourite(pub.name),
         builder: (context, snapshot) {
@@ -287,10 +287,12 @@ class MapSampleState extends State<MapSample> {
                     child: ExpansionTile(
                       trailing: Text('Info'),
                       leading: IconButton(
-                        icon: Icon(
-                          Icons.favorite,
-                          color: Colors.amberAccent[400],
-                        ),
+                        icon: isFavourite
+                            ? Icon(
+                                Icons.favorite,
+                                color: Colors.amberAccent[400],
+                              )
+                            : Icon(Icons.favorite_border),
                         onPressed: () {
                           showAlertDialog();
                           setState(() {
