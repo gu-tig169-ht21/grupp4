@@ -233,7 +233,7 @@ class MapSampleState extends State<MapSample> {
     if (barnameB4.contains('%20')) {
       barname = barnameB4.replaceAll(RegExp(r'%20'), ' ');
     }
-    bool isFavourite;
+    bool isFavourite = false;
     return FutureBuilder(
         future: FirebaseApi.checkIfFavourite(pub.name),
         builder: (context, snapshot) {
@@ -278,9 +278,41 @@ class MapSampleState extends State<MapSample> {
                     ),
                   ),
                 ]);
+          } else {
+            return ListView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  Card(
+                    child: ExpansionTile(
+                      trailing: Text('Info'),
+                      leading: IconButton(
+                        icon: isFavourite
+                            ? Icon(
+                                Icons.favorite,
+                                color: Colors.amberAccent[400],
+                              )
+                            : Icon(Icons.favorite_border),
+                        onPressed: () {
+                          showAlertDialog();
+                          setState(() {
+                            _pubs.clear();
+                          });
+                        },
+                      ),
+                      title: Text(barname),
+                      children: [
+                        ListTile(
+                          title: Text('Name: ' + barname),
+                        ),
+                        ListTile(
+                          title: Text('Adress: ' + pub.pubadress),
+                        )
+                      ],
+                    ),
+                  ),
+                ]);
           }
-          ;
-          return Text('Loading...');
         });
   }
 }
