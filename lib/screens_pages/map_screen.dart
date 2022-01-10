@@ -278,9 +278,39 @@ class MapSampleState extends State<MapSample> {
                     ),
                   ),
                 ]);
+          } else {
+            return ListView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  Card(
+                    child: ExpansionTile(
+                      trailing: Text('Info'),
+                      leading: IconButton(
+                        icon: Icon(
+                          Icons.favorite,
+                          color: Colors.amberAccent[400],
+                        ),
+                        onPressed: () {
+                          showAlertDialog();
+                          setState(() {
+                            _pubs.clear();
+                          });
+                        },
+                      ),
+                      title: Text(barname),
+                      children: [
+                        ListTile(
+                          title: Text('Name: ' + barname),
+                        ),
+                        ListTile(
+                          title: Text('Adress: ' + pub.pubadress),
+                        )
+                      ],
+                    ),
+                  ),
+                ]);
           }
-          ;
-          return Text('Loading...');
         });
   }
 }
