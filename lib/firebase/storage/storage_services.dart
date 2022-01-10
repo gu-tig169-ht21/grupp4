@@ -29,9 +29,16 @@ class FirebaseApi {
   }
 
   Future<String> loadProfileImage(String ref) async {
-    final reference =
-        await storage.ref('/profilePics/profilePics/$ref').getDownloadURL();
-    return reference;
+    try {
+      final reference =
+          await storage.ref('/profilePics/profilePics/$ref').getDownloadURL();
+      return reference;
+    } catch (e) {
+      final reference = await storage
+          .ref('//profilePics/profilePics/default_profile_pic.png')
+          .getDownloadURL();
+      return reference;
+    }
   }
 
   static Future<List<String>> _getDownloadLinks(List<Reference> refs) =>
