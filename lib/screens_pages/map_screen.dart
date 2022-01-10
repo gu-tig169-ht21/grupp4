@@ -2,7 +2,9 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -228,23 +230,25 @@ class MapSampleState extends State<MapSample> {
   }
 
   Widget pubInfoCard(Pub pub) {
+    String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
+    var collection = FirebaseFirestore.instance.collection('User');
     String barname = pub.pubname;
     String barnameB4 = pub.pubname.toString();
     if (barnameB4.contains('%20')) {
       barname = barnameB4.replaceAll(RegExp(r'%20'), ' ');
     }
     bool isFavourite = false;
-    return FutureBuilder(
-        future: FirebaseApi.checkIfFavourite(pub.name),
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: collection.doc(userEmail).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            String x = snapshot.data.toString();
-            if (x == 'true') {
-              isFavourite = true;
-            } else {
-              isFavourite = false;
-            }
-
+            var output = snapshot.data!.data();
+            List userFavList =
+                output!['favoriets']; //userFavList = användarens favoriter
+            print(userFavList.toString()); //_pubs = pubar på crawl
+            userFavList.forEach((x) {
+              if (x == pub.pubname) isFavourite = true;
+            });
             return ListView(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),

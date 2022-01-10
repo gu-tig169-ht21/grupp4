@@ -120,9 +120,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ElevatedButton(
               onPressed: () async {
                 await context.read<AuthenticationService>().signOut();
-                if (FirebaseAuth.instance.currentUser == null) {
+               /* if (FirebaseAuth.instance.currentUser == null) {
                   setState(() {});
-                }
+                }*/
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => NavbarPage(),
