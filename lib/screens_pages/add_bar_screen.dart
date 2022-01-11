@@ -19,6 +19,8 @@ class AddBarMapState extends State<AddBarMap> {
   final List<Pub> _selectedPubs = [];
   List<PlacesSearchResult> places = [];
   bool isLoading = false;
+  int x = 0;
+  Pub? selected;
 
   static final CameraPosition _centerGbg = CameraPosition(
     target: LatLng(57.70884963208789, 11.974438295782342),
@@ -33,77 +35,98 @@ class AddBarMapState extends State<AddBarMap> {
 
   @override
   Widget build(BuildContext context) {
-    int x = 0;
-    Pub? selected;
+    ;
     return new Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Google Maps'),
+        title: Text('Add pubs'),
         backgroundColor: Color(0xffD9B250),
       ),
-      body: Column(children: [
-        Container(
-          height: 275,
-          child: GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: _centerGbg,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            child: isLoading
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      CircularProgressIndicator(
-                        color: Color(0xffD9B250),
-                      ),
-                    ],
-                  )
-                : const Text(' '),
-          ),
-        ),
-        DropdownButton<Pub>(
-          onChanged: (value) {
-            selected = value;
-            setState(() {
-              _selectedPubs.add(selected!);
-            });
-          },
-          items: _pubsGbg
-              .map((pub) => DropdownMenuItem(
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        pub.pubname,
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    value: pub,
-                  ))
-              .toList(),
-          onTap: () {},
-        ),
-        Visibility(
-          visible: _pubsGbg.isEmpty,
-          child: ElevatedButton(
-            onPressed: getNearbyPlaces,
-            child: Text('Ladda barer'),
-          ),
-        ),
-        SizedBox(
-          height: 200,
-          child: SingleChildScrollView(
-            child: Padding(
-                padding: EdgeInsets.all(10),
-                child: _choosenBars(_selectedPubs, context, x)),
-          ),
-        ),
-      ]),
+      body: Column(
+        children: [
+          mapBox(),
+          loadingIcon(),
+          selectPubs(),
+          loadPubsButton(),
+          viewSelectedPubs(),
+        ],
+      ),
+    );
+  }
+
+  Widget mapBox() {
+    return Container(
+      height: 275,
+      child: GoogleMap(
+        mapType: MapType.normal,
+        initialCameraPosition: _centerGbg,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+      ),
+    );
+  }
+
+  Widget loadingIcon() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: isLoading
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(
+                    color: Color(0xffD9B250),
+                  ),
+                ],
+              )
+            : const Text(' '),
+      ),
+    );
+  }
+
+  Widget selectPubs() {
+    return DropdownButton<Pub>(
+      onChanged: (value) {
+        selected = value;
+        setState(() {
+          _selectedPubs.add(selected!);
+        });
+      },
+      items: _pubsGbg
+          .map((pub) => DropdownMenuItem(
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    pub.pubname,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+                value: pub,
+              ))
+          .toList(),
+      onTap: () {},
+    );
+  }
+
+  Widget loadPubsButton() {
+    return Visibility(
+      visible: _pubsGbg.isEmpty,
+      child: ElevatedButton(
+        onPressed: getNearbyPlaces,
+        child: Text('Ladda barer'),
+      ),
+    );
+  }
+
+  Widget viewSelectedPubs() {
+    return SizedBox(
+      height: 200,
+      child: SingleChildScrollView(
+        child: Padding(
+            padding: EdgeInsets.all(10),
+            child: _choosenBars(_selectedPubs, context, x)),
+      ),
     );
   }
 

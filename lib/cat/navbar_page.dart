@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_first_app/screens_pages/favorites.dart';
+import 'package:my_first_app/screens_pages/signin_favorites.dart';
 import 'package:my_first_app/screens_pages/not_signed_in.dart';
 import 'package:my_first_app/screens_pages/profile_screen.dart';
 import '../screens_pages/crawl_card.dart';
@@ -46,7 +47,7 @@ class _NavbarPageState extends State<NavbarPage> {
         children: <Widget>[
           CrawlCard(),
           if (FirebaseAuth.instance.currentUser == null)
-            NotSignedInScreen()
+            const NoFavorites()
           else if (FirebaseAuth.instance.currentUser != null)
             Favorites(),
           if (FirebaseAuth.instance.currentUser == null)

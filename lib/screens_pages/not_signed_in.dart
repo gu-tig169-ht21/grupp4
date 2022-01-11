@@ -17,7 +17,7 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('Account'),
         backgroundColor: ColorTheme.a,
         shadowColor: ColorTheme.a,
         elevation: 0,
@@ -26,94 +26,103 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
       body: Center(
         child: Column(
           children: [
-            Card(
-              elevation: 2,
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Expanded(
-                flex: 10,
-                child: Container(
-                  margin: const EdgeInsets.all(20),
-                  padding: const EdgeInsets.all(20),
-                  child: const Text(
-                    'You are not signed in to any account. Create a new one or sign in',
-                  ),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: ElevatedButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Register(),
-                  ),
-                ),
-                child: const Padding(
-                  padding:
-                      EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
-                  child: Text(
-                    'Create an account',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: ColorTheme.b,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-              ),
-              trailing: ElevatedButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => LoginScreen(),
-                  ),
-                ),
-                child: const Padding(
-                  padding:
-                      EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
-                  child: Text(
-                    'Sign in',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: ColorTheme.b,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-              ),
-            ),
+            infoCard(),
+            buttonRow(),
             Container(
               height: 20,
             ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ProfileScreen(),
-                ),
-              ),
-              onLongPress: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => NewCrawl())),
-              child: const Padding(
-                padding:
-                    EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),
-                child: Text(
-                  'View profile screen [developer]',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.b,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-            ),
+            developerButton(),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget infoCard() {
+    return Card(
+      elevation: 2,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Expanded(
+        flex: 10,
+        child: Container(
+          margin: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
+          child: const Text(
+            'You are not signed in to any account. Create a new one or sign in',
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buttonRow() {
+    return ListTile(
+      leading: ElevatedButton(
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => Register(),
+          ),
+        ),
+        child: const Padding(
+          padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
+          child: Text(
+            'Create an account',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: ColorTheme.b,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+      ),
+      trailing: ElevatedButton(
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => LoginScreen(),
+          ),
+        ),
+        child: const Padding(
+          padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
+          child: Text(
+            'Sign in',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: ColorTheme.b,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget developerButton() {
+    return ElevatedButton(
+      onPressed: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ProfileScreen(),
+        ),
+      ),
+      onLongPress: () => Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => NewCrawl())),
+      child: const Padding(
+        padding: EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),
+        child: Text(
+          'View profile screen [developer]',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: ColorTheme.b,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
         ),
       ),
     );

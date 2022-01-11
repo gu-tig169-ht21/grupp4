@@ -105,26 +105,33 @@ class MapSampleState extends State<MapSample> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: 275,
-              child: GoogleMap(
-                mapType: MapType.normal,
-                //markers: Set<Marker>.from(snapshot.data.values),
-                onMapCreated: _onMapCreated,
-                markers: _markers,
-                initialCameraPosition: inital,
-                gestureRecognizers: Set()
-                  ..add(Factory<EagerGestureRecognizer>(
-                      () => EagerGestureRecognizer())),
-              ),
-            ),
-            SingleChildScrollView(
-              child: Column(
-                  children: _pubs.map((pub) => pubInfoCard(pub)).toList()),
-            ),
+            mapBox(),
+            pubList(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget mapBox() {
+    return Container(
+      height: 275,
+      child: GoogleMap(
+        mapType: MapType.normal,
+        //markers: Set<Marker>.from(snapshot.data.values),
+        onMapCreated: _onMapCreated,
+        markers: _markers,
+        initialCameraPosition: inital,
+        gestureRecognizers: Set()
+          ..add(
+              Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
+      ),
+    );
+  }
+
+  Widget pubList() {
+    return SingleChildScrollView(
+      child: Column(children: _pubs.map((pub) => pubInfoCard(pub)).toList()),
     );
   }
 

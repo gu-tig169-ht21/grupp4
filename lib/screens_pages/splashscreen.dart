@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, file_names
 
 import 'package:flutter/material.dart';
+import 'package:my_first_app/cat/interface_theme.dart';
 import '../firebase/storage/firebase_file.dart';
 import '../firebase/storage/storage_services.dart';
 
@@ -26,6 +27,10 @@ class SplashscreenState extends State<Splashscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: ColorTheme.a,
+      ),
       body: FutureBuilder<List<FirebaseFile>>(
         future: futureFiles,
         builder: (context, snapshot) {
@@ -41,20 +46,24 @@ class SplashscreenState extends State<Splashscreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: 1,
-                        itemBuilder: (context, index) {
-                          final file = files[index];
-
-                          return Image.network(file.url, fit: BoxFit.fill);
-                        },
-                      ),
-                    ),
+                    splashscreenImage(files),
                   ],
                 );
               }
           }
+        },
+      ),
+    );
+  }
+
+  Widget splashscreenImage(files) {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: 1,
+        itemBuilder: (context, index) {
+          final file = files[index];
+
+          return Image.network(file.url, fit: BoxFit.fill);
         },
       ),
     );
