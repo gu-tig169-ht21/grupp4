@@ -159,7 +159,7 @@ class _newCrawlState extends State<newCrawl> {
                 ),
               ),
               Visibility(
-                visible: loggedIn,
+                visible: true,
                 child: ElevatedButton(
                     child: const Text(
                       'Post you new Crawl!',
