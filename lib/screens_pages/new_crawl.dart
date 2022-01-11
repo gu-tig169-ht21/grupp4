@@ -1,27 +1,21 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
 import 'package:my_first_app/screens_pages/add_bar_screen.dart';
-import 'register_user.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../admin_navigation/crawl_list_view.dart';
-import '../firebase/Authenticate/authenticate.dart';
 import '../cat/interface_theme.dart';
 
 bool showLogout = false;
 
-class newCrawl extends StatefulWidget {
+class NewCrawl extends StatefulWidget {
   @override
-  State<newCrawl> createState() => _newCrawlState();
+  State<NewCrawl> createState() => _NewCrawlState();
 }
 
-class _newCrawlState extends State<newCrawl> {
+class _NewCrawlState extends State<NewCrawl> {
   String crawlTitleLabel = 'Crawl Title';
   Color crawlTitleLabelColor = Colors.grey;
   File? _photo;
@@ -40,17 +34,11 @@ class _newCrawlState extends State<newCrawl> {
       Pub(name: "Steampunk Bar", adress: 'Kungsgatan 7A', isfavourite: false)
     ];
     Pub? _selectedBar;
-    bool loggedIn;
-    print('Current User: ' + FirebaseAuth.instance.currentUser.toString());
     if (FirebaseAuth.instance.currentUser == null) {
-      print('inte inloggad');
-      loggedIn = false;
-    } else {
-      loggedIn = true;
-    }
+    } else {}
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create New Crawl'),
+        title: const Text('Create New Crawl'),
         backgroundColor: ColorTheme.a,
       ),
       body: Center(
@@ -67,7 +55,7 @@ class _newCrawlState extends State<newCrawl> {
                     decoration: InputDecoration(
                         labelStyle: TextStyle(color: crawlTitleLabelColor),
                         labelText: crawlTitleLabel,
-                        border: OutlineInputBorder()),
+                        border: const OutlineInputBorder()),
                   ),
                 ]),
               ),
@@ -103,7 +91,7 @@ class _newCrawlState extends State<newCrawl> {
                       onPressed: () => Navigator.of(context).push(
                           (MaterialPageRoute(
                               builder: (context) => AddBarMap()))),
-                      child: Text('Select bars'),
+                      child: const Text('Select bars'),
                     ),
                     DropdownButton<Pub>(
                       onChanged: (value) {
@@ -116,7 +104,7 @@ class _newCrawlState extends State<newCrawl> {
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     e.pubname,
-                                    style: TextStyle(fontSize: 18),
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                 ),
                                 value: e,
@@ -174,7 +162,6 @@ class _newCrawlState extends State<newCrawl> {
                           crawlTitleLabel = '*CrawlTitle is required';
                           crawlTitleLabelColor = Colors.red;
                         });
-                        print('Label: ' + crawlTitleLabel);
                       } else {
                         createPubCrawl(
                             _crawlTitle.text, _crawlDesc.text, _crawlPubs.text);
@@ -223,8 +210,6 @@ class _newCrawlState extends State<newCrawl> {
       if (pickedFile != null) {
         _photo = File(pickedFile.path);
         FirebaseApi().uploadCrawlImage(_photo, crawlTitle);
-      } else {
-        print('No image selected.');
       }
     });
   }
@@ -236,8 +221,6 @@ class _newCrawlState extends State<newCrawl> {
       if (pickedFile != null) {
         _photo = File(pickedFile.path);
         FirebaseApi().uploadCrawlImage(_photo, crawltitle);
-      } else {
-        print('No image selected.');
       }
     });
   }

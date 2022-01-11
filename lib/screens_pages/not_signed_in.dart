@@ -95,7 +95,7 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
                 ),
               ),
               onLongPress: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => newCrawl())),
+                  .push(MaterialPageRoute(builder: (context) => NewCrawl())),
               child: const Padding(
                 padding:
                     EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),
