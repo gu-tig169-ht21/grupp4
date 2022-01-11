@@ -1,14 +1,9 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 import 'firebase_file.dart';
 
@@ -63,7 +58,7 @@ class FirebaseApi {
         .toList();
   }
 
-  static Future? storeUser() {
+  static void storeUser() {
     try {
       FirebaseFirestore.instance.collection('User').add({
         'email': FirebaseAuth.instance.currentUser!.email,
@@ -71,23 +66,20 @@ class FirebaseApi {
         'favorites': ''
       });
     } catch (e) {
-      print(e.toString());
+      (e.toString());
     }
-    return null;
   }
 
   Future uploadCrawlImage(dynamic _photo, String crawlName) async {
     if (_photo == null) return;
-    final fileName = basename(_photo!.path);
     final destination = 'PubImages/$crawlName';
-
     try {
       final ref = firebase_storage.FirebaseStorage.instance
           .ref('/crawlPics/')
           .child(destination);
       await ref.putFile(_photo!);
     } catch (e) {
-      print('error occured');
+      e.toString();
     }
   }
 
@@ -100,7 +92,7 @@ class FirebaseApi {
         'favoriets': ''
       });
     } catch (e) {
-      print(e.toString());
+      (e.toString());
     }
     return null;
   }
@@ -139,7 +131,6 @@ class FirebaseApi {
 
   Future uploadProfileImage(dynamic _photo, String imageName) async {
     if (_photo == null) return;
-    final fileName = basename(_photo!.path);
     final destination = 'profilePics/$imageName';
 
     try {
@@ -148,7 +139,7 @@ class FirebaseApi {
           .child(destination);
       await ref.putFile(_photo!);
     } catch (e) {
-      print('error occured');
+      e.toString();
     }
   }
 
@@ -166,7 +157,6 @@ class FirebaseApi {
   }
 
   static Future<bool> updateFavourite(String pubToRemove) async {
-    String testbar = pubToRemove;
     String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
     var collection = FirebaseFirestore.instance.collection('User');
     var docSnapshot = await collection.doc(userEmail).get();
@@ -188,7 +178,6 @@ class FirebaseApi {
   static void removeFavourite(
       String pubToRemove, List<dynamic> favourites) async {
     String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
-    String uid = FirebaseAuth.instance.currentUser!.uid.toString();
     favourites.remove(pubToRemove);
     FirebaseFirestore.instance
         .collection('User')
@@ -198,13 +187,11 @@ class FirebaseApi {
 
   static void addFavourite(String pubToAdd, List<dynamic> favourites) async {
     String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
-    String uid = FirebaseAuth.instance.currentUser!.uid.toString();
     favourites.add(pubToAdd);
     FirebaseFirestore.instance
         .collection('User')
         .doc(userEmail)
         .update({"favoriets": favourites});
-    ;
   }
 
   static Future<bool> isAdmin() async {

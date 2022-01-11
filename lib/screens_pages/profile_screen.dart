@@ -1,21 +1,15 @@
+// ignore_for_file: implementation_imports, unnecessary_null_comparison, use_key_in_widget_constructors
+
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/cat/navbar_page.dart';
 import 'package:my_first_app/firebase/Authenticate/authenticate.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
-import 'package:my_first_app/screens_pages/login_screen.dart';
-import 'package:my_first_app/screens_pages/register_user.dart';
 import 'package:provider/src/provider.dart';
-
-import 'not_signed_in.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -28,9 +22,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   File? _photo;
   final ImagePicker _picker = ImagePicker();
 
+  @override
   Widget build(BuildContext context) {
     final TextEditingController _imageTitle = TextEditingController();
-    Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -51,8 +45,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 250.0,
                   decoration: BoxDecoration(
                     color: ColorTheme.a,
-                    borderRadius: new BorderRadius.vertical(
-                      bottom: const Radius.elliptical(450, 60),
+                    borderRadius: const BorderRadius.vertical(
+                      bottom: Radius.elliptical(450, 60),
                     ),
                   ),
                 ),
@@ -79,37 +73,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Positioned.fill(
                   left: 150,
-                  child: Container(
-                    // width: 160,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 35,
-                        ),
-                        Text(
-                          'Hello',
-                          style: TextStyle(color: ColorTheme.f),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          email != null ? email.toString() : 'User',
-                          style: TextStyle(
-                              shadows: [
-                                Shadow(
-                                    color: Colors.black45,
-                                    offset: Offset.fromDirection(45, 3.0),
-                                    blurRadius: 10)
-                              ],
-                              fontWeight: FontWeight.bold,
-                              fontSize: 32,
-                              color: Colors.white),
-                        ),
-                      ],
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 35,
+                      ),
+                      Text(
+                        'Hello',
+                        style: TextStyle(color: ColorTheme.f),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        email != null ? email.toString() : 'User',
+                        style: TextStyle(
+                            shadows: [
+                              Shadow(
+                                  color: Colors.black45,
+                                  offset: Offset.fromDirection(45, 3.0),
+                                  blurRadius: 10)
+                            ],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 32,
+                            color: Colors.white),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -211,9 +202,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)),
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 13, top: 10),
-                                child: const Icon(
+                                padding: EdgeInsets.only(left: 13, top: 10),
+                                child: Icon(
                                   Icons.person,
                                   size: 130,
                                 ),
@@ -291,9 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _photo = File(pickedFile.path);
         imageTitle = FirebaseAuth.instance.currentUser!.email.toString();
         FirebaseApi().uploadProfileImage(_photo, imageTitle);
-      } else {
-        print('No image selected.');
-      }
+      } else {}
     });
   }
 
@@ -305,9 +293,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _photo = File(pickedFile.path);
         imageTitle = FirebaseAuth.instance.currentUser!.email.toString();
         FirebaseApi().uploadProfileImage(_photo, imageTitle);
-      } else {
-        print('No image selected.');
-      }
+      } else {}
     });
   }
 

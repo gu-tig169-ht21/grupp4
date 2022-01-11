@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, unnecessary_new, sized_box_for_whitespace, no_logic_in_create_state, prefer_collection_literals, use_key_in_widget_constructors
 
 import 'dart:async';
 import 'package:async/async.dart';
@@ -16,7 +16,7 @@ import '../google/places_api.dart';
 class MapSample extends StatefulWidget {
   final PubCrawlModel crawlModel;
 
-  MapSample({required this.crawlModel});
+  const MapSample({required this.crawlModel});
 
   @override
   State<MapSample> createState() => MapSampleState(crawlModel: crawlModel);
@@ -30,6 +30,7 @@ class MapSampleState extends State<MapSample> {
 
   late Future<List<Pub>> pubInfoList;
   late AsyncMemoizer _memoizer;
+  bool x = false;
 
   CameraPosition inital = CameraPosition(
       target: LatLng(57.702870438939414, 11.957678856217141), zoom: 1);
@@ -62,31 +63,24 @@ class MapSampleState extends State<MapSample> {
   }
 
   Future<CameraPosition> boundsFromLatLngList() async {
-    print('hejhej');
     List<String> pubbar = crawlModel.crawlPubs.split(";,");
     List<LatLng> markerList = await Api.reveiveCoordinates(pubbar);
     double lat = 0;
     double lng = 0;
     for (int i = 0; i < markerList.length; i++) {
-      print('HÄÄÄÄÄR: ' + markerList[i].toString());
       LatLng toExtract = markerList[i];
       lat += toExtract.latitude;
       lng += toExtract.longitude;
     }
-    print('Cameraposition = Lat: ' + lat.toString() + 'Lng: ' + lng.toString());
+
     lat = lat / markerList.length;
     lng = lng / markerList.length;
-    print('CamerapositionCorrect = Lat: ' +
-        lat.toString() +
-        'Lng: ' +
-        lng.toString());
     return CameraPosition(target: LatLng(lat, lng), zoom: 14);
   }
 
   _onMapCreated(GoogleMapController controller) async {
-    print('före future');
-    await Future.delayed(Duration(milliseconds: 2500));
-    print('Future genomförd');
+    await Future.sync(() => boundsFromLatLngList());
+    await Future.delayed(Duration(milliseconds: 500));
     controller.animateCamera(CameraUpdate.newCameraPosition(inital));
   }
 

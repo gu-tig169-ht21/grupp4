@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/firebase/storage/firebase_file.dart';
@@ -7,8 +9,6 @@ import 'package:my_first_app/models/pub_crawl_model.dart';
 //import './pics/bottles.jpg';
 //import 'theme.dart';
 //import 'card_theme.dart';
-import 'package:flutter/widgets.dart';
-import '../google/places_api.dart';
 import '../cat/interface_theme.dart';
 
 class CrawlCard extends StatefulWidget {
@@ -40,11 +40,10 @@ class _CrawlCardState extends State<CrawlCard> {
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               default:
                 if (snapshot.hasError) {
-                  print(snapshot.toString());
-                  return Center(child: Text('Some error occurred!'));
+                  return const Center(child: Text('Some error occurred!'));
                 } else {
                   final list = snapshot.data!;
                   return Column(
@@ -73,11 +72,6 @@ class _CrawlCardState extends State<CrawlCard> {
   }
 
   Widget buildImageCard(BuildContext context, PubCrawlModel pubCrawl) {
-    const color = Color(0xffA5D5B4);
-    String cords;
-    List<String> splitCords;
-    late var path = FirebaseApi().loadCrawlImage(pubCrawl.imgRef).toString();
-
     return Card(
       elevation: 2,
       clipBehavior: Clip.antiAlias,
@@ -105,11 +99,12 @@ class _CrawlCardState extends State<CrawlCard> {
                     builder: (context, snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
-                          return Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         default:
                           if (snapshot.hasError) {
-                            print(snapshot.toString());
-                            return Center(child: Text('Some error occurred!'));
+                            return const Center(
+                                child: Text('Some error occurred!'));
                           } else {
                             final url = snapshot.data.toString();
 
@@ -129,7 +124,7 @@ class _CrawlCardState extends State<CrawlCard> {
                                 left: 16,
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: Color(0xffD9B250),
+                                    color: const Color(0xffD9B250),
                                     border: Border.all(
                                         color: Colors.black, width: 2),
                                   ),
@@ -153,9 +148,9 @@ class _CrawlCardState extends State<CrawlCard> {
                     })
               ],
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Padding(
-              padding: EdgeInsets.all(16).copyWith(bottom: 0),
+              padding: const EdgeInsets.all(16).copyWith(bottom: 0),
               child: ExpandablePanel(
                 header: Text(
                   pubCrawl.title,
@@ -186,16 +181,6 @@ class _CrawlCardState extends State<CrawlCard> {
       ),
     );
   }
-
-  Future<List<PubCrawlModel>> _loadCrawls() async {
-    List<PubCrawlModel> crawls = await FirebaseApi.getCrawl();
-    return crawls;
-  }
-
-  // Future<String> cordinates(String bar) async {
-  //   String cords = await Api.getPlace(bar);
-  //   return cords;
-  // }
 
   Future<String> getCrawlImage(String imageName) async {
     String path = await FirebaseApi().loadCrawlImage(imageName);

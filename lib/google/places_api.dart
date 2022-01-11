@@ -78,7 +78,6 @@ class Api {
         LatLng(lat, lng),
       );
     }
-    print('MarkerList: ' + markerList.toString());
     return markerList;
   }
 
@@ -95,13 +94,11 @@ class Api {
         .get(Uri.parse('$apiUrl/ ' + pubName + '%Pub%Gothenburg&key=$nyckel'));
     String bodyString = response.body;
     var json = jsonDecode(bodyString);
-    String svar = json['status'];
     if (json['status'] == 'OK') {
       adress = json['results'][0]['formatted_address'];
 
       name = pubName;
     }
-    print('Namn: ' + pubName + ' Adress: ' + adress);
     return Pub(name: name, adress: adress, isfavourite: isfavourite);
   }
 }
