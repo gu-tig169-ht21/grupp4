@@ -75,15 +75,14 @@ class Api {
     String name = '';
     String adress = '';
     bool isfavourite = false;
-    var response =
-        await http.get(Uri.parse('$API_URL/ ' + pubName + '&key=$nyckel'));
+    var response = await http
+        .get(Uri.parse('$API_URL/ ' + pubName + '%bGothenburg&key=$nyckel'));
     String bodyString = response.body;
     var json = jsonDecode(bodyString);
     String svar = json['status'];
     if (json['status'] == 'OK') {
       adress = json['results'][0]['formatted_address'];
       name = pubName;
-      print('bar:  = $name, med adress: $adress');
     }
     return Pub(name: name, adress: adress, isfavourite: isfavourite);
   }

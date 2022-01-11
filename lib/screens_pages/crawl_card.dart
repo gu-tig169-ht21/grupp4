@@ -32,7 +32,7 @@ class _CrawlCardState extends State<CrawlCard> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorTheme.a,
-        title: Text('Crawl list'),
+        title: const Text('Crawl list'),
         automaticallyImplyLeading: false,
       ),
       body: FutureBuilder<List<PubCrawlModel>>(
@@ -86,7 +86,7 @@ class _CrawlCardState extends State<CrawlCard> {
       ),
       //child: Column(children: [ListTile(title: Text("test"),subtitle: Text("test again"),)],)
       child: InkWell(
-        onTap: () async {
+        onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => MapSample(
