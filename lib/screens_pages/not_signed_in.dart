@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/screens_pages/new_crawl.dart';
@@ -12,10 +13,11 @@ class NotSignedInScreen extends StatefulWidget {
 }
 
 class _NotSignedInScreenState extends State<NotSignedInScreen> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
         backgroundColor: ColorTheme.a,
         shadowColor: ColorTheme.a,
         elevation: 0,
@@ -33,9 +35,9 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
               child: Expanded(
                 flex: 10,
                 child: Container(
-                  margin: EdgeInsets.all(20),
-                  padding: EdgeInsets.all(20),
-                  child: Text(
+                  margin: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
+                  child: const Text(
                     'You are not signed in to any account. Create a new one or sign in',
                   ),
                 ),
@@ -95,7 +97,7 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
                 ),
               ),
               onLongPress: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => newCrawl())),
+                  .push(MaterialPageRoute(builder: (context) => NewCrawl())),
               child: const Padding(
                 padding:
                     EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),

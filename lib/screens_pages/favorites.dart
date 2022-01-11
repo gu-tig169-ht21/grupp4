@@ -1,13 +1,11 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
-import '../admin_navigation/crawl_list_view.dart';
 import '../models/pub_crawl_model.dart';
 import '../cat/interface_theme.dart';
-import '../models/pub_crawl_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class Favorites extends StatefulWidget {
   @override
@@ -20,14 +18,6 @@ class FavoritesState extends State<Favorites> {
   Stream<QuerySnapshot> favorites =
       FirebaseFirestore.instance.collection('User').snapshots();
   List<Pub> favPubs = [];
-  int _selectedIndex = 0;
-  final _pub = <Pub>[];
-
-  void onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   static List<String> favourites = [];
 
@@ -35,8 +25,8 @@ class FavoritesState extends State<Favorites> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Favorites'),
-        actions: <Widget>[
+        title: const Text('Favorites'),
+        actions: const <Widget>[
           //IconButton(icon: Icon(Icons.favorite), onPressed: _pushadd)
         ],
         backgroundColor: ColorTheme.a,
@@ -54,9 +44,6 @@ class FavoritesState extends State<Favorites> {
                 List<dynamic> value = output!['favoriets'];
                 List<Widget> favList = [];
                 for (int i = 0; i < value.length; i++) {
-                  print(value.length);
-                  print(value[i]);
-
                   favList.add(crawlCard(value[i]));
                 }
                 return (ListView(
@@ -77,7 +64,6 @@ class FavoritesState extends State<Favorites> {
     String barnameB4 = value.toString();
     if (barnameB4.contains('%20')) {
       f = barnameB4.replaceAll(RegExp(r'%20'), ' ');
-      print(f);
     }
     return Card(
       child: ListTile(
@@ -86,7 +72,7 @@ class FavoritesState extends State<Favorites> {
             onPressed: () {
               FirebaseApi.updateFavourite(value);
             },
-            icon: Icon(Icons.delete)),
+            icon: const Icon(Icons.delete)),
       ),
     );
   }

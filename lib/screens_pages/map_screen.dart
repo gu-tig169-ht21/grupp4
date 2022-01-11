@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, unnecessary_new, sized_box_for_whitespace, no_logic_in_create_state, prefer_collection_literals, use_key_in_widget_constructors
 
 import 'dart:async';
 import 'package:async/async.dart';
@@ -7,21 +7,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
-import 'package:my_first_app/screens_pages/crawl_card.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
-import 'package:my_first_app/screens_pages/favorites.dart';
-import 'package:my_first_app/screens_pages/not_signed_in.dart';
 import '../google/places_api.dart';
-import 'login_screen.dart';
 
 class MapSample extends StatefulWidget {
   final PubCrawlModel crawlModel;
 
-  MapSample({required this.crawlModel});
+  const MapSample({required this.crawlModel});
 
   @override
   State<MapSample> createState() => MapSampleState(crawlModel: crawlModel);
@@ -30,20 +25,23 @@ class MapSample extends StatefulWidget {
 class MapSampleState extends State<MapSample> {
   MapSampleState({required this.crawlModel});
   final PubCrawlModel crawlModel;
-
-  late Future<List<Marker>> markerList;
-  late Future<List<Pub>> pubInfoList;
-
   final Set<Marker> _markers = {};
   final List<Pub> _pubs = [];
-  late AsyncMemoizer _memoizer;
 
-  Future<dynamic> _getListOfPubs(crawlModel) async {
+  late Future<List<Pub>> pubInfoList;
+  late AsyncMemoizer _memoizer;
+  bool x = false;
+
+  CameraPosition inital = CameraPosition(
+      target: LatLng(57.702870438939414, 11.957678856217141), zoom: 1);
+
+  Future<dynamic> _getListOfPubs() async {
     return _memoizer.runOnce(() async {
-      List<String> allPlaces = crawlModel.pubs.split(";,");
-      for (int i = 0; i < allPlaces.length; i++) {
-        _pubs.add(await Api.callGetPubInfo(allPlaces[i]));
+      List<String> pubList = crawlModel.pubs.split(";,");
+      for (int i = 0; i < pubList.length; i++) {
+        _pubs.add(await Api.callGetPubInfo(pubList[i]));
       }
+      setState(() {});
     });
   }
 
@@ -55,50 +53,45 @@ class MapSampleState extends State<MapSample> {
     setState(() {});
   }
 
-  _onMapCreated(GoogleMapController controller) async {
-    List<String> pubList = crawlModel.pubs.split(";,");
-    for (int i = 0; i < pubList.length; i++) {
-      _markers.add(await Api.callGetPlace(pubList[i]));
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    markerList = Api.callAllPlaces(crawlModel.pubs);
-    _memoizer = AsyncMemoizer();
-    _fetchMarkers();
-  }
-
   final CameraPosition centerGbg = CameraPosition(
     target: LatLng(57.702870438939414, 11.957678856217141),
     zoom: 12.4746,
   );
 
-/*   LatLngBounds boundsFromLatLngList(List<LatLng> list) {
-    assert(list.isNotEmpty);
-    double x0, x1, y0, y1;
-    for (LatLng latLng in list) {
-      if (x0 == null) {
-        x0 = x1 = latLng.latitude;
-        y0 = y1 = latLng.longitude;
-      } else {
-        if (latLng.latitude > x1) x1 = latLng.latitude;
-        if (latLng.latitude < x0) x0 = latLng.latitude;
-        if (latLng.longitude > y1) y1 = latLng.longitude;
-        if (latLng.longitude < y0) y0 = latLng.longitude;
-      }
-    }
-    return LatLngBounds(northeast: LatLng(x1, y1), southwest: LatLng(x0, y0));
+  void callCamera() async {
+    inital = await boundsFromLatLngList();
   }
 
-  final _mapController.animateCamera(CameraUpdate.newLatLngBounds(
-                  LatLngBounds(
-                      southwest: LatLng(latMin, longMin),
-                      northeast: LatLng(latMax, longMax),
-                  ),
-                  100
-                )); */
+  Future<CameraPosition> boundsFromLatLngList() async {
+    List<String> pubbar = crawlModel.crawlPubs.split(";,");
+    List<LatLng> markerList = await Api.reveiveCoordinates(pubbar);
+    double lat = 0;
+    double lng = 0;
+    for (int i = 0; i < markerList.length; i++) {
+      LatLng toExtract = markerList[i];
+      lat += toExtract.latitude;
+      lng += toExtract.longitude;
+    }
+
+    lat = lat / markerList.length;
+    lng = lng / markerList.length;
+    return CameraPosition(target: LatLng(lat, lng), zoom: 14);
+  }
+
+  _onMapCreated(GoogleMapController controller) async {
+    await Future.sync(() => boundsFromLatLngList());
+    await Future.delayed(Duration(milliseconds: 500));
+    controller.animateCamera(CameraUpdate.newCameraPosition(inital));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _memoizer = AsyncMemoizer();
+    _fetchMarkers();
+    _getListOfPubs();
+    callCamera();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,28 +107,21 @@ class MapSampleState extends State<MapSample> {
           children: [
             Container(
               height: 275,
-              child: FutureBuilder(
-                //undersök!!
-                future: markerList,
-                builder: (context, snapshot) => GoogleMap(
-                  mapType: MapType.normal,
-                  //markers: Set<Marker>.from(snapshot.data.values),
-                  onMapCreated: _onMapCreated,
-                  markers: _markers,
-                  initialCameraPosition: centerGbg,
-                  gestureRecognizers: Set()
-                    ..add(Factory<EagerGestureRecognizer>(
-                        () => EagerGestureRecognizer())),
-                ),
+              child: GoogleMap(
+                mapType: MapType.normal,
+                //markers: Set<Marker>.from(snapshot.data.values),
+                onMapCreated: _onMapCreated,
+                markers: _markers,
+                initialCameraPosition: inital,
+                gestureRecognizers: Set()
+                  ..add(Factory<EagerGestureRecognizer>(
+                      () => EagerGestureRecognizer())),
               ),
             ),
             SingleChildScrollView(
-              child: FutureBuilder(
-                future: _getListOfPubs(crawlModel),
-                builder: (context, snapshot) => Column(
-                    children: _pubs.map((pub) => pubInfoCard(pub)).toList()),
-              ),
-            )
+              child: Column(
+                  children: _pubs.map((pub) => pubInfoCard(pub)).toList()),
+            ),
           ],
         ),
       ),
@@ -150,9 +136,7 @@ class MapSampleState extends State<MapSample> {
     }
     try {
       String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
-
       var collection = FirebaseFirestore.instance.collection('User');
-
       bool isFavourite = false;
       return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
           stream: collection.doc(userEmail).snapshots(),
@@ -184,10 +168,7 @@ class MapSampleState extends State<MapSample> {
                                 : Icon(Icons.favorite_border),
                             onPressed: () {
                               FirebaseApi.updateFavourite(pub.name);
-                              setState(() {
-                                //await Future.delayed(Duration(milliseconds: 100));
-                                //_pubs.clear();
-                              });
+                              setState(() {});
                             },
                           ),
                           title: Text(barname),

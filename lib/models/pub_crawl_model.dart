@@ -14,7 +14,7 @@ class PubCrawlModel {
       required this.pubs,
       required this.imgRef});
 
-  String get ID => crawlID;
+  String get id => crawlID;
   String get crawlTitle => title;
   String get crawlDescription => description;
   String? get crawlRating => rating;
@@ -24,7 +24,6 @@ class PubCrawlModel {
 class Pub {
   String name;
   String adress;
-  //TODO: få in longitud/lattitud
   String? description;
   bool isfavourite = false;
 

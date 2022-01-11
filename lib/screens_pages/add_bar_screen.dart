@@ -1,11 +1,8 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, unnecessary_new, sized_box_for_whitespace, use_key_in_widget_constructors
 
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
 import 'package:google_maps_webservice/places.dart';
 
@@ -28,12 +25,6 @@ class AddBarMapState extends State<AddBarMap> {
     zoom: 12.50,
   );
 
-  static final Marker _gbgCenter = Marker(
-      markerId: MarkerId('_CenterGbg'),
-      infoWindow: InfoWindow(title: 'This is the Center of Gothenburg'),
-      icon: BitmapDescriptor.defaultMarker,
-      position: LatLng(57.70884963208789, 11.974438295782342));
-
   static final Marker henke = Marker(
       markerId: MarkerId('Henriksberg'),
       infoWindow: InfoWindow(title: 'Ta en bira eller 2!'),
@@ -55,7 +46,6 @@ class AddBarMapState extends State<AddBarMap> {
           height: 275,
           child: GoogleMap(
             mapType: MapType.normal,
-            markers: {},
             initialCameraPosition: _centerGbg,
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
@@ -126,7 +116,6 @@ class AddBarMapState extends State<AddBarMap> {
   }
 
   Widget _oneBar(Pub pub, context, int x) {
-    String pubnamn = pub.pubname.toString();
     return Card(
       child: InkWell(
         child: ListTile(
@@ -148,15 +137,15 @@ class AddBarMapState extends State<AddBarMap> {
   void getNearbyPlaces() async {
     const kGoogleApiKey = 'AIzaSyCuPHW1WY319HfTCohnUXfBc7zMwVfgbmk';
     GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
-    var next_page_token;
+    var nextPageToken;
 
     final location = Location(lat: 57.70884963208789, lng: 11.974438295782342);
     final result = await _places.searchNearbyWithRadius(location, 3500,
-        type: 'bar', pagetoken: next_page_token);
+        type: 'bar', pagetoken: nextPageToken);
     setState(() {
       isLoading = true;
       if (result.status == 'OK') {
-        next_page_token = result.nextPageToken;
+        nextPageToken = result.nextPageToken;
         places = result.results;
         for (var pub in result.results) {
           _pubsGbg.add(Pub(
@@ -168,12 +157,12 @@ class AddBarMapState extends State<AddBarMap> {
     });
     new Future.delayed(Duration(seconds: 2), () async {
       final result2 = await _places.searchNearbyWithRadius(location, 3500,
-          type: 'bar', pagetoken: next_page_token);
+          type: 'bar', pagetoken: nextPageToken);
 
       setState(() {
         if (result2.status == 'OK') {
           places = result2.results;
-          next_page_token = result2.nextPageToken;
+          nextPageToken = result2.nextPageToken;
           for (var pub2 in result2.results) {
             _pubsGbg.add(Pub(
                 name: pub2.name,
@@ -182,11 +171,10 @@ class AddBarMapState extends State<AddBarMap> {
           }
         }
       });
-      print('varv 2 klart');
 
       new Future.delayed(Duration(seconds: 2), () async {
         final result3 = await _places.searchNearbyWithRadius(location, 3500,
-            type: 'bar', pagetoken: next_page_token);
+            type: 'bar', pagetoken: nextPageToken);
         setState(() {
           if (result3.status == 'OK') {
             places = result3.results;
@@ -199,7 +187,6 @@ class AddBarMapState extends State<AddBarMap> {
           }
           isLoading = false;
         });
-        print('varv 3 klart');
       });
     });
   }

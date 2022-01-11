@@ -1,14 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'admin_navigation/crawl_list_view.dart';
 import 'firebase/Authenticate/authenticate.dart';
-import './google/places_api.dart';
-import 'firebase/storage/firebase_file.dart';
 import 'cat/navbar_page.dart';
-import 'cat/interface_theme.dart';
 import 'firebase/storage/storage_services.dart';
 import 'screens_pages/splashscreen.dart';
 
@@ -34,7 +29,7 @@ class MyApp extends StatelessWidget {
           initialData: 0,
         ),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         title: 'hej',
         home: MyHomePage(),
       ),
@@ -52,13 +47,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,6 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                   onLongPress: () async {
                     //'Här finns ett utrymme för att testa funktioner!
+                    bool x = await FirebaseApi.isAdmin();
+                    if (x) {}
                   }),
             ),
           ],
