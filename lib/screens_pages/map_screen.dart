@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, sized_box_for_whitespace
 
 import 'dart:async';
-
+import 'package:async/async.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -35,44 +36,41 @@ class MapSampleState extends State<MapSample> {
 
   final Set<Marker> _markers = {};
   final List<Pub> _pubs = [];
+  late AsyncMemoizer _memoizer;
 
-  Future<List<Pub>> _getListOfPubs() async {
-    List<String> allPlaces = crawlModel.pubs.split(";,");
-    for (int i = 0; i < allPlaces.length; i++) {
-      if (_pubs.contains(allPlaces[i])) {
-        print(allPlaces[i] + ' finns redan i listan');
-      } else {
+  Future<dynamic> _getListOfPubs(crawlModel) async {
+    return _memoizer.runOnce(() async {
+      List<String> allPlaces = crawlModel.pubs.split(";,");
+      for (int i = 0; i < allPlaces.length; i++) {
         _pubs.add(await Api.callGetPubInfo(allPlaces[i]));
       }
-    }
-    return _pubs;
+    });
   }
 
-  void _onMapCreated(GoogleMapController controller) async {
+  void _fetchMarkers() async {
+    List<String> pubList = crawlModel.pubs.split(";,");
+    for (int i = 0; i < pubList.length; i++) {
+      _markers.add(await Api.callGetPlace(pubList[i]));
+    }
+    setState(() {});
+  }
+
+  _onMapCreated(GoogleMapController controller) async {
     List<String> pubList = crawlModel.pubs.split(";,");
     for (int i = 0; i < pubList.length; i++) {
       _markers.add(await Api.callGetPlace(pubList[i]));
     }
   }
 
-  //int _selectedIndex = 0;
-
-  //Måste göra en metod av det hela istället för att initiera allt i "initalizern"
-
   @override
   void initState() {
     super.initState();
     markerList = Api.callAllPlaces(crawlModel.pubs);
+    _memoizer = AsyncMemoizer();
+    _fetchMarkers();
   }
-  /* void onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  } */
 
-  //Completer<GoogleMapController> _controller = Completer();
-
-  final CameraPosition _CenterGbg = CameraPosition(
+  final CameraPosition centerGbg = CameraPosition(
     target: LatLng(57.702870438939414, 11.957678856217141),
     zoom: 12.4746,
   );
@@ -117,13 +115,14 @@ class MapSampleState extends State<MapSample> {
             Container(
               height: 275,
               child: FutureBuilder(
+                //undersök!!
                 future: markerList,
                 builder: (context, snapshot) => GoogleMap(
                   mapType: MapType.normal,
                   //markers: Set<Marker>.from(snapshot.data.values),
                   onMapCreated: _onMapCreated,
                   markers: _markers,
-                  initialCameraPosition: _CenterGbg,
+                  initialCameraPosition: centerGbg,
                   gestureRecognizers: Set()
                     ..add(Factory<EagerGestureRecognizer>(
                         () => EagerGestureRecognizer())),
@@ -132,7 +131,7 @@ class MapSampleState extends State<MapSample> {
             ),
             SingleChildScrollView(
               child: FutureBuilder(
-                future: _getListOfPubs(),
+                future: _getListOfPubs(crawlModel),
                 builder: (context, snapshot) => Column(
                     children: _pubs.map((pub) => pubInfoCard(pub)).toList()),
               ),
@@ -143,145 +142,105 @@ class MapSampleState extends State<MapSample> {
     );
   }
 
-  void showCustomDialog(Pub pub, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  title: Text(
-                    'Name: ' + pub.pubname,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                  ),
-                ),
-                /* ListTile(
-                  title: Text(
-                    'Adress: ' + pubs.adress,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                  ),
-                ), */
-                /* ListTile(
-                  title: Text(
-                    'Description: ' + pubs.description!,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                  ),
-                ), */
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Cancel')),
-              ],
-            ),
-          );
-        });
-  }
-
-  void showNotLoggedInDialog() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: Container(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: const Text('You have to log in to save favoriets!!!',
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold)),
-            )),
-          );
-        });
-  }
-
-  void showAlertDialog() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Alert!'),
-            content: Text('You have to log in to save favourites'),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Keep crawling')),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => NotSignedInScreen()));
-                      },
-                      child: Text('Log in')),
-                ],
-              )
-            ],
-          );
-        });
-  }
-
   Widget pubInfoCard(Pub pub) {
     String barname = pub.pubname;
     String barnameB4 = pub.pubname.toString();
     if (barnameB4.contains('%20')) {
       barname = barnameB4.replaceAll(RegExp(r'%20'), ' ');
     }
-    bool isFavourite = false;
-    return FutureBuilder(
-        future: FirebaseApi.checkIfFavourite(pub.name),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            String x = snapshot.data.toString();
-            if (x == 'true') {
-              isFavourite = true;
-            } else {
-              isFavourite = false;
-            }
+    try {
+      String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
 
-            return ListView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  Card(
-                    child: ExpansionTile(
-                      trailing: Row(children: [
-                        Text('Info ▼'),
-                      ]),
-                      leading: IconButton(
-                        icon: isFavourite
-                            ? Icon(
-                                Icons.favorite,
-                                color: Colors.amberAccent[400],
-                              )
-                            : Icon(Icons.favorite_border),
-                        onPressed: () {
-                          FirebaseApi.updateFavourite(pub.name);
-                          setState(() {
-                            _pubs.clear();
-                          });
-                        },
-                      ),
-                      title: Text(barname),
-                      children: [
-                        ListTile(
-                          title: Text('Name: ' + barname),
+      var collection = FirebaseFirestore.instance.collection('User');
+
+      bool isFavourite = false;
+      return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+          stream: collection.doc(userEmail).snapshots(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return const Center(child: CircularProgressIndicator());
+              default:
+                var output = snapshot.data!.data();
+                List userFavList =
+                    output!['favoriets']; //userFavList = användarens favoriter
+                for (var favoriet in userFavList) {
+                  if (favoriet == pub.pubname) isFavourite = true;
+                }
+
+                return ListView(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
+                      Card(
+                        child: ExpansionTile(
+                          trailing: Text('Info ▼'),
+                          leading: IconButton(
+                            icon: isFavourite
+                                ? Icon(
+                                    Icons.favorite,
+                                    color: Colors.amberAccent[400],
+                                  )
+                                : Icon(Icons.favorite_border),
+                            onPressed: () {
+                              FirebaseApi.updateFavourite(pub.name);
+                              setState(() {
+                                //await Future.delayed(Duration(milliseconds: 100));
+                                //_pubs.clear();
+                              });
+                            },
+                          ),
+                          title: Text(barname),
+                          children: [
+                            ListTile(
+                              title: Text('Name: ' + barname),
+                            ),
+                            ListTile(
+                              title: Text('Adress: ' + pub.pubadress),
+                            )
+                          ],
                         ),
-                        ListTile(
-                          title: Text('Adress: ' + pub.pubadress),
-                        )
-                      ],
-                    ),
+                      ),
+                    ]);
+            }
+          });
+    } catch (e) {
+      return ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            Card(
+              child: ExpansionTile(
+                trailing: Text('Info ▼'),
+                leading: IconButton(
+                  icon: Icon(Icons.favorite_border),
+                  onPressed: () {
+                    //showAlertDialog();
+                    const snackBar = SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      elevation: 10,
+                      duration: Duration(milliseconds: 2200),
+                      content: Text(
+                          'You have to be logged in to save bars to "Favourites"'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    setState(() {
+                      //_pubs.clear();
+                    });
+                  },
+                ),
+                title: Text(barname),
+                children: [
+                  ListTile(
+                    title: Text('Name: ' + barname),
                   ),
-                ]);
-          }
-          return Text('Hej');
-        });
+                  ListTile(
+                    title: Text('Adress: ' + pub.pubadress),
+                  )
+                ],
+              ),
+            ),
+          ]);
+    }
   }
 }
