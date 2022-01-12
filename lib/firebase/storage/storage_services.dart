@@ -58,18 +58,6 @@ class FirebaseApi {
         .toList();
   }
 
-  static void storeUser() {
-    try {
-      FirebaseFirestore.instance.collection('User').add({
-        'email': FirebaseAuth.instance.currentUser!.email,
-        'Uid': FirebaseAuth.instance.currentUser!.uid,
-        'favorites': ''
-      });
-    } catch (e) {
-      (e.toString());
-    }
-  }
-
   Future uploadCrawlImage(dynamic _photo, String crawlName) async {
     if (_photo == null) return;
     final destination = 'PubImages/$crawlName';
@@ -84,12 +72,13 @@ class FirebaseApi {
   }
 
   static Future? regNewUser(email) async {
+    List<String> favs = [];
     try {
       await FirebaseFirestore.instance.collection('User').doc(email).set({
         'email': email,
         'Uid': FirebaseAuth.instance.currentUser!.uid,
         'admin': false,
-        'favoriets': ''
+        'favoriets': favs,
       });
     } catch (e) {
       (e.toString());
