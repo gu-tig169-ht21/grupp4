@@ -25,7 +25,7 @@ class FavoritesState extends State<Favorites> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favorites'),
+        title: const Text('Favourites'),
         actions: const <Widget>[
           //IconButton(icon: Icon(Icons.favorite), onPressed: _pushadd)
         ],
@@ -34,28 +34,32 @@ class FavoritesState extends State<Favorites> {
       ),
       body: Column(
         children: [
-          StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-            stream: collection.doc(currentUser).snapshots(),
-            builder: (_, snapshot) {
-              if (snapshot.hasError) return Text('Error = ${snapshot.error}');
-
-              if (snapshot.hasData) {
-                var output = snapshot.data!.data();
-                List<dynamic> value = output!['favoriets'];
-                List<Widget> favList = [];
-                for (int i = 0; i < value.length; i++) {
-                  favList.add(crawlCard(value[i]));
-                }
-                return (ListView(
-                  children: favList,
-                  shrinkWrap: true,
-                ));
-              }
-              return const Center(child: CircularProgressIndicator());
-            },
-          )
+          favorietList(),
         ],
       ),
+    );
+  }
+
+  Widget favorietList() {
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: collection.doc(currentUser).snapshots(),
+      builder: (_, snapshot) {
+        if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+
+        if (snapshot.hasData) {
+          var output = snapshot.data!.data();
+          List<dynamic> value = output!['favoriets'];
+          List<Widget> favList = [];
+          for (int i = 0; i < value.length; i++) {
+            favList.add(crawlCard(value[i]));
+          }
+          return (ListView(
+            children: favList,
+            shrinkWrap: true,
+          ));
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
@@ -80,7 +84,6 @@ class FavoritesState extends State<Favorites> {
 /*
   Widget _buildRow(WordPair pair) {
     final alreadyadd = _addWordPairs.contains(pair);
-
     // word-pair tile
     return ListTile(
         title: Text(pair.asPascalCase, style: TextStyle(fontSize: 18.0)),
@@ -96,17 +99,14 @@ class FavoritesState extends State<Favorites> {
           });
         });
   }
-
   void _pushadd() => Navigator.of(context)
           .push(MaterialPageRoute(builder: (BuildContext context) {
         final Iterable<ListTile> tiles = _addWordPairs.map((WordPair pair) {
           return ListTile(
               title: Text(pair.asPascalCase, style: TextStyle(fontSize: 16.0)));
         });
-
         final List<Widget> divided =
             ListTile.divideTiles(context: context, tiles: tiles).toList();
-
         // saved word-pair page
         return Scaffold(
             appBar: AppBar(

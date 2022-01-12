@@ -22,6 +22,12 @@ class _NewCrawlState extends State<NewCrawl> {
   Color crawlTitleLabelColor = Colors.grey;
   File? _photo;
   final ImagePicker _picker = ImagePicker();
+  List<Pub> _pubs = [
+    Pub(name: "Brygghuset", adress: 'Järntorget 4', isfavourite: false),
+    Pub(name: "Steampunk Bar", adress: 'Kungsgatan 7A', isfavourite: false)
+  ];
+  Pub? _selectedBar;
+  Color hintTextColor = Colors.grey.shade700;
 
   final TextEditingController _crawlTitle = TextEditingController();
   final TextEditingController _crawlDesc = TextEditingController();
@@ -29,13 +35,6 @@ class _NewCrawlState extends State<NewCrawl> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    Color hintTextColor = Colors.grey.shade700;
-    List<Pub> _pubs = [
-      Pub(name: "Brygghuset", adress: 'Järntorget 4', isfavourite: false),
-      Pub(name: "Steampunk Bar", adress: 'Kungsgatan 7A', isfavourite: false)
-    ];
-    Pub? _selectedBar;
     if (FirebaseAuth.instance.currentUser == null) {
     } else {}
     return Scaffold(
@@ -48,132 +47,159 @@ class _NewCrawlState extends State<NewCrawl> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(children: [
-                  const Text('Please fill out all information below:'),
-                  TextField(
-                    controller: _crawlTitle,
-                    decoration: InputDecoration(
-                        labelStyle: TextStyle(color: crawlTitleLabelColor),
-                        labelText: crawlTitleLabel,
-                        border: const OutlineInputBorder()),
-                  ),
-                ]),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: _crawlDesc,
-                  decoration: InputDecoration(
-                      label: Text(
-                        'Description:',
-                        style: TextStyle(color: hintTextColor),
-                      ),
-                      border: const OutlineInputBorder()),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: _crawlPubs,
-                  decoration: InputDecoration(
-                      label: Text(
-                        'Pubs: Separate with ";," between pubs',
-                        style: TextStyle(color: hintTextColor),
-                      ),
-                      border: const OutlineInputBorder()),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => Navigator.of(context).push(
-                          (MaterialPageRoute(
-                              builder: (context) => AddBarMap()))),
-                      child: const Text('Select bars'),
-                    ),
-                    DropdownButton<Pub>(
-                      onChanged: (value) {
-                        _selectedBar = value;
-                      },
-                      value: _selectedBar,
-                      items: _pubs
-                          .map((e) => DropdownMenuItem(
-                                child: Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    e.pubname,
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                ),
-                                value: e,
-                              ))
-                          .toList(),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    _showPicker(context, _crawlTitle.text);
-                  },
-                  child: Container(
-                    decoration: const BoxDecoration(color: Color(0xffFDCF09)),
-                    child: _photo != null
-                        ? ClipRRect(
-                            //borderRadius: BorderRadius.square(50),
-                            child: Image.file(
-                              _photo!,
-                              width: size.width * 0.8,
-                              height: size.height * 0.25,
-                              fit: BoxFit.fitHeight,
-                            ),
-                          )
-                        : Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                            ),
-                            width: 300,
-                            height: 150,
-                            child: Icon(
-                              Icons.camera_alt,
-                              color: Colors.grey[800],
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: true,
-                child: ElevatedButton(
-                    child: const Text(
-                      'Post you new Crawl!',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xffD9B250),
-                    ),
-                    onPressed: () async {
-                      if (_crawlTitle.text.isEmpty) {
-                        setState(() {
-                          crawlTitleLabel = '*CrawlTitle is required';
-                          crawlTitleLabelColor = Colors.red;
-                        });
-                      } else {
-                        createPubCrawl(
-                            _crawlTitle.text, _crawlDesc.text, _crawlPubs.text);
-                      }
-                    }),
-              ),
+              inputTitle(),
+              inputDescription(),
+              inputPubs(),
+              selectBars(),
+              imageUpload(),
+              postButton(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget inputTitle() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          const Text('Please fill out all information below:'),
+          TextField(
+            controller: _crawlTitle,
+            decoration: InputDecoration(
+                labelStyle: TextStyle(color: crawlTitleLabelColor),
+                labelText: crawlTitleLabel,
+                border: const OutlineInputBorder()),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget inputDescription() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: _crawlDesc,
+        decoration: InputDecoration(
+            label: Text(
+              'Description:',
+              style: TextStyle(color: hintTextColor),
+            ),
+            border: const OutlineInputBorder()),
+      ),
+    );
+  }
+
+  Widget inputPubs() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: _crawlPubs,
+        decoration: InputDecoration(
+            label: Text(
+              'Pubs: Separate with ";," between pubs',
+              style: TextStyle(color: hintTextColor),
+            ),
+            border: const OutlineInputBorder()),
+      ),
+    );
+  }
+
+  Widget selectBars() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () => Navigator.of(context)
+                .push((MaterialPageRoute(builder: (context) => AddBarMap()))),
+            child: const Text('Select bars'),
+          ),
+          DropdownButton<Pub>(
+            onChanged: (value) {
+              _selectedBar = value;
+            },
+            value: _selectedBar,
+            items: _pubs
+                .map((e) => DropdownMenuItem(
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          e.pubname,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      value: e,
+                    ))
+                .toList(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget imageUpload() {
+    Size size = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () {
+          _showPicker(context, _crawlTitle.text);
+        },
+        child: Container(
+          decoration: const BoxDecoration(color: Color(0xffFDCF09)),
+          child: _photo != null
+              ? ClipRRect(
+                  //borderRadius: BorderRadius.square(50),
+                  child: Image.file(
+                    _photo!,
+                    width: size.width * 0.8,
+                    height: size.height * 0.25,
+                    fit: BoxFit.fitHeight,
+                  ),
+                )
+              : Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                  ),
+                  width: 300,
+                  height: 150,
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: Colors.grey[800],
+                  ),
+                ),
+        ),
+      ),
+    );
+  }
+
+  Widget postButton() {
+    return Visibility(
+      visible: true,
+      child: ElevatedButton(
+          child: const Text(
+            'Post you new Crawl!',
+            style: TextStyle(fontSize: 20),
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: const Color(0xffD9B250),
+          ),
+          onPressed: () async {
+            if (_crawlTitle.text.isEmpty) {
+              setState(() {
+                crawlTitleLabel = '*CrawlTitle is required';
+                crawlTitleLabelColor = Colors.red;
+              });
+            } else {
+              createPubCrawl(
+                  _crawlTitle.text, _crawlDesc.text, _crawlPubs.text);
+            }
+          }),
     );
   }
 

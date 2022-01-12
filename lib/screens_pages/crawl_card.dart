@@ -32,7 +32,7 @@ class _CrawlCardState extends State<CrawlCard> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorTheme.a,
-        title: const Text('Crawl list'),
+        title: const Text('Discover crawls'),
         automaticallyImplyLeading: false,
       ),
       body: FutureBuilder<List<PubCrawlModel>>(
@@ -49,25 +49,26 @@ class _CrawlCardState extends State<CrawlCard> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 12),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: list.length,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) =>
-                              Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 5),
-                            child: buildImageCard(context, list[index]),
-                          ),
-                        ),
-                      ),
+                      crawlList(list),
                     ],
                   );
                 }
             }
           }),
+    );
+  }
+
+  Widget crawlList(list) {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: list.length,
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) => Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          child: buildImageCard(context, list[index]),
+        ),
+      ),
     );
   }
 
@@ -78,7 +79,6 @@ class _CrawlCardState extends State<CrawlCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      //child: Column(children: [ListTile(title: Text("test"),subtitle: Text("test again"),)],)
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
@@ -89,94 +89,111 @@ class _CrawlCardState extends State<CrawlCard> {
             ),
           );
         },
-        child: Column(
-          children: [
-            Stack(
-              //alignment: Alignment.center,
-              children: [
-                FutureBuilder(
-                    future: getCrawlImage(pubCrawl.imgRef),
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        default:
-                          if (snapshot.hasError) {
-                            return const Center(
-                                child: Text('Some error occurred!'));
-                          } else {
-                            final url = snapshot.data.toString();
+        child: pubCrawlField(context, pubCrawl),
+      ),
+    );
+  }
 
-                            return Stack(children: [
-                              ClipRRect(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(15)),
-                                child: Image.network(
-                                  url,
-                                  fit: BoxFit.scaleDown,
-                                  height: 240,
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 16,
-                                //right: 16,
-                                left: 16,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffD9B250),
-                                    border: Border.all(
-                                        color: Colors.black, width: 2),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      pubCrawl.title,
-                                      style: const TextStyle(
-                                        fontSize: 24,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        //backgroundColor: Colors.amber,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ]);
-                          }
+  Widget pubCrawlField(BuildContext context, PubCrawlModel pubCrawl) {
+    return Column(
+      children: [
+        Stack(
+          //alignment: Alignment.center,
+          children: [
+            FutureBuilder(
+                future: getCrawlImage(pubCrawl.imgRef),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const Center(child: CircularProgressIndicator());
+                    default:
+                      if (snapshot.hasError) {
+                        return const Center(
+                            child: Text('Some error occurred!'));
+                      } else {
+                        final url = snapshot.data.toString();
+
+                        return Stack(
+                          children: [
+                            crawlImage(url),
+                            crawlText(pubCrawl),
+                          ],
+                        );
                       }
-                    })
-              ],
-            ),
-            const SizedBox(height: 2),
-            Padding(
-              padding: const EdgeInsets.all(16).copyWith(bottom: 0),
-              child: ExpandablePanel(
-                header: Text(
-                  pubCrawl.title,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                collapsed: Text(
-                  pubCrawl.description,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                  softWrap: true,
-                  maxLines: 1,
-                ),
-                expanded: Text(
-                  pubCrawl.description,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
+                  }
+                })
           ],
+        ),
+        const SizedBox(height: 2),
+        crawlTitleBox(pubCrawl),
+      ],
+    );
+  }
+
+  Widget crawlImage(url) {
+    return Padding(
+      padding: EdgeInsets.only(top: 8),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        child: Image.network(
+          url,
+          fit: BoxFit.scaleDown,
+          height: 240,
+        ),
+      ),
+    );
+  }
+
+  Widget crawlText(PubCrawlModel pubCrawl) {
+    return Positioned(
+      bottom: 16,
+      left: 16,
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xffD9B250),
+          border: Border.all(color: Colors.black, width: 2),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Text(
+            pubCrawl.title,
+            style: const TextStyle(
+              fontSize: 24,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              //backgroundColor: Colors.amber,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget crawlTitleBox(PubCrawlModel pubCrawl) {
+    return Padding(
+      padding: const EdgeInsets.all(16).copyWith(bottom: 0),
+      child: ExpandablePanel(
+        header: Text(
+          pubCrawl.title,
+          style: const TextStyle(
+            fontSize: 24,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        collapsed: Text(
+          pubCrawl.description,
+          style: const TextStyle(
+            fontSize: 16,
+          ),
+          softWrap: true,
+          maxLines: 1,
+        ),
+        expanded: Text(
+          pubCrawl.description,
+          style: const TextStyle(
+            fontSize: 16,
+          ),
         ),
       ),
     );

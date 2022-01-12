@@ -21,11 +21,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String admin = FirebaseApi.isAdmin().toString();
   File? _photo;
   final ImagePicker _picker = ImagePicker();
+  final TextEditingController _imageTitle = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _imageTitle = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -38,107 +37,111 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 250.0,
-                  decoration: BoxDecoration(
-                    color: ColorTheme.a,
-                    borderRadius: const BorderRadius.vertical(
-                      bottom: Radius.elliptical(450, 60),
-                    ),
-                  ),
-                ),
-                Positioned.fill(
-                  top: -50,
-                  left: 5,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: profileCard(),
-                  ),
-                ),
-                Positioned.fill(
-                  top: 50,
-                  left: 80,
-                  child: GestureDetector(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: changeProfilePic(),
-                    ),
-                    onTap: () {
-                      _showPicker(context, _imageTitle.text);
-                    },
-                  ),
-                ),
-                Positioned.fill(
-                  left: 150,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 35,
-                      ),
-                      Text(
-                        'Hello',
-                        style: TextStyle(color: ColorTheme.f),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        email != null ? email.toString() : 'User',
-                        style: TextStyle(
-                            shadows: [
-                              Shadow(
-                                  color: Colors.black45,
-                                  offset: Offset.fromDirection(45, 3.0),
-                                  blurRadius: 10)
-                            ],
-                            fontWeight: FontWeight.bold,
-                            fontSize: 32,
-                            color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            profileArea(),
             Container(
               height: 50,
             ),
-            ElevatedButton(
-              onPressed: () async {
-                await context.read<AuthenticationService>().signOut();
-                /* if (FirebaseAuth.instance.currentUser == null) {
+            signoutButton(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget profileArea() {
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 250.0,
+          decoration: BoxDecoration(
+            color: ColorTheme.a,
+            borderRadius: const BorderRadius.vertical(
+              bottom: Radius.elliptical(450, 60),
+            ),
+          ),
+        ),
+        Positioned.fill(
+          top: -50,
+          left: 5,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: profileCard(),
+          ),
+        ),
+        Positioned.fill(
+          top: 50,
+          left: 80,
+          child: GestureDetector(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: changeProfilePic(),
+            ),
+            onTap: () {
+              _showPicker(context, _imageTitle.text);
+            },
+          ),
+        ),
+        Positioned.fill(
+          left: 150,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 35,
+              ),
+              Text(
+                'Hello',
+                style: TextStyle(color: ColorTheme.f),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                email != null ? email.toString() : 'User',
+                style: TextStyle(
+                    shadows: [
+                      Shadow(
+                          color: Colors.black45,
+                          offset: Offset.fromDirection(45, 3.0),
+                          blurRadius: 10)
+                    ],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                    color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget signoutButton() {
+    return ElevatedButton(
+      onPressed: () async {
+        await context.read<AuthenticationService>().signOut();
+        /* if (FirebaseAuth.instance.currentUser == null) {
                   setState(() {});
                 }*/
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const NavbarPage(),
-                  ),
-                );
-              },
-              child: const Padding(
-                padding:
-                    EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),
-                child: Text(
-                  'Sign out',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.b,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-            ),
-            Container(
-              height: 20,
-            ),
-          ],
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const NavbarPage(),
+          ),
+        );
+      },
+      child: const Padding(
+        padding: EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),
+        child: Text(
+          'Sign out',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: ColorTheme.b,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
         ),
       ),
     );
