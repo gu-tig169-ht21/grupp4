@@ -169,23 +169,21 @@ class FirebaseApi {
   }
 
   //Nedan metod används inte i dagsläget, men tanken är att admins ska kunna skapa crawls
-  static Future<bool> isAdmin() async {
+  Future<bool> isAdmin() async {
     bool admin = false;
     String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
     var collection = FirebaseFirestore.instance.collection('User');
     var docSnapshot = await collection.doc(userEmail).get();
     if (docSnapshot.exists) {
       var data = docSnapshot.data();
-      try {
-        admin = data!['admin'];
-      } catch (e) {
-        return admin;
+      if (data!['admin'] == true) {
+        admin = true;
       }
     }
-    return false;
+    return admin;
   }
 
-  Future<bool> callcheckIfFavourite(String pubname) async {
+  /* static Future<bool> callcheckIfFavourite(String pubname) async {
     bool x = await checkIfFavourite(pubname);
     return x;
   }
@@ -202,7 +200,7 @@ class FirebaseApi {
       }
     }
     return false;
-  }
+  } */
 
   bool checkIfProfilePic(String email) {
     bool x = false;

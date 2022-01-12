@@ -28,7 +28,6 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
           children: [
             infoCard(),
             buttonRow(),
-            developerButton(),
           ],
         ),
       ),
@@ -99,31 +98,6 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
         ),
         const Padding(padding: EdgeInsets.only(top: 25)),
       ],
-    );
-  }
-
-  Widget developerButton() {
-    return ElevatedButton(
-      onPressed: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => ProfileScreen(),
-        ),
-      ),
-      onLongPress: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => NewCrawl())),
-      child: const Padding(
-        padding: EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),
-        child: Text(
-          'View profile screen [developer]',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      style: ElevatedButton.styleFrom(
-        primary: ColorTheme.b,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
-        ),
-      ),
     );
   }
 }

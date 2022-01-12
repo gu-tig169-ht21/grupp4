@@ -9,6 +9,8 @@ import 'package:my_first_app/cat/interface_theme.dart';
 import 'package:my_first_app/cat/navbar_page.dart';
 import 'package:my_first_app/firebase/Authenticate/authenticate.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
+import 'package:my_first_app/screens_pages/login_screen.dart';
+import 'package:my_first_app/screens_pages/new_crawl.dart';
 import 'package:provider/src/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -21,6 +23,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   File? _photo;
   final ImagePicker _picker = ImagePicker();
   final TextEditingController _imageTitle = TextEditingController();
+  bool showButton = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isAdmin();
+  }
+
+  void isAdmin() async {
+    showButton = await FirebaseApi().isAdmin();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +51,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             profileArea(),
+            Container(
+              height: 50,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 12)),
+            Visibility(
+              visible: showButton,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => NewCrawl(),
+                    ),
+                  );
+                },
+                child: const Padding(
+                  padding:
+                      EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),
+                  child: Text(
+                    'Create Crawl [ADMIN ONLY]',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: ColorTheme.b,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+            ),
             Container(
               height: 50,
             ),
@@ -194,7 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             const BorderRadius.all(Radius.circular(15)),
                         child: Image.network(
                           url,
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                           height: 130,
                           width: 130,
                         ),
