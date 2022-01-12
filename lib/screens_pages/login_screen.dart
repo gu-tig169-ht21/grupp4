@@ -13,8 +13,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController _email = TextEditingController();
-  TextEditingController _password = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
   void onItemTapped(int index) {
     setState(() {});
@@ -42,9 +42,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget signinText() {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.only(top: 20),
-      child: const Text('Sign in'),
+      child: Text('Sign in'),
     );
   }
 

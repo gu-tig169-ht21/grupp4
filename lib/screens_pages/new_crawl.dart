@@ -22,7 +22,7 @@ class _NewCrawlState extends State<NewCrawl> {
   Color crawlTitleLabelColor = Colors.grey;
   File? _photo;
   final ImagePicker _picker = ImagePicker();
-  List<Pub> _pubs = [
+  final List<Pub> _pubs = [
     Pub(name: "Brygghuset", adress: 'Järntorget 4', isfavourite: false),
     Pub(name: "Steampunk Bar", adress: 'Kungsgatan 7A', isfavourite: false)
   ];
