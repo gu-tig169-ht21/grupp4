@@ -22,8 +22,6 @@ class SplashscreenState extends State<Splashscreen> {
     futureFiles = FirebaseApi.listAll('/images/');
   }
 
-  final Storage storage = Storage();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

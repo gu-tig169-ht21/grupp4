@@ -13,9 +13,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  TextEditingController _email = TextEditingController();
-  TextEditingController _password = TextEditingController();
-  TextEditingController _confirmpassword = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final TextEditingController _confirmpassword = TextEditingController();
   final AuthenticationService _auth =
       AuthenticationService(FirebaseAuth.instance);
 
@@ -41,6 +41,7 @@ class _RegisterState extends State<Register> {
   }
 
   Widget emailInput() {
+    //TODO: kolla att mail inte redan är registrerad!
     return Padding(
       padding:
           const EdgeInsets.only(left: 8.0, right: 8.0, top: 28.0, bottom: 8.0),
@@ -53,6 +54,7 @@ class _RegisterState extends State<Register> {
   }
 
   Widget passwordInput() {
+    //TODO: fixa någon slags popup/snackbar samt break ifall lösenord inte stämmer överrens!
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
       child: TextFormField(
@@ -60,7 +62,7 @@ class _RegisterState extends State<Register> {
         obscureText: true,
         validator: (passwordMatch) {
           if (passwordMatch!.isEmpty)
-            return 'You need to confirm your password'; //TODO: fixa någon slags popup/snackbar
+            return 'You need to confirm your password';
           return null;
         },
         decoration: const InputDecoration(
@@ -72,6 +74,7 @@ class _RegisterState extends State<Register> {
   }
 
   Widget confirmPasswordInput() {
+    //TODO: lägg till en popup // snackbar
     return Padding(
       padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 30),
       child: TextFormField(
@@ -80,8 +83,7 @@ class _RegisterState extends State<Register> {
         validator: (passwordMatch) {
           if (passwordMatch!.isEmpty)
             print(
-              const Text(
-                  'You need to confirm your password'), //TODO: lägg till en popup // snackbar
+              const Text('You need to confirm your password'),
             );
           if (_confirmpassword.text != _password.text) {
             //WIP

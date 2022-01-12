@@ -18,7 +18,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String email = FirebaseAuth.instance.currentUser!.email.toString();
-  String admin = FirebaseApi.isAdmin().toString();
   File? _photo;
   final ImagePicker _picker = ImagePicker();
   final TextEditingController _imageTitle = TextEditingController();
@@ -53,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         Container(
           width: double.infinity,
-          height: 250.0,
+          height: MediaQuery.of(context).size.height / 3,
           decoration: BoxDecoration(
             color: ColorTheme.a,
             borderRadius: const BorderRadius.vertical(
@@ -187,53 +186,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 case ConnectionState.waiting:
                   return const Center(child: CircularProgressIndicator());
                 default:
-                  if (snapshot.hasError) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 75,
+                  final url = snapshot.data.toString();
+                  return Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                        child: Image.network(
+                          url,
+                          fit: BoxFit.fill,
+                          height: 130,
+                          width: 130,
                         ),
-                        Stack(
-                          children: [
-                            Icon(
-                              Icons.circle,
-                              size: 155,
-                              color: ColorTheme.f,
-                            ),
-                            const ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 13, top: 10),
-                                child: Icon(
-                                  Icons.person,
-                                  size: 130,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  } else {
-                    final url = snapshot.data.toString();
-
-                    return Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(15)),
-                          child: Image.network(
-                            url,
-                            fit: BoxFit.fill,
-                            height: 130,
-                            width: 130,
-                          ),
-                        ),
-                      ],
-                    );
-                  }
+                      ),
+                    ],
+                  );
               }
             },
           )

@@ -36,14 +36,11 @@ class NoFavoritesState extends State<NoFavorites> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Expanded(
-        flex: 10,
-        child: Container(
-          margin: const EdgeInsets.all(20),
-          padding: const EdgeInsets.all(20),
-          child: const Text(
-            'You need to be signed in to save and view favourites.',
-          ),
+      child: Container(
+        margin: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
+        child: const Text(
+          'You need to be signed in to save and view favourites.',
         ),
       ),
     );

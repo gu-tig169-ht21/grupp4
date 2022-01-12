@@ -28,9 +28,7 @@ class MapSampleState extends State<MapSample> {
   final Set<Marker> _markers = {};
   final List<Pub> _pubs = [];
 
-  late Future<List<Pub>> pubInfoList;
   late AsyncMemoizer _memoizer;
-  bool x = false;
 
   CameraPosition inital = CameraPosition(
       target: LatLng(57.702870438939414, 11.957678856217141), zoom: 1);
@@ -75,7 +73,7 @@ class MapSampleState extends State<MapSample> {
 
     lat = lat / markerList.length;
     lng = lng / markerList.length;
-    return CameraPosition(target: LatLng(lat, lng), zoom: 14);
+    return CameraPosition(target: LatLng(lat, lng), zoom: 14.7);
   }
 
   _onMapCreated(GoogleMapController controller) async {
@@ -115,7 +113,7 @@ class MapSampleState extends State<MapSample> {
 
   Widget mapBox() {
     return Container(
-      height: 275,
+      height: MediaQuery.of(context).size.height / 2,
       child: GoogleMap(
         mapType: MapType.normal,
         //markers: Set<Marker>.from(snapshot.data.values),

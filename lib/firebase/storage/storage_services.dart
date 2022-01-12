@@ -7,8 +7,6 @@ import 'package:my_first_app/models/pub_crawl_model.dart';
 
 import 'firebase_file.dart';
 
-class Storage {}
-
 class FirebaseApi {
   final firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
@@ -17,10 +15,6 @@ class FirebaseApi {
     final reference =
         await storage.ref('/crawlPics/PubImages/$ref').getDownloadURL();
     return reference;
-    /* print(reference.toString() + '<-- detta är reference');
-    var url = await reference.getDownloadURL();
-    print('Detta är URL:en -->' + url.toString());
-    return url; */
   }
 
   Future<String> loadProfileImage(String ref) async {
@@ -36,6 +30,7 @@ class FirebaseApi {
     }
   }
 
+  //Nedan metod är en gammal metod, dock används den idag för att hämta splashscreen:en
   static Future<List<String>> _getDownloadLinks(List<Reference> refs) =>
       Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
 
@@ -105,16 +100,6 @@ class FirebaseApi {
           pubs: crawls['crawlPubs'],
           imgRef: crawls['crawlImgRef']));
     }
-    /* list.add(PubCrawlModel(
-        crawlID: json[0]['crawlID'],
-        title: json[0]['crawlTitle'],
-        description: json[0]['crawlDescription'],
-        pubs: json[0]['crawlPubs']));
-    list.add(PubCrawlModel(
-        crawlID: json[1]['crawlID'],
-        title: json[1]['crawlTitle'],
-        description: json[1]['crawlDescription'],
-        pubs: json[1]['crawlPubs'])); */
     return list;
   }
 
@@ -183,6 +168,7 @@ class FirebaseApi {
         .update({"favoriets": favourites});
   }
 
+  //Nedan metod används inte i dagsläget, men tanken är att admins ska kunna skapa crawls
   static Future<bool> isAdmin() async {
     bool admin = false;
     String userEmail = FirebaseAuth.instance.currentUser!.email.toString();

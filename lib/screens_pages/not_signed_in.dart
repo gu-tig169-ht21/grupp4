@@ -42,14 +42,11 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Expanded(
-        flex: 10,
-        child: Container(
-          margin: const EdgeInsets.all(20),
-          padding: const EdgeInsets.all(20),
-          child: const Text(
-            'You are not signed in to any account. Create a new one or sign in',
-          ),
+      child: Container(
+        margin: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
+        child: const Text(
+          'You are not signed in to any account. Create a new one or sign in',
         ),
       ),
     );

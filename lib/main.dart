@@ -16,7 +16,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: const MaterialApp(
-        title: 'hej',
+        title: 'Gothenburg PubCrawl',
         home: MyHomePage(),
       ),
     );
@@ -66,29 +65,25 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: const EdgeInsets.only(bottom: 100),
       alignment: Alignment.bottomCenter,
       child: OutlinedButton(
-          child: const Text(
-            "Start",
-            textScaleFactor: 1.7,
-            style: TextStyle(),
+        child: const Text(
+          "Start",
+          textScaleFactor: 1.7,
+          style: TextStyle(),
+        ),
+        style: OutlinedButton.styleFrom(
+            minimumSize: const Size(170, 65),
+            backgroundColor: Colors.white,
+            side: const BorderSide(
+              color: Color.fromRGBO(114, 107, 89, 1),
+              width: 7,
+            ),
+            primary: Colors.black),
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const NavbarPage(),
           ),
-          style: OutlinedButton.styleFrom(
-              minimumSize: const Size(170, 65),
-              backgroundColor: Colors.white,
-              side: const BorderSide(
-                color: Color.fromRGBO(114, 107, 89, 1),
-                width: 7,
-              ),
-              primary: Colors.black),
-          onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const NavbarPage(),
-                ),
-              ),
-          onLongPress: () async {
-            //'Här finns ett utrymme för att testa funktioner!
-            bool x = await FirebaseApi.isAdmin();
-            if (x) {}
-          }),
+        ),
+      ),
     );
   }
 }

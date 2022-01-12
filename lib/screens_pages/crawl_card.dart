@@ -6,9 +6,6 @@ import 'package:my_first_app/firebase/storage/firebase_file.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/screens_pages/map_screen.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
-//import './pics/bottles.jpg';
-//import 'theme.dart';
-//import 'card_theme.dart';
 import '../cat/interface_theme.dart';
 
 class CrawlCard extends StatefulWidget {
@@ -18,7 +15,6 @@ class CrawlCard extends StatefulWidget {
 
 class _CrawlCardState extends State<CrawlCard> {
   late Future<List<PubCrawlModel>> list;
-  late Future<List<FirebaseFile>> futureFiles;
 
   @override
   void initState() {
@@ -98,7 +94,6 @@ class _CrawlCardState extends State<CrawlCard> {
     return Column(
       children: [
         Stack(
-          //alignment: Alignment.center,
           children: [
             FutureBuilder(
                 future: getCrawlImage(pubCrawl.imgRef),
@@ -161,7 +156,6 @@ class _CrawlCardState extends State<CrawlCard> {
               fontSize: 24,
               color: Colors.black,
               fontWeight: FontWeight.bold,
-              //backgroundColor: Colors.amber,
             ),
           ),
         ),
@@ -173,10 +167,10 @@ class _CrawlCardState extends State<CrawlCard> {
     return Padding(
       padding: const EdgeInsets.all(16).copyWith(bottom: 0),
       child: ExpandablePanel(
-        header: Text(
-          pubCrawl.title,
-          style: const TextStyle(
-            fontSize: 24,
+        header: const Text(
+          'Description',
+          style: TextStyle(
+            fontSize: 20,
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
