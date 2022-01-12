@@ -35,7 +35,6 @@ class AddBarMapState extends State<AddBarMap> {
 
   @override
   Widget build(BuildContext context) {
-    ;
     return new Scaffold(
       appBar: AppBar(
         centerTitle: true,

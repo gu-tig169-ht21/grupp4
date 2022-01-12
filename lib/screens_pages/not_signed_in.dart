@@ -28,9 +28,6 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
           children: [
             infoCard(),
             buttonRow(),
-            Container(
-              height: 20,
-            ),
             developerButton(),
           ],
         ),
@@ -59,47 +56,52 @@ class _NotSignedInScreenState extends State<NotSignedInScreen> {
   }
 
   Widget buttonRow() {
-    return ListTile(
-      leading: ElevatedButton(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => Register(),
+    return Column(
+      children: [
+        const Padding(padding: EdgeInsets.only(top: 6)),
+        ElevatedButton(
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => Register(),
+            ),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
+            child: Text(
+              'Create an account',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: ColorTheme.b,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
           ),
         ),
-        child: const Padding(
-          padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
-          child: Text(
-            'Create an account',
-            style: TextStyle(color: Colors.white),
+        const Padding(padding: EdgeInsets.only(top: 12)),
+        ElevatedButton(
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(),
+            ),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
+            child: Text(
+              'Sign in',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: ColorTheme.b,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
           ),
         ),
-        style: ElevatedButton.styleFrom(
-          primary: ColorTheme.b,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-      ),
-      trailing: ElevatedButton(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => LoginScreen(),
-          ),
-        ),
-        child: const Padding(
-          padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
-          child: Text(
-            'Sign in',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: ColorTheme.b,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-      ),
+        const Padding(padding: EdgeInsets.only(top: 25)),
+      ],
     );
   }
 
