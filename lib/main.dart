@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'firebase/Authenticate/authenticate.dart';
 import 'cat/navbar_page.dart';
-import 'firebase/storage/storage_services.dart';
 import 'screens_pages/splashscreen.dart';
 
 Future<void> main() async {

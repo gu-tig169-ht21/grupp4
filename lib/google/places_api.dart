@@ -20,13 +20,10 @@ class Api {
         await http.get(Uri.parse('$apiUrl/$place%Pub%Gothenburg&key=$nyckel'));
     String bodyString = response.body;
     var json = jsonDecode(bodyString);
-    //print(json.toString());
-    // Map<String, dynamic> map = jsonDecode(bodyString);
 
     double lat = json['results'][0]['geometry']['location']['lat'];
     double lng = json['results'][0]['geometry']['location']['lng'];
 
-    //String coordinates = lat += ';,' + lng;
     if (place.contains('%20')) {
       corrPlace = place.replaceAll(RegExp(r'%20'), ' ');
     }
@@ -34,33 +31,6 @@ class Api {
         markerId: MarkerId(place),
         position: LatLng(lat, lng),
         infoWindow: InfoWindow(title: corrPlace));
-  }
-
-  static Future<List<Marker>> callAllPlaces(String place) {
-    Future<List<Marker>> allMarkers = getAllPlaces(place);
-    return allMarkers;
-  }
-
-  static Future<List<Marker>> getAllPlaces(String place) async {
-    List<Marker> markerList = [];
-    List<String> allPlaces = place.split(';,');
-    for (int i = 0; i < allPlaces.length; i++) {
-      var response = await http.get(
-          Uri.parse('$apiUrl/' + allPlaces[i] + '%Pub%Gothenburg&key=$nyckel'));
-      String bodyString = response.body;
-      var json = jsonDecode(bodyString);
-      if (json['results'][0]['status'] != null) {
-        double lat = json['results'][0]['geometry']['location']['lat'];
-        double lng = json['results'][0]['geometry']['location']['lng'];
-        markerList.add(Marker(
-          markerId: MarkerId(place[i]),
-          icon: BitmapDescriptor.defaultMarker,
-          position: LatLng(lat, lng),
-        ));
-      }
-    }
-
-    return markerList;
   }
 
   static Future<List<LatLng>> reveiveCoordinates(List<String> places) async {
