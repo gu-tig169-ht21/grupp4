@@ -37,7 +37,7 @@ class MapSampleState extends State<MapSample> {
     return _memoizer.runOnce(() async {
       List<String> pubList = crawlModel.pubs.split(";,");
       for (int i = 0; i < pubList.length; i++) {
-        _pubs.add(await Api.callGetPubInfo(pubList[i]));
+        _pubs.add(await Api.getPubInfo(pubList[i]));
       }
       setState(() {});
     });
@@ -46,7 +46,7 @@ class MapSampleState extends State<MapSample> {
   void _fetchMarkers() async {
     List<String> pubList = crawlModel.pubs.split(";,");
     for (int i = 0; i < pubList.length; i++) {
-      _markers.add(await Api.callGetPlace(pubList[i]));
+      _markers.add(await Api.getPlace(pubList[i]));
     }
     setState(() {});
   }

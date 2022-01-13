@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
-
 import 'firebase_file.dart';
 
 class FirebaseApi {
@@ -30,7 +29,7 @@ class FirebaseApi {
     }
   }
 
-  //Nedan metod är en gammal metod, dock används den idag för att hämta splashscreen:en
+  //Två nedan metoder är en gammal metod, dock används den idag för att hämta splashscreen:en
   static Future<List<String>> _getDownloadLinks(List<Reference> refs) =>
       Future.wait(refs.map((ref) => ref.getDownloadURL()).toList());
 
@@ -79,11 +78,6 @@ class FirebaseApi {
       (e.toString());
     }
     return null;
-  }
-
-  static Future<List<PubCrawlModel>> getCrawl() {
-    Future<List<PubCrawlModel>> allCrawls = receiveCrawls();
-    return allCrawls;
   }
 
   static Future<List<PubCrawlModel>> receiveCrawls() async {
@@ -168,7 +162,6 @@ class FirebaseApi {
         .update({"favoriets": favourites});
   }
 
-  //Nedan metod används inte i dagsläget, men tanken är att admins ska kunna skapa crawls
   Future<bool> isAdmin() async {
     bool admin = false;
     String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
@@ -182,25 +175,6 @@ class FirebaseApi {
     }
     return admin;
   }
-
-  /* static Future<bool> callcheckIfFavourite(String pubname) async {
-    bool x = await checkIfFavourite(pubname);
-    return x;
-  }
-
-  static Future<bool> checkIfFavourite(String pubToRemove) async {
-    String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
-    var collection = FirebaseFirestore.instance.collection('User');
-    var docSnapshot = await collection.doc(userEmail).get();
-    if (docSnapshot.exists) {
-      Map<String, dynamic>? data = docSnapshot.data();
-      List<dynamic> favourites = data?['favoriets'].toList();
-      if (favourites.contains(pubToRemove)) {
-        return true;
-      }
-    }
-    return false;
-  } */
 
   bool checkIfProfilePic(String email) {
     bool x = false;

@@ -9,11 +9,6 @@ const apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
 class Api {
   //todo, skapa variabel som tar emot adress
 
-  static Future<Marker> callGetPlace(String place) {
-    Future<Marker> marker = getPlace(place);
-    return marker;
-  }
-
   static Future<Marker> getPlace(String place) async {
     String corrPlace = place;
     var response =
@@ -49,11 +44,6 @@ class Api {
       );
     }
     return markerList;
-  }
-
-  static Future<Pub> callGetPubInfo(String place) {
-    Future<Pub> pub = getPubInfo(place);
-    return pub;
   }
 
   static Future<Pub> getPubInfo(String pubName) async {

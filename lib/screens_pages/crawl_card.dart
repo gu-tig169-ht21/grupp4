@@ -19,7 +19,7 @@ class _CrawlCardState extends State<CrawlCard> {
   void initState() {
     super.initState();
 
-    list = FirebaseApi.getCrawl();
+    list = FirebaseApi.receiveCrawls();
   }
 
   @override
