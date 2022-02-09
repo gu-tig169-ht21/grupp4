@@ -2,14 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'cat/state.dart';
 import 'firebase/Authenticate/authenticate.dart';
-import 'cat/navbar_page.dart';
 import 'screens_pages/splashscreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  var state = MyState();
+  runApp(
+      ChangeNotifierProvider(create: (context) => state, child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -51,37 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: InkWell(
         child: Stack(
-          children: [
-            const Splashscreen(),
-            splashscreenButton(),
+          children: const [
+            Splashscreen(),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget splashscreenButton() {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 100),
-      alignment: Alignment.bottomCenter,
-      child: OutlinedButton(
-        child: const Text(
-          "Start",
-          textScaleFactor: 1.7,
-          style: TextStyle(),
-        ),
-        style: OutlinedButton.styleFrom(
-            minimumSize: const Size(170, 65),
-            backgroundColor: Colors.white,
-            side: const BorderSide(
-              color: Color.fromRGBO(114, 107, 89, 1),
-              width: 7,
-            ),
-            primary: Colors.black),
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const NavbarPage(),
-          ),
         ),
       ),
     );

@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:my_first_app/firebase/storage/storage_services.dart';
 import 'package:my_first_app/screens_pages/map_screen.dart';
 import 'package:my_first_app/models/pub_crawl_model.dart';
+import 'package:provider/provider.dart';
 import '../cat/interface_theme.dart';
+import '../cat/state.dart';
 
 class CrawlCard extends StatefulWidget {
   @override
@@ -13,44 +15,19 @@ class CrawlCard extends StatefulWidget {
 }
 
 class _CrawlCardState extends State<CrawlCard> {
-  late Future<List<PubCrawlModel>> list;
-
-  @override
-  void initState() {
-    super.initState();
-
-    list = FirebaseApi.receiveCrawls();
-  }
-
   @override
   Widget build(BuildContext context) {
+    var state = Provider.of<MyState>(context, listen: false);
+    List<PubCrawlModel> list = state.crawlsForCurrentCity;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorTheme.a,
-        title: const Text('Discover crawls'),
-        automaticallyImplyLeading: false,
-      ),
-      body: FutureBuilder<List<PubCrawlModel>>(
-          future: list,
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return const Center(child: CircularProgressIndicator());
-              default:
-                if (snapshot.hasError) {
-                  return const Center(child: Text('Some error occurred!'));
-                } else {
-                  final list = snapshot.data!;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      crawlList(list),
-                    ],
-                  );
-                }
-            }
-          }),
-    );
+        appBar: AppBar(
+          backgroundColor: ColorTheme.a,
+          title: const Text('Discover crawls'),
+          automaticallyImplyLeading: false,
+        ),
+        body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          crawlList(list),
+        ]));
   }
 
   Widget crawlList(list) {
