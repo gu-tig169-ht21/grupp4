@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Gothenburg PubCrawl',
+        title: 'PubCrawl',
         home: MyHomePage(),
       ),
     );

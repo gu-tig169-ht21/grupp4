@@ -159,7 +159,7 @@ class AddBarMapState extends State<AddBarMap> {
   void getNearbyPlaces() async {
     const kGoogleApiKey = 'AIzaSyCuPHW1WY319HfTCohnUXfBc7zMwVfgbmk';
     GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
-    var nextPageToken;
+    String? nextPageToken;
 
     final location = Location(lat: 57.70884963208789, lng: 11.974438295782342);
     final result = await _places.searchNearbyWithRadius(location, 3500,

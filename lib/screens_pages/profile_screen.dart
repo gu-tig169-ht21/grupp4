@@ -13,6 +13,8 @@ import 'package:my_first_app/screens_pages/login_screen.dart';
 import 'package:my_first_app/screens_pages/new_crawl.dart';
 import 'package:provider/src/provider.dart';
 
+import '../google/places_api.dart';
+
 class ProfileScreen extends StatefulWidget {
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -178,6 +180,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),
         child: Text(
           'Sign out',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: ColorTheme.b,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+        ),
+      ),
+    );
+  }
+
+  Widget getCity() {
+    return ElevatedButton(
+      onPressed: () async {
+        Api().getCurrentCity();
+      },
+      child: const Padding(
+        padding: EdgeInsets.only(left: 50, right: 50, top: 15, bottom: 15),
+        child: Text(
+          'Load City (console)',
           style: TextStyle(color: Colors.white),
         ),
       ),
