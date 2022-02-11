@@ -77,16 +77,19 @@ class Api {
     GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
     String? nextPageToken;
 
-    final result = await _places.searchNearbyWithRadius(userCoord, 10000,
+    final result = await _places.searchNearbyWithRadius(userCoord, 1000000,
         type: 'postal_town');
-
     isLoading = true;
     if (result.status == 'OK') {
       nextPageToken = result.nextPageToken;
       places = result.results;
       for (var pub in result.results) {
-        print(pub);
+        print(pub.name.toString());
       }
+    } else if (result.status == ' [] ') {
+      print('result empty...');
+    } else {
+      print('something went wrong (line 92)');
     }
     return city = "1";
   }
@@ -94,9 +97,11 @@ class Api {
   static Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
+    Future<Position> foundLocation;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      print('Location services are disabled.');
       return Future.error('Location services are disabled.');
     }
 
@@ -104,14 +109,18 @@ class Api {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        print('Location permissions are denied');
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
+      print(
+          'Location permissions are permanently denied, we cannot request permissions.');
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    return await Geolocator.getCurrentPosition();
+    foundLocation = Geolocator.getCurrentPosition();
+    return foundLocation;
   }
 }

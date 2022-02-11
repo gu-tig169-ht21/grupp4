@@ -34,12 +34,8 @@ class SplashscreenState extends State<Splashscreen> {
     state
         .getCrawlList(); //Tänker att här laddar man in listan från Firebase under tiden som splaschscreen visas
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0,
-        backgroundColor: ColorTheme.a,
-      ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
               child: Image.asset('assets/images/splashscreen.jpg',

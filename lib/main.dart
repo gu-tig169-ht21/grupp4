@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           initialData: 0,
         ),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'PubCrawl',
         home: MyHomePage(),
@@ -38,26 +38,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: InkWell(
-        child: Stack(
-          children: const [
-            Splashscreen(),
-          ],
-        ),
-      ),
+    return Stack(
+      children: const [
+        Splashscreen(),
+      ],
     );
   }
 }

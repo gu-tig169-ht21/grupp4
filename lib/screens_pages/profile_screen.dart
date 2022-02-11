@@ -87,6 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 50,
             ),
             signoutButton(),
+            getCity(),
           ],
         ),
       ),
