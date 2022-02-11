@@ -23,7 +23,7 @@ class SplashscreenState extends State<Splashscreen> {
   void initState() {
     super.initState();
     Timer(
-        const Duration(milliseconds: 2000),
+        const Duration(seconds: 2),
         () => Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const NavbarPage())));
   }
@@ -33,15 +33,13 @@ class SplashscreenState extends State<Splashscreen> {
     var state = Provider.of<MyState>(context, listen: false);
     state
         .getCrawlList(); //Tänker att här laddar man in listan från Firebase under tiden som splaschscreen visas
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-              child: Image.asset('assets/images/splashscreen.jpg',
-                  fit: BoxFit.cover))
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+            child: Image.asset('assets/images/splashscreen.jpg',
+                fit: BoxFit.cover))
+      ],
     );
   }
 }
